@@ -176,6 +176,20 @@ ifndef KBUILD_CHECKSRC
   KBUILD_CHECKSRC = 0
 endif
 
+# Run scripts/checkpatch.pl with --ignore-cfg checkpatch.cfg
+#
+# Use 'make P=1' to enable checking of only re-compiled files.
+# Use 'make P=2' to enable checking of *all* source files, regardless
+#
+# See the file "Documentation/dev-tools/run-checkpatch.rst" for more details,
+#
+ifeq ("$(origin P)", "command line")
+  KBUILD_CHECKPATCH = $(P)
+endif
+ifndef KBUILD_CHECKPATCH
+  KBUILD_CHECKPATCH = 0
+endif
+
 # Use make M=dir to specify directory of external module to build
 # Old syntax make ... SUBDIRS=$PWD is still supported
 # Setting the environment variable KBUILD_EXTMOD take precedence
@@ -340,7 +354,7 @@ ifeq ($(MAKECMDGOALS),)
 endif
 
 export KBUILD_MODULES KBUILD_BUILTIN
-export KBUILD_CHECKSRC KBUILD_SRC KBUILD_EXTMOD
+export KBUILD_CHECKSRC KBUILD_CHECKPATCH KBUILD_SRC KBUILD_EXTMOD
 
 # We need some generic definitions (do not try to remake the file).
 scripts/Kbuild.include: ;
@@ -363,9 +377,12 @@ DEPMOD		= /sbin/depmod
 PERL		= perl
 PYTHON		= python
 CHECK		= sparse
+CHECKP		= scripts/checkpatch.pl
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
+CHECKPFLAGS    := --quiet --show-types --emacs \
+		  --ignore-cfg checkpatch.cfg --file $(PF)
 NOSTDINC_FLAGS  =
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
@@ -419,6 +436,7 @@ export ARCH SRCARCH CONFIG_SHELL HOSTCC HOSTCFLAGS CROSS_COMPILE AS LD CC
 export CPP AR NM STRIP OBJCOPY OBJDUMP HOSTLDFLAGS HOST_LOADLIBES
 export MAKE AWK GENKSYMS INSTALLKERNEL PERL PYTHON UTS_MACHINE
 export HOSTCXX HOSTCXXFLAGS LDFLAGS_MODULE CHECK CHECKFLAGS
+export CHECKP CHECKPFLAGS
 
 export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS LDFLAGS
 export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE CFLAGS_GCOV CFLAGS_KCOV CFLAGS_KASAN CFLAGS_UBSAN
