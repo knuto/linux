@@ -981,7 +981,7 @@ static ssize_t show_ibdev(struct device *device, struct device_attribute *attr,
 
 	return ret;
 }
-static DEVICE_ATTR(ibdev, S_IRUGO, show_ibdev, NULL);
+static DEVICE_ATTR(ibdev, 0444, show_ibdev, NULL);
 
 static ssize_t show_dev_abi_version(struct device *device,
 				    struct device_attribute *attr, char *buf)
@@ -1001,9 +1001,9 @@ static ssize_t show_dev_abi_version(struct device *device,
 
 	return ret;
 }
-static DEVICE_ATTR(abi_version, S_IRUGO, show_dev_abi_version, NULL);
+static DEVICE_ATTR(abi_version, 0444, show_dev_abi_version, NULL);
 
-static CLASS_ATTR_STRING(abi_version, S_IRUGO,
+static CLASS_ATTR_STRING(abi_version, 0444,
 			 __stringify(IB_USER_VERBS_ABI_VERSION));
 
 static dev_t overflow_maj;

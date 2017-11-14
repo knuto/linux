@@ -1233,7 +1233,7 @@ static ssize_t show_ibdev(struct device *dev, struct device_attribute *attr,
 	ucm_dev = container_of(dev, struct ib_ucm_device, dev);
 	return sprintf(buf, "%s\n", ucm_dev->ib_dev->name);
 }
-static DEVICE_ATTR(ibdev, S_IRUGO, show_ibdev, NULL);
+static DEVICE_ATTR(ibdev, 0444, show_ibdev, NULL);
 
 static dev_t overflow_maj;
 static int find_overflow_devnum(void)
@@ -1327,7 +1327,7 @@ static void ib_ucm_remove_one(struct ib_device *device, void *client_data)
 	put_device(&ucm_dev->dev);
 }
 
-static CLASS_ATTR_STRING(abi_version, S_IRUGO,
+static CLASS_ATTR_STRING(abi_version, 0444,
 			 __stringify(IB_USER_CM_ABI_VERSION));
 
 static int __init ib_ucm_init(void)

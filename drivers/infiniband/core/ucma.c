@@ -1739,7 +1739,7 @@ static ssize_t show_abi_version(struct device *dev,
 {
 	return sprintf(buf, "%d\n", RDMA_USER_CM_ABI_VERSION);
 }
-static DEVICE_ATTR(abi_version, S_IRUGO, show_abi_version, NULL);
+static DEVICE_ATTR(abi_version, 0444, show_abi_version, NULL);
 
 static int __init ucma_init(void)
 {
