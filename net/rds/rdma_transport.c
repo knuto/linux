@@ -116,7 +116,7 @@ int rds_rdma_cm_event_handler(struct rdma_cm_id *cm_id,
 
 	case RDMA_CM_EVENT_DISCONNECTED:
 		rdsdebug("DISCONNECT event - dropping connection %pI4->%pI4\n",
-			&conn->c_laddr,
+			 &conn->c_laddr,
 			 &conn->c_faddr);
 		rds_conn_drop(conn);
 		break;
@@ -229,4 +229,3 @@ module_exit(rds_rdma_exit);
 MODULE_AUTHOR("Oracle Corporation <rds-devel@oss.oracle.com>");
 MODULE_DESCRIPTION("RDS: IB transport");
 MODULE_LICENSE("Dual BSD/GPL");
-
