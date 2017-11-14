@@ -390,7 +390,7 @@ static inline int get_seg_num(struct ib_mad_recv_buf *seg)
 	return be32_to_cpu(rmpp_mad->rmpp_hdr.seg_num);
 }
 
-static inline struct ib_mad_recv_buf * get_next_seg(struct list_head *rmpp_list,
+static inline struct ib_mad_recv_buf *get_next_seg(struct list_head *rmpp_list,
 						    struct ib_mad_recv_buf *seg)
 {
 	if (seg->list.next == rmpp_list)
@@ -404,7 +404,7 @@ static inline int window_size(struct ib_mad_agent_private *agent)
 	return max(agent->qp_info->recv_queue.max_active >> 3, 1);
 }
 
-static struct ib_mad_recv_buf * find_seg_location(struct list_head *rmpp_list,
+static struct ib_mad_recv_buf *find_seg_location(struct list_head *rmpp_list,
 						  int seg_num)
 {
 	struct ib_mad_recv_buf *seg_buf;
@@ -457,7 +457,7 @@ static inline int get_mad_len(struct mad_rmpp_recv *rmpp_recv)
 	return hdr_size + rmpp_recv->seg_num * data_size - pad;
 }
 
-static struct ib_mad_recv_wc * complete_rmpp(struct mad_rmpp_recv *rmpp_recv)
+static struct ib_mad_recv_wc *complete_rmpp(struct mad_rmpp_recv *rmpp_recv)
 {
 	struct ib_mad_recv_wc *rmpp_wc;
 
