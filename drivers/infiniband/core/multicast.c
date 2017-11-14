@@ -434,7 +434,6 @@ retest:
 	spin_lock_irq(&group->lock);
 	while (!list_empty(&group->pending_list) ||
 	       (group->state != MCAST_BUSY)) {
-
 		if (group->state != MCAST_BUSY) {
 			spin_unlock_irq(&group->lock);
 			process_group_error(group);

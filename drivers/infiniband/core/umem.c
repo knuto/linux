@@ -55,7 +55,6 @@ static void __ib_umem_release(struct ib_device *dev, struct ib_umem *umem, int d
 				DMA_BIDIRECTIONAL);
 
 	for_each_sg(umem->sg_head.sgl, sg, umem->npages, i) {
-
 		page = sg_page(sg);
 		if (!PageDirty(page) && umem->writable && dirty)
 			set_page_dirty_lock(page);
@@ -64,7 +63,6 @@ static void __ib_umem_release(struct ib_device *dev, struct ib_umem *umem, int d
 
 	sg_free_table(&umem->sg_head);
 	return;
-
 }
 
 /**

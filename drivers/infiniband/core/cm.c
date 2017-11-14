@@ -4138,7 +4138,6 @@ error:
 		kobject_put(&port->counter_group[i].obj);
 	kobject_put(&port->port_obj);
 	return ret;
-
 }
 
 static void cm_remove_port_fs(struct cm_port *port)

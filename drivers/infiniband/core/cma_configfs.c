@@ -225,7 +225,6 @@ static int make_cma_ports(struct cma_dev_group *cma_dev_group,
 					    &cma_port_group_type);
 		configfs_add_default_group(&ports[i].group,
 					   &cma_dev_group->ports_group);
-
 	}
 	cma_dev_group->ports = ports;
 

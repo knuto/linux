@@ -2453,7 +2453,6 @@ static void ib_sa_remove_one(struct ib_device *device, void *client_data)
 			if (sa_dev->port[i].sm_ah)
 				kref_put(&sa_dev->port[i].sm_ah->ref, free_sm_ah);
 		}
-
 	}
 
 	kfree(sa_dev);

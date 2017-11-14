@@ -2948,7 +2948,6 @@ static void cleanup_recv_queue(struct ib_mad_qp_info *qp_info)
 		return;
 
 	while (!list_empty(&qp_info->recv_queue.list)) {
-
 		mad_list = list_entry(qp_info->recv_queue.list.next,
 				      struct ib_mad_list_head, list);
 		mad_priv_hdr = container_of(mad_list,

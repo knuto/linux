@@ -180,7 +180,6 @@ EXPORT_SYMBOL(ib_rate_to_mbps);
 __attribute_const__ enum rdma_transport_type
 rdma_node_get_transport(enum rdma_node_type node_type)
 {
-
 	if (node_type == RDMA_NODE_USNIC)
 		return RDMA_TRANSPORT_USNIC;
 	if (node_type == RDMA_NODE_USNIC_UDP)
@@ -553,7 +552,6 @@ int ib_init_ah_from_wc(struct ib_device *device, u8 port_num,
 				flow_class & 0xFFFFF,
 				(u8)gid_index, hoplimit,
 				(flow_class >> 20) & 0xFF);
-
 	}
 	return 0;
 }

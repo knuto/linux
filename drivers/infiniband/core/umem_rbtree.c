@@ -104,6 +104,5 @@ struct ib_umem_odp *rbt_ib_umem_lookup(struct rb_root_cached *root,
 	if (node)
 		return container_of(node, struct ib_umem_odp, interval_tree);
 	return NULL;
-
 }
 EXPORT_SYMBOL(rbt_ib_umem_lookup);
