@@ -661,8 +661,7 @@ int rds_ib_cm_handle_connect(struct rdma_cm_id *cm_id,
 			rdsdebug("incoming connect while connecting\n");
 			rds_conn_drop(conn);
 			rds_ib_stats_inc(s_ib_listen_closed_stale);
-		} else
-		if (rds_conn_state(conn) == RDS_CONN_CONNECTING) {
+		} else if (rds_conn_state(conn) == RDS_CONN_CONNECTING) {
 			/* Wait and see - our connect may still be succeeding */
 			rds_ib_stats_inc(s_ib_connect_raced);
 		}

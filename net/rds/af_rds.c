@@ -399,9 +399,8 @@ static int rds_getsockopt(struct socket *sock, int level, int optname,
 	case RDS_RECVERR:
 		if (len < sizeof(int))
 			ret = -EINVAL;
-		else
-		if (put_user(rs->rs_recverr, (int __user *)optval) ||
-		    put_user(sizeof(int), optlen))
+		else if (put_user(rs->rs_recverr, (int __user *)optval) ||
+			 put_user(sizeof(int), optlen))
 			ret = -EFAULT;
 		else
 			ret = 0;
