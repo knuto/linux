@@ -20,6 +20,7 @@ my $V = '0.32';
 use Getopt::Long qw(:config no_auto_abbrev);
 
 my $quiet = 0;
+my $no_quiet;
 my $tree = 1;
 my $chk_signoff = 1;
 my $chk_patch = 1;
@@ -49,6 +50,9 @@ my @ignore = ();
 my $help = 0;
 my $configuration_file = ".checkpatch.conf";
 my $ignore_cfg_file;
+my $no_ignore_cfg_file;
+my $req_ignore_cfg_file;
+my $not_defined;
 my $max_line_length = 80;
 my $ignore_perl_version = 0;
 my $minimum_perl_version = 5.10.0;
@@ -70,6 +74,7 @@ Version: $V
 
 Options:
   -q, --quiet                quiet
+  --no-quiet		     Undo the effect of a previous --quiet argument
   --no-tree                  run without a kernel tree
   --no-signoff               do not check for 'Signed-off-by' line
   --patch                    treat FILE as patchfile (default)
@@ -94,6 +99,10 @@ Options:
   --ignore-cfg FILE	     parse this file for a detailed file specific ignore list,
 			     silently exit without checking if an ignore config file
 			     is not found.
+  --req-ignore-cfg	     With --ignore-cfg - if the file is not found, behave as
+			     if the file existed and was empty, which is identical
+			     to a normal run with --strict
+  --no-ignore-cfg	     undo the effect of any previous --ignore-cfg argument
   --show-types               show the specific message type in the output
   --max-line-length=n        set the maximum line length, if exceeded, warn
   --min-conf-desc-length=n   set the min description length, if shorter, warn
@@ -104,6 +113,8 @@ Options:
   --debug KEY=[0|1]          turn on/off debugging of KEY, where KEY is one of
                              'values', 'possible', 'type', and 'attr' (default
                              is all off)
+  --no-errors		     Let checkpatch return status 0 even in presence
+			     of errors.
   --test-only=WORD           report only warnings/errors containing WORD
                              literally
   --fix                      EXPERIMENTAL - may create horrible results
@@ -198,6 +209,7 @@ foreach (@ARGV) {
 
 GetOptions(
 	'q|quiet+'	=> \$quiet,
+	'no-quiet'	=> \$no_quiet,
 	'tree!'		=> \$tree,
 	'signoff!'	=> \$chk_signoff,
 	'patch!'	=> \$chk_patch,
@@ -206,6 +218,8 @@ GetOptions(
 	'showfile!'	=> \$showfile,
 	'f|file!'	=> \$file,
 	'ignore-cfg=s'	=> \$ignore_cfg_file,
+	'no-ignore-cfg!'	=> \$no_ignore_cfg_file,
+	'req-ignore-cfg!'	=> \$req_ignore_cfg_file,
 	'g|git!'	=> \$git,
 	'subjective!'	=> \$check,
 	'strict!'	=> \$check,
@@ -237,6 +251,9 @@ GetOptions(
 help(0) if ($help);
 
 list_types(0) if ($list_types);
+
+$quiet = 0 if defined($no_quiet);
+$ignore_cfg_file = $not_defined if defined($no_ignore_cfg_file);
 
 # Enforce --strict if used with a ignore configuration file:
 $check = 1 if defined($ignore_cfg_file);
@@ -299,7 +316,7 @@ sub hash_show_words {
 	}
 }
 
-parse_ignore_cfg_file(@ARGV) || exit(0);
+parse_ignore_cfg_file(@ARGV) || defined($req_ignore_cfg_file) || exit(0);
 hash_save_array_words(\%ignore_type, \@ignore);
 hash_save_array_words(\%use_type, \@use);
 
