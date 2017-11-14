@@ -42,6 +42,7 @@ static struct kmem_cache *rds_tcp_incoming_slab;
 static void rds_tcp_inc_purge(struct rds_incoming *inc)
 {
 	struct rds_tcp_incoming *tinc;
+
 	tinc = container_of(inc, struct rds_tcp_incoming, ti_inc);
 	rdsdebug("purging tinc %p inc %p\n", tinc, inc);
 	skb_queue_purge(&tinc->ti_skb_list);
@@ -50,6 +51,7 @@ static void rds_tcp_inc_purge(struct rds_incoming *inc)
 void rds_tcp_inc_free(struct rds_incoming *inc)
 {
 	struct rds_tcp_incoming *tinc;
+
 	tinc = container_of(inc, struct rds_tcp_incoming, ti_inc);
 	rds_tcp_inc_purge(inc);
 	rdsdebug("freeing tinc %p inc %p\n", tinc, inc);
@@ -72,6 +74,7 @@ int rds_tcp_inc_copy_to_user(struct rds_incoming *inc, struct iov_iter *to)
 
 	skb_queue_walk(&tinc->ti_skb_list, skb) {
 		unsigned long to_copy, skb_off;
+
 		for (skb_off = 0; skb_off < skb->len; skb_off += to_copy) {
 			to_copy = iov_iter_count(to);
 			to_copy = min(to_copy, skb->len - skb_off);

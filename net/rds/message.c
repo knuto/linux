@@ -45,7 +45,6 @@ static unsigned int	rds_exthdr_size[__RDS_EXTHDR_MAX] = {
 [RDS_EXTHDR_GEN_NUM]	= sizeof(u32),
 };
 
-
 void rds_message_addref(struct rds_message *rm)
 {
 	rdsdebug("addref rm %p ref %d\n", rm, refcount_read(&rm->m_refcount));

@@ -85,7 +85,6 @@ static void rds_ib_remove_ipaddr(struct rds_ib_device *rds_ibdev, __be32 ipaddr)
 	struct rds_ib_ipaddr *i_ipaddr;
 	struct rds_ib_ipaddr *to_free = NULL;
 
-
 	spin_lock_irq(&rds_ibdev->spinlock);
 	list_for_each_entry_rcu(i_ipaddr, &rds_ibdev->ipaddr_list, list) {
 		if (i_ipaddr->ipaddr == ipaddr) {
@@ -353,6 +352,7 @@ int rds_ib_flush_mr_pool(struct rds_ib_mr_pool *pool,
 
 	if (ibmr_ret) {
 		DEFINE_WAIT(wait);
+
 		while (!mutex_trylock(&pool->flush_lock)) {
 			ibmr = rds_ib_reuse_mr(pool);
 			if (ibmr) {
