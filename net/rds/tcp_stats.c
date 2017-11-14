@@ -52,8 +52,8 @@ unsigned int rds_tcp_stats_info_copy(struct rds_info_iterator *iter,
 				     unsigned int avail)
 {
 	struct rds_tcp_statistics stats = {0, };
-	uint64_t *src;
-	uint64_t *sum;
+	u64 *src;
+	u64 *sum;
 	size_t i;
 	int cpu;
 
