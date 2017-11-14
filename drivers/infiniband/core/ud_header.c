@@ -325,7 +325,7 @@ int ib_ud_header_init(int     payload_bytes,
 	size_t udp_bytes = udp_present ? IB_UDP_BYTES : 0;
 
 	grh_present = grh_present && !ip_version;
-	memset(header, 0, sizeof *header);
+	memset(header, 0, sizeof(*header));
 
 	/*
 	 * UDP header without IP header doesn't make sense
@@ -455,8 +455,8 @@ int ib_ud_header_pack(struct ib_ud_header *header,
 	len += IB_DETH_BYTES;
 
 	if (header->immediate_present) {
-		memcpy(buf + len, &header->immediate_data, sizeof header->immediate_data);
-		len += sizeof header->immediate_data;
+		memcpy(buf + len, &header->immediate_data, sizeof(header->immediate_data));
+		len += sizeof(header->immediate_data);
 	}
 
 	return len;
@@ -540,7 +540,7 @@ int ib_ud_header_unpack(void                *buf,
 	buf += IB_DETH_BYTES;
 
 	if (header->immediate_present)
-		memcpy(&header->immediate_data, buf, sizeof header->immediate_data);
+		memcpy(&header->immediate_data, buf, sizeof(header->immediate_data));
 
 	return 0;
 }
