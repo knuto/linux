@@ -74,8 +74,7 @@ EXPORT_SYMBOL_GPL(rds_wq);
 void rds_connect_path_complete(struct rds_conn_path *cp, int curr)
 {
 	if (!rds_conn_path_transition(cp, curr, RDS_CONN_UP)) {
-		printk(KERN_WARNING "%s: Cannot transition to state UP, "
-				"current state is %d\n",
+		printk(KERN_WARNING "%s: Cannot transition to state UP, current state is %d\n",
 				__func__,
 				atomic_read(&cp->cp_state));
 		rds_conn_path_drop(cp, false);

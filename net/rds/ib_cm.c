@@ -347,8 +347,7 @@ static void rds_ib_qp_event_handler(struct ib_event *event, void *data)
 		rdma_notify(ic->i_cm_id, IB_EVENT_COMM_EST);
 		break;
 	default:
-		rdsdebug("Fatal QP Event %u (%s) "
-			"- connection %pI4->%pI4, reconnecting\n",
+		rdsdebug("Fatal QP Event %u (%s) - connection %pI4->%pI4, reconnecting\n",
 			event->event, ib_event_msg(event->event),
 			&conn->c_laddr, &conn->c_faddr);
 		rds_conn_drop(conn);
@@ -594,8 +593,7 @@ static u32 rds_ib_protocol_compatible(struct rdma_cm_event *event)
 
 	/* Be paranoid. RDS always has privdata */
 	if (!event->param.conn.private_data_len) {
-		printk(KERN_NOTICE "RDS incoming connection has no private data, "
-			"rejecting\n");
+		printk(KERN_NOTICE "RDS incoming connection has no private data, rejecting\n");
 		return 0;
 	}
 
@@ -635,8 +633,8 @@ int rds_ib_cm_handle_connect(struct rdma_cm_id *cm_id,
 	if (!version)
 		goto out;
 
-	rdsdebug("saddr %pI4 daddr %pI4 RDSv%u.%u lguid 0x%llx fguid "
-		 "0x%llx\n", &dp->dp_saddr, &dp->dp_daddr,
+	rdsdebug("saddr %pI4 daddr %pI4 RDSv%u.%u lguid 0x%llx fguid 0x%llx\n",
+		 &dp->dp_saddr, &dp->dp_daddr,
 		 RDS_PROTOCOL_MAJOR(version), RDS_PROTOCOL_MINOR(version),
 		 (unsigned long long)be64_to_cpu(lguid),
 		 (unsigned long long)be64_to_cpu(fguid));

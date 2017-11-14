@@ -353,9 +353,8 @@ void rds_conn_shutdown(struct rds_conn_path *cp)
 			 * a FIN, thus we need to recheck for RDS_CONN_ERROR
 			 * here.
 			 */
-			rds_conn_path_error(cp, "%s: failed to transition "
-					    "to state DOWN, current state "
-					    "is %d\n", __func__,
+			rds_conn_path_error(cp, "%s: failed to transition to state DOWN, current state is %d\n",
+					    __func__,
 					    atomic_read(&cp->cp_state));
 			return;
 		}
@@ -420,8 +419,8 @@ void rds_conn_destroy(struct rds_connection *conn)
 	struct rds_conn_path *cp;
 	int npaths = (conn->c_trans->t_mp_capable ? RDS_MPATH_WORKERS : 1);
 
-	rdsdebug("freeing conn %p for %pI4 -> "
-		 "%pI4\n", conn, &conn->c_laddr,
+	rdsdebug("freeing conn %p for %pI4 -> %pI4\n",
+		 conn, &conn->c_laddr,
 		 &conn->c_faddr);
 
 	conn->c_destroy_in_prog = 1;

@@ -153,9 +153,7 @@ out:
 			 * an incoming RST.
 			 */
 			if (rds_conn_path_up(cp)) {
-				pr_warn("RDS/tcp: send to %pI4 on cp [%d]"
-					"returned %d, "
-					"disconnecting and reconnecting\n",
+				pr_warn("RDS/tcp: send to %pI4 on cp [%d]returned %d, disconnecting and reconnecting\n",
 					&conn->c_faddr, cp->cp_index, ret);
 				rds_conn_path_drop(cp, false);
 			}

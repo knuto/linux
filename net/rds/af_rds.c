@@ -696,8 +696,8 @@ module_init(rds_init);
 #define DRV_RELDATE     "Feb 12, 2009"
 
 MODULE_AUTHOR("Oracle Corporation <rds-devel@oss.oracle.com>");
-MODULE_DESCRIPTION("RDS: Reliable Datagram Sockets"
-		   " v" DRV_VERSION " (" DRV_RELDATE ")");
+MODULE_DESCRIPTION("RDS: Reliable Datagram Sockets v"
+		    DRV_VERSION " (" DRV_RELDATE ")");
 MODULE_VERSION(DRV_VERSION);
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_ALIAS_NETPROTO(PF_RDS);
