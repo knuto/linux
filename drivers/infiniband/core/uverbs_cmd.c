@@ -1199,7 +1199,7 @@ static int copy_wc_to_user(struct ib_device *ib_dev, void __user *dest,
 	tmp.opcode		= wc->opcode;
 	tmp.vendor_err		= wc->vendor_err;
 	tmp.byte_len		= wc->byte_len;
-	tmp.ex.imm_data		= (__u32 __force) wc->ex.imm_data;
+	tmp.ex.imm_data		= (__u32 __force)wc->ex.imm_data;
 	tmp.qp_num		= wc->qp->qp_num;
 	tmp.src_qp		= wc->src_qp;
 	tmp.wc_flags		= wc->wc_flags;
@@ -2129,12 +2129,12 @@ ssize_t ib_uverbs_destroy_qp(struct ib_uverbs_file *file,
 
 static void *alloc_wr(size_t wr_size, __u32 num_sge)
 {
-	if (num_sge >= (U32_MAX - ALIGN(wr_size, sizeof (struct ib_sge))) /
-		       sizeof (struct ib_sge))
+	if (num_sge >= (U32_MAX - ALIGN(wr_size, sizeof(struct ib_sge))) /
+		       sizeof(struct ib_sge))
 		return NULL;
 
-	return kmalloc(ALIGN(wr_size, sizeof (struct ib_sge)) +
-			 num_sge * sizeof (struct ib_sge), GFP_KERNEL);
+	return kmalloc(ALIGN(wr_size, sizeof(struct ib_sge)) +
+			 num_sge * sizeof(struct ib_sge), GFP_KERNEL);
 }
 
 ssize_t ib_uverbs_post_send(struct ib_uverbs_file *file,
@@ -2156,10 +2156,10 @@ ssize_t ib_uverbs_post_send(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	if (in_len < sizeof cmd + cmd.wqe_size * cmd.wr_count +
-	    cmd.sge_count * sizeof (struct ib_uverbs_sge))
+	    cmd.sge_count * sizeof(struct ib_uverbs_sge))
 		return -EINVAL;
 
-	if (cmd.wqe_size < sizeof (struct ib_uverbs_send_wr))
+	if (cmd.wqe_size < sizeof(struct ib_uverbs_send_wr))
 		return -EINVAL;
 
 	user_wr = kmalloc(cmd.wqe_size, GFP_KERNEL);
@@ -2263,7 +2263,7 @@ ssize_t ib_uverbs_post_send(struct ib_uverbs_file *file,
 		if (user_wr->opcode == IB_WR_SEND_WITH_IMM ||
 		    user_wr->opcode == IB_WR_RDMA_WRITE_WITH_IMM) {
 			next->ex.imm_data =
-					(__be32 __force) user_wr->ex.imm_data;
+					(__be32 __force)user_wr->ex.imm_data;
 		} else if (user_wr->opcode == IB_WR_SEND_WITH_INV) {
 			next->ex.invalidate_rkey = user_wr->ex.invalidate_rkey;
 		}
@@ -2281,13 +2281,13 @@ ssize_t ib_uverbs_post_send(struct ib_uverbs_file *file,
 		next->send_flags = user_wr->send_flags;
 
 		if (next->num_sge) {
-			next->sg_list = (void *) next +
+			next->sg_list = (void *)next +
 				ALIGN(next_size, sizeof(struct ib_sge));
 			if (copy_from_user(next->sg_list,
 					   buf + sizeof cmd +
 					   cmd.wr_count * cmd.wqe_size +
-					   sg_ind * sizeof (struct ib_sge),
-					   next->num_sge * sizeof (struct ib_sge))) {
+					   sg_ind * sizeof(struct ib_sge),
+					   next->num_sge * sizeof(struct ib_sge))) {
 				ret = -EFAULT;
 				goto out_put;
 			}
@@ -2338,10 +2338,10 @@ static struct ib_recv_wr *ib_uverbs_unmarshall_recv(const char __user *buf,
 	int                       ret;
 
 	if (in_len < wqe_size * wr_count +
-	    sge_count * sizeof (struct ib_uverbs_sge))
+	    sge_count * sizeof(struct ib_uverbs_sge))
 		return ERR_PTR(-EINVAL);
 
-	if (wqe_size < sizeof (struct ib_uverbs_recv_wr))
+	if (wqe_size < sizeof(struct ib_uverbs_recv_wr))
 		return ERR_PTR(-EINVAL);
 
 	user_wr = kmalloc(wqe_size, GFP_KERNEL);
@@ -2363,14 +2363,14 @@ static struct ib_recv_wr *ib_uverbs_unmarshall_recv(const char __user *buf,
 		}
 
 		if (user_wr->num_sge >=
-		    (U32_MAX - ALIGN(sizeof *next, sizeof (struct ib_sge))) /
-		    sizeof (struct ib_sge)) {
+		    (U32_MAX - ALIGN(sizeof *next, sizeof(struct ib_sge))) /
+		    sizeof(struct ib_sge)) {
 			ret = -EINVAL;
 			goto err;
 		}
 
-		next = kmalloc(ALIGN(sizeof *next, sizeof (struct ib_sge)) +
-			       user_wr->num_sge * sizeof (struct ib_sge),
+		next = kmalloc(ALIGN(sizeof *next, sizeof(struct ib_sge)) +
+			       user_wr->num_sge * sizeof(struct ib_sge),
 			       GFP_KERNEL);
 		if (!next) {
 			ret = -ENOMEM;
@@ -2388,12 +2388,12 @@ static struct ib_recv_wr *ib_uverbs_unmarshall_recv(const char __user *buf,
 		next->num_sge    = user_wr->num_sge;
 
 		if (next->num_sge) {
-			next->sg_list = (void *) next +
-				ALIGN(sizeof *next, sizeof (struct ib_sge));
+			next->sg_list = (void *)next +
+				ALIGN(sizeof *next, sizeof(struct ib_sge));
 			if (copy_from_user(next->sg_list,
 					   buf + wr_count * wqe_size +
-					   sg_ind * sizeof (struct ib_sge),
-					   next->num_sge * sizeof (struct ib_sge))) {
+					   sg_ind * sizeof(struct ib_sge),
+					   next->num_sge * sizeof(struct ib_sge))) {
 				ret = -EFAULT;
 				goto err;
 			}
@@ -3370,10 +3370,10 @@ int ib_uverbs_ex_create_flow(struct ib_uverbs_file *file,
 		if (err)
 			goto err_free;
 		flow_attr->size +=
-			((union ib_flow_spec *) ib_spec)->size;
+			((union ib_flow_spec *)ib_spec)->size;
 		cmd.flow_attr.size -= ((struct ib_uverbs_flow_spec *)kern_spec)->size;
-		kern_spec += ((struct ib_uverbs_flow_spec *) kern_spec)->size;
-		ib_spec += ((union ib_flow_spec *) ib_spec)->size;
+		kern_spec += ((struct ib_uverbs_flow_spec *)kern_spec)->size;
+		ib_spec += ((union ib_flow_spec *)ib_spec)->size;
 	}
 	if (cmd.flow_attr.size || (i != flow_attr->num_of_specs)) {
 		pr_warn("create flow failed, flow %d: %d bytes left from uverb cmd\n",
@@ -3545,7 +3545,7 @@ static int __uverbs_create_xsrq(struct ib_uverbs_file *file,
 	if (cmd->srq_type == IB_SRQT_XRC)
 		resp.srqn = srq->ext.xrc.srq_num;
 
-	if (copy_to_user((void __user *) (unsigned long) cmd->response,
+	if (copy_to_user((void __user *)(unsigned long)cmd->response,
 			 &resp, sizeof resp)) {
 		ret = -EFAULT;
 		goto err_copy;

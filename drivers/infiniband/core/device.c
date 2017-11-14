@@ -124,7 +124,7 @@ static int ib_device_check_mandatory(struct ib_device *device)
 	int i;
 
 	for (i = 0; i < ARRAY_SIZE(mandatory_table); ++i) {
-		if (!*(void **) ((void *) device + mandatory_table[i].offset)) {
+		if (!*(void **)((void *)device + mandatory_table[i].offset)) {
 			pr_warn("Device %s is missing mandatory function %s\n",
 				device->name, mandatory_table[i].name);
 			return -EINVAL;
@@ -163,7 +163,7 @@ static int alloc_name(char *name)
 	struct ib_device *device;
 	int i;
 
-	inuse = (unsigned long *) get_zeroed_page(GFP_KERNEL);
+	inuse = (unsigned long *)get_zeroed_page(GFP_KERNEL);
 	if (!inuse)
 		return -ENOMEM;
 
@@ -178,7 +178,7 @@ static int alloc_name(char *name)
 	}
 
 	i = find_first_zero_bit(inuse, PAGE_SIZE * 8);
-	free_page((unsigned long) inuse);
+	free_page((unsigned long)inuse);
 	snprintf(buf, sizeof buf, name, i);
 
 	if (__ib_device_get_by_name(buf))

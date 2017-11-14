@@ -361,7 +361,7 @@ int iwpm_wait_complete_req(struct iwpm_nlmsg_request *nlmsg_request)
 	if (ret) {
 		ret = -EINVAL;
 		pr_info("%s: Timeout %d sec for netlink request (seq = %u)\n",
-			__func__, (IWPM_NL_TIMEOUT/HZ), nlmsg_request->nlmsg_seq);
+			__func__, (IWPM_NL_TIMEOUT / HZ), nlmsg_request->nlmsg_seq);
 	} else {
 		ret = nlmsg_request->err_code;
 	}
@@ -513,14 +513,14 @@ void iwpm_print_sockaddr(struct sockaddr_storage *sockaddr, char *msg)
 static u32 iwpm_ipv6_jhash(struct sockaddr_in6 *ipv6_sockaddr)
 {
 	u32 ipv6_hash = jhash(&ipv6_sockaddr->sin6_addr, sizeof(struct in6_addr), 0);
-	u32 hash = jhash_2words(ipv6_hash, (__force u32) ipv6_sockaddr->sin6_port, 0);
+	u32 hash = jhash_2words(ipv6_hash, (__force u32)ipv6_sockaddr->sin6_port, 0);
 	return hash;
 }
 
 static u32 iwpm_ipv4_jhash(struct sockaddr_in *ipv4_sockaddr)
 {
 	u32 ipv4_hash = jhash(&ipv4_sockaddr->sin_addr, sizeof(struct in_addr), 0);
-	u32 hash = jhash_2words(ipv4_hash, (__force u32) ipv4_sockaddr->sin_port, 0);
+	u32 hash = jhash_2words(ipv4_hash, (__force u32)ipv4_sockaddr->sin_port, 0);
 	return hash;
 }
 
@@ -530,12 +530,12 @@ static int get_hash_bucket(struct sockaddr_storage *a_sockaddr,
 	u32 a_hash, b_hash;
 
 	if (a_sockaddr->ss_family == AF_INET) {
-		a_hash = iwpm_ipv4_jhash((struct sockaddr_in *) a_sockaddr);
-		b_hash = iwpm_ipv4_jhash((struct sockaddr_in *) b_sockaddr);
+		a_hash = iwpm_ipv4_jhash((struct sockaddr_in *)a_sockaddr);
+		b_hash = iwpm_ipv4_jhash((struct sockaddr_in *)b_sockaddr);
 
 	} else if (a_sockaddr->ss_family == AF_INET6) {
-		a_hash = iwpm_ipv6_jhash((struct sockaddr_in6 *) a_sockaddr);
-		b_hash = iwpm_ipv6_jhash((struct sockaddr_in6 *) b_sockaddr);
+		a_hash = iwpm_ipv6_jhash((struct sockaddr_in6 *)a_sockaddr);
+		b_hash = iwpm_ipv6_jhash((struct sockaddr_in6 *)b_sockaddr);
 	} else {
 		pr_err("%s: Invalid sockaddr family\n", __func__);
 		return -EINVAL;

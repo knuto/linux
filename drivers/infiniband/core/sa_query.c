@@ -421,7 +421,7 @@ static const struct ib_field opa_path_rec_table[] = {
 
 #define MCMEMBER_REC_FIELD(field) \
 	.struct_offset_bytes = offsetof(struct ib_sa_mcmember_rec, field),	\
-	.struct_size_bytes   = sizeof ((struct ib_sa_mcmember_rec *) 0)->field,	\
+	.struct_size_bytes   = sizeof((struct ib_sa_mcmember_rec *)0)->field,	\
 	.field_name          = "sa_mcmember_rec:" #field
 
 static const struct ib_field mcmember_rec_table[] = {
@@ -505,7 +505,7 @@ static const struct ib_field mcmember_rec_table[] = {
 
 #define SERVICE_REC_FIELD(field) \
 	.struct_offset_bytes = offsetof(struct ib_sa_service_rec, field),	\
-	.struct_size_bytes   = sizeof ((struct ib_sa_service_rec *) 0)->field,	\
+	.struct_size_bytes   = sizeof((struct ib_sa_service_rec *)0)->field,	\
 	.field_name          = "sa_service_rec:" #field
 
 static const struct ib_field service_rec_table[] = {
@@ -532,23 +532,23 @@ static const struct ib_field service_rec_table[] = {
 	{ SERVICE_REC_FIELD(name),
 	  .offset_words = 12,
 	  .offset_bits  = 0,
-	  .size_bits    = 64*8 },
+	  .size_bits    = 64 * 8 },
 	{ SERVICE_REC_FIELD(data8),
 	  .offset_words = 28,
 	  .offset_bits  = 0,
-	  .size_bits    = 16*8 },
+	  .size_bits    = 16 * 8 },
 	{ SERVICE_REC_FIELD(data16),
 	  .offset_words = 32,
 	  .offset_bits  = 0,
-	  .size_bits    = 8*16 },
+	  .size_bits    = 8 * 16 },
 	{ SERVICE_REC_FIELD(data32),
 	  .offset_words = 36,
 	  .offset_bits  = 0,
-	  .size_bits    = 4*32 },
+	  .size_bits    = 4 * 32 },
 	{ SERVICE_REC_FIELD(data64),
 	  .offset_words = 40,
 	  .offset_bits  = 0,
-	  .size_bits    = 2*64 },
+	  .size_bits    = 2 * 64 },
 };
 
 #define CLASSPORTINFO_REC_FIELD(field) \
@@ -711,7 +711,7 @@ static const struct ib_field opa_classport_info_rec_table[] = {
 
 #define GUIDINFO_REC_FIELD(field) \
 	.struct_offset_bytes = offsetof(struct ib_sa_guidinfo_rec, field),	\
-	.struct_size_bytes   = sizeof((struct ib_sa_guidinfo_rec *) 0)->field,	\
+	.struct_size_bytes   = sizeof((struct ib_sa_guidinfo_rec *)0)->field,	\
 	.field_name          = "sa_guidinfo_rec:" #field
 
 static const struct ib_field guidinfo_rec_table[] = {
@@ -942,7 +942,7 @@ static void ib_nl_process_good_resolve_rsp(struct ib_sa_query *query,
 	int status = -EIO;
 
 	if (query->callback) {
-		head = (const struct nlattr *) nlmsg_data(nlh);
+		head = (const struct nlattr *)nlmsg_data(nlh);
 		len = nlmsg_len(nlh);
 		switch (query->path_use) {
 		case LS_RESOLVE_PATH_USE_UNIDIRECTIONAL:
@@ -1043,7 +1043,7 @@ int ib_nl_handle_set_timeout(struct sk_buff *skb,
 	if (ret || !attr)
 		goto settimeout_out;
 
-	timeout = *(int *) nla_data(attr);
+	timeout = *(int *)nla_data(attr);
 	if (timeout < IB_SA_LOCAL_SVC_TIMEOUT_MIN)
 		timeout = IB_SA_LOCAL_SVC_TIMEOUT_MIN;
 	if (timeout > IB_SA_LOCAL_SVC_TIMEOUT_MAX)
@@ -1396,7 +1396,7 @@ static void init_mad(struct ib_sa_query *query, struct ib_mad_agent *agent)
 	mad->mad_hdr.mgmt_class    = IB_MGMT_CLASS_SUBN_ADM;
 	spin_lock_irqsave(&tid_lock, flags);
 	mad->mad_hdr.tid           =
-		cpu_to_be64(((u64) agent->hi_tid) << 32 | tid++);
+		cpu_to_be64(((u64)agent->hi_tid) << 32 | tid++);
 	spin_unlock_irqrestore(&tid_lock, flags);
 }
 
@@ -2254,7 +2254,7 @@ static void recv_handler(struct ib_mad_agent *mad_agent,
 			query->callback(query,
 					mad_recv_wc->recv_buf.mad->mad_hdr.status ?
 					-EINVAL : 0,
-					(struct ib_sa_mad *) mad_recv_wc->recv_buf.mad);
+					(struct ib_sa_mad *)mad_recv_wc->recv_buf.mad);
 		else
 			query->callback(query, -EIO, NULL);
 	}
@@ -2371,7 +2371,7 @@ static void ib_sa_add_one(struct ib_device *device)
 	e = rdma_end_port(device);
 
 	sa_dev = kzalloc(sizeof *sa_dev +
-			 (e - s + 1) * sizeof (struct ib_sa_port),
+			 (e - s + 1) * sizeof(struct ib_sa_port),
 			 GFP_KERNEL);
 	if (!sa_dev)
 		return;

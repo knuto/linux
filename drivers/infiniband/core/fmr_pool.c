@@ -107,7 +107,7 @@ struct ib_fmr_pool {
 
 static inline u32 ib_fmr_hash(u64 first_page)
 {
-	return jhash_2words((u32) first_page, (u32) (first_page >> 32), 0) &
+	return jhash_2words((u32)first_page, (u32)(first_page >> 32), 0) &
 		(IB_FMR_HASH_SIZE - 1);
 }
 
@@ -150,7 +150,7 @@ static void ib_fmr_batch_release(struct ib_fmr_pool *pool)
 		list_add_tail(&fmr->fmr->list, &fmr_list);
 
 #ifdef DEBUG
-		if (fmr->ref_count !=0) {
+		if (fmr->ref_count != 0) {
 			pr_warn(PFX "Unmapping FMR 0x%08x with ref count %d\n",
 				fmr, fmr->ref_count);
 		}
@@ -274,7 +274,7 @@ struct ib_fmr_pool *ib_create_fmr_pool(struct ib_pd             *pd,
 		int bytes_per_fmr = sizeof *fmr;
 
 		if (pool->cache_bucket)
-			bytes_per_fmr += params->max_pages_per_fmr * sizeof (u64);
+			bytes_per_fmr += params->max_pages_per_fmr * sizeof(u64);
 
 		for (i = 0; i < params->pool_size; ++i) {
 			fmr = kmalloc(bytes_per_fmr, GFP_KERNEL);

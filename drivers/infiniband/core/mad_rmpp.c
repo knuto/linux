@@ -146,7 +146,7 @@ static void ack_recv(struct mad_rmpp_recv *rmpp_recv,
 	if (IS_ERR(msg))
 		return;
 
-	format_ack(msg, (struct ib_rmpp_mad *) recv_wc->recv_buf.mad, rmpp_recv);
+	format_ack(msg, (struct ib_rmpp_mad *)recv_wc->recv_buf.mad, rmpp_recv);
 	msg->ah = rmpp_recv->ah;
 	ret = ib_post_send_mad(msg, NULL);
 	if (ret)
@@ -163,7 +163,7 @@ static struct ib_mad_send_buf *alloc_response_msg(struct ib_mad_agent *agent,
 	ah = ib_create_ah_from_wc(agent->qp->pd, recv_wc->wc,
 				  recv_wc->recv_buf.grh, agent->port_num);
 	if (IS_ERR(ah))
-		return (void *) ah;
+		return (void *)ah;
 
 	hdr_len = ib_get_mad_data_offset(recv_wc->recv_buf.mad->mad_hdr.mgmt_class);
 	msg = ib_create_send_mad(agent, recv_wc->wc->src_qp,
@@ -378,7 +378,7 @@ static inline int get_last_flag(struct ib_mad_recv_buf *seg)
 {
 	struct ib_rmpp_mad *rmpp_mad;
 
-	rmpp_mad = (struct ib_rmpp_mad *) seg->mad;
+	rmpp_mad = (struct ib_rmpp_mad *)seg->mad;
 	return ib_get_rmpp_flags(&rmpp_mad->rmpp_hdr) & IB_MGMT_RMPP_FLAG_LAST;
 }
 
@@ -386,7 +386,7 @@ static inline int get_seg_num(struct ib_mad_recv_buf *seg)
 {
 	struct ib_rmpp_mad *rmpp_mad;
 
-	rmpp_mad = (struct ib_rmpp_mad *) seg->mad;
+	rmpp_mad = (struct ib_rmpp_mad *)seg->mad;
 	return be32_to_cpu(rmpp_mad->rmpp_hdr.seg_num);
 }
 
