@@ -3244,7 +3244,7 @@ static int ib_mad_port_close(struct ib_device *device, int port_num)
 
 	spin_lock_irqsave(&ib_mad_port_list_lock, flags);
 	port_priv = __ib_get_mad_port(device, port_num);
-	if (port_priv == NULL) {
+	if (!port_priv) {
 		spin_unlock_irqrestore(&ib_mad_port_list_lock, flags);
 		dev_err(&device->dev, "Port %d not found\n", port_num);
 		return -ENODEV;

@@ -870,7 +870,7 @@ int rdma_create_qp(struct rdma_cm_id *id, struct ib_pd *pd,
 
 	id->qp = qp;
 	id_priv->qp_num = qp->qp_num;
-	id_priv->srq = (qp->srq != NULL);
+	id_priv->srq = !!(qp->srq);
 	return 0;
 err:
 	ib_destroy_qp(qp);
