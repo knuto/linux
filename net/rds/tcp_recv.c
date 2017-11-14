@@ -223,8 +223,7 @@ static int rds_tcp_data_recv(read_descriptor_t *desc, struct sk_buff *skb,
 
 			skb_queue_tail(&tinc->ti_skb_list, clone);
 
-			rdsdebug("skb %p data %p len %d off %u to_copy %zu -> "
-				 "clone %p data %p len %d\n",
+			rdsdebug("skb %p data %p len %d off %u to_copy %zu -> clone %p data %p len %d\n",
 				 skb, skb->data, skb->len, offset, to_copy,
 				 clone, clone->data, clone->len);
 

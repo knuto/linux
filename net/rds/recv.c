@@ -105,8 +105,7 @@ static void rds_recv_rcvbuf_delta(struct rds_sock *rs, struct sock *sk,
 		rds_stats_add(s_recv_bytes_removed_from_socket, -delta);
 	now_congested = rs->rs_rcv_bytes > rds_sk_rcvbuf(rs);
 
-	rdsdebug("rs %p (%pI4:%u) recv bytes %d buf %d "
-	  "now_cong %d delta %d\n",
+	rdsdebug("rs %p (%pI4:%u) recv bytes %d buf %d now_cong %d delta %d\n",
 	  rs, &rs->rs_bound_addr,
 	  ntohs(rs->rs_bound_port), rs->rs_rcv_bytes,
 	  rds_sk_rcvbuf(rs), now_congested, delta);
@@ -221,8 +220,8 @@ static void rds_recv_hs_exthdrs(struct rds_header *hdr,
 			new_peer_gen_num = be32_to_cpu(buffer.rds_gen_num);
 			break;
 		default:
-			pr_warn_ratelimited("ignoring unknown exthdr type "
-					     "0x%x\n", type);
+			pr_warn_ratelimited("ignoring unknown exthdr type 0x%x\n",
+					     type);
 		}
 	}
 	/* if RDS_EXTHDR_NPATHS was not found, default to a single-path */
@@ -294,8 +293,8 @@ void rds_recv_incoming(struct rds_connection *conn, __be32 saddr, __be32 daddr,
 	else
 		cp = &conn->c_path[0];
 
-	rdsdebug("conn %p next %llu inc %p seq %llu len %u sport %u dport %u "
-		 "flags 0x%x rx_jiffies %lu\n", conn,
+	rdsdebug("conn %p next %llu inc %p seq %llu len %u sport %u dport %u flags 0x%x rx_jiffies %lu\n",
+		 conn,
 		 (unsigned long long)cp->cp_next_rx_seq,
 		 inc,
 		 (unsigned long long)be64_to_cpu(inc->i_hdr.h_sequence),

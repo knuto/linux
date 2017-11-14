@@ -730,8 +730,8 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 		 first, &first->s_wr, ret, failed_wr);
 	BUG_ON(failed_wr != &first->s_wr);
 	if (ret) {
-		printk(KERN_WARNING "RDS/IB: ib_post_send to %pI4 "
-		       "returned %d\n", &conn->c_faddr, ret);
+		printk(KERN_WARNING "RDS/IB: ib_post_send to %pI4 returned %d\n",
+		       &conn->c_faddr, ret);
 		rds_ib_ring_unalloc(&ic->i_send_ring, work_alloc);
 		rds_ib_sub_signaled(ic, nr_sig);
 		if (prev->s_op) {
@@ -827,8 +827,8 @@ int rds_ib_xmit_atomic(struct rds_connection *conn, struct rm_atomic_op *op)
 		 send, &send->s_atomic_wr, ret, failed_wr);
 	BUG_ON(failed_wr != &send->s_atomic_wr.wr);
 	if (ret) {
-		printk(KERN_WARNING "RDS/IB: atomic ib_post_send to %pI4 "
-		       "returned %d\n", &conn->c_faddr, ret);
+		printk(KERN_WARNING "RDS/IB: atomic ib_post_send to %pI4 returned %d\n",
+		       &conn->c_faddr, ret);
 		rds_ib_ring_unalloc(&ic->i_send_ring, work_alloc);
 		rds_ib_sub_signaled(ic, nr_sig);
 		goto out;
@@ -967,8 +967,8 @@ int rds_ib_xmit_rdma(struct rds_connection *conn, struct rm_rdma_op *op)
 		 first, &first->s_rdma_wr.wr, ret, failed_wr);
 	BUG_ON(failed_wr != &first->s_rdma_wr.wr);
 	if (ret) {
-		printk(KERN_WARNING "RDS/IB: rdma ib_post_send to %pI4 "
-		       "returned %d\n", &conn->c_faddr, ret);
+		printk(KERN_WARNING "RDS/IB: rdma ib_post_send to %pI4 returned %d\n",
+		       &conn->c_faddr, ret);
 		rds_ib_ring_unalloc(&ic->i_send_ring, work_alloc);
 		rds_ib_sub_signaled(ic, nr_sig);
 		goto out;

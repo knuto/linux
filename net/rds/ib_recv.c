@@ -419,9 +419,8 @@ void rds_ib_recv_refill(struct rds_connection *conn, int prefill, gfp_t gfp)
 		/* XXX when can this fail? */
 		ret = ib_post_recv(ic->i_cm_id->qp, &recv->r_wr, &failed_wr);
 		if (ret) {
-			rds_ib_conn_error(conn, "recv post on "
-			       "%pI4 returned %d, disconnecting and "
-			       "reconnecting\n", &conn->c_faddr,
+			rds_ib_conn_error(conn, "recv post on %pI4 returned %d, disconnecting and reconnecting\n",
+			       &conn->c_faddr,
 			       ret);
 			break;
 		}
@@ -849,10 +848,7 @@ static void rds_ib_process_recv(struct rds_connection *conn,
 		 data_len);
 
 	if (data_len < sizeof(struct rds_header)) {
-		rds_ib_conn_error(conn, "incoming message "
-		       "from %pI4 didn't include a "
-		       "header, disconnecting and "
-		       "reconnecting\n",
+		rds_ib_conn_error(conn, "incoming message from %pI4 didn't include a header, disconnecting and reconnecting\n",
 		       &conn->c_faddr);
 		return;
 	}
@@ -862,9 +858,7 @@ static void rds_ib_process_recv(struct rds_connection *conn,
 
 	/* Validate the checksum. */
 	if (!rds_message_verify_checksum(ihdr)) {
-		rds_ib_conn_error(conn, "incoming message "
-		       "from %pI4 has corrupted header - "
-		       "forcing a reconnect\n",
+		rds_ib_conn_error(conn, "incoming message from %pI4 has corrupted header - forcing a reconnect\n",
 		       &conn->c_faddr);
 		rds_stats_inc(s_recv_drop_bad_checksum);
 		return;
