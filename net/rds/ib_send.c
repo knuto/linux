@@ -811,7 +811,7 @@ int rds_ib_xmit_atomic(struct rds_connection *conn, struct rm_atomic_op *op)
 	send->s_sge[0].length = ib_sg_dma_len(ic->i_cm_id->device, op->op_sg);
 	send->s_sge[0].lkey = ic->i_pd->local_dma_lkey;
 
-	rdsdebug("rva %Lx rpa %Lx len %u\n", op->op_remote_addr,
+	rdsdebug("rva %llx rpa %llx len %u\n", op->op_remote_addr,
 		 send->s_sge[0].addr, send->s_sge[0].length);
 
 	if (nr_sig)
