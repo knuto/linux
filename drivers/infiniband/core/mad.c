@@ -60,7 +60,7 @@ module_param_named(recv_queue_size, mad_recvq_size, int, 0444);
 MODULE_PARM_DESC(recv_queue_size, "Size of receive queue in number of work requests");
 
 static struct list_head ib_mad_port_list;
-static u32 ib_mad_client_id = 0;
+static u32 ib_mad_client_id;
 
 /* Port list lock */
 static DEFINE_SPINLOCK(ib_mad_port_list_lock);
