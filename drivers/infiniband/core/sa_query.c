@@ -1235,7 +1235,7 @@ int ib_init_ah_from_path(struct ib_device *device, u8 port_num,
 	int use_roce;
 	struct net_device *ndev = NULL;
 
-	memset(ah_attr, 0, sizeof *ah_attr);
+	memset(ah_attr, 0, sizeof(*ah_attr));
 	ah_attr->type = rdma_ah_find_type(device, port_num);
 
 	rdma_ah_set_dlid(ah_attr, be32_to_cpu(sa_path_get_dlid(rec)));
@@ -1383,7 +1383,7 @@ static void init_mad(struct ib_sa_query *query, struct ib_mad_agent *agent)
 	struct ib_sa_mad *mad = query->mad_buf->mad;
 	unsigned long flags;
 
-	memset(mad, 0, sizeof *mad);
+	memset(mad, 0, sizeof(*mad));
 
 	if (query->flags & IB_SA_QUERY_OPA) {
 		mad->mad_hdr.base_version  = OPA_MGMT_BASE_VERSION;
@@ -2369,7 +2369,7 @@ static void ib_sa_add_one(struct ib_device *device)
 	s = rdma_start_port(device);
 	e = rdma_end_port(device);
 
-	sa_dev = kzalloc(sizeof *sa_dev +
+	sa_dev = kzalloc(sizeof(*sa_dev) +
 			 (e - s + 1) * sizeof(struct ib_sa_port),
 			 GFP_KERNEL);
 	if (!sa_dev)
@@ -2463,7 +2463,7 @@ int ib_sa_init(void)
 {
 	int ret;
 
-	get_random_bytes(&tid, sizeof tid);
+	get_random_bytes(&tid, sizeof(tid));
 
 	atomic_set(&ib_nl_sa_request_seq, 0);
 

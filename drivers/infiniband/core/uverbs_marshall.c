@@ -189,8 +189,8 @@ void ib_copy_path_rec_from_user(struct sa_path_rec *dst,
 		slid = htonl(ntohs(src->slid));
 		dlid = htonl(ntohs(src->dlid));
 	}
-	memcpy(dst->dgid.raw, src->dgid, sizeof dst->dgid);
-	memcpy(dst->sgid.raw, src->sgid, sizeof dst->sgid);
+	memcpy(dst->dgid.raw, src->dgid, sizeof(dst->dgid));
+	memcpy(dst->sgid.raw, src->sgid, sizeof(dst->sgid));
 
 	sa_path_set_dlid(dst, dlid);
 	sa_path_set_slid(dst, slid);

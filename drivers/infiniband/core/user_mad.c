@@ -219,7 +219,7 @@ static void recv_handler(struct ib_mad_agent *agent,
 	if (mad_recv_wc->wc->status != IB_WC_SUCCESS)
 		goto err1;
 
-	packet = kzalloc(sizeof *packet, GFP_KERNEL);
+	packet = kzalloc(sizeof(*packet), GFP_KERNEL);
 	if (!packet)
 		goto err1;
 
@@ -404,10 +404,10 @@ static int same_destination(struct ib_user_mad_hdr *hdr1,
 			    struct ib_user_mad_hdr *hdr2)
 {
 	if (!hdr1->grh_present && !hdr2->grh_present)
-	return (hdr1->lid == hdr2->lid);
+		return (hdr1->lid == hdr2->lid);
 
 	if (hdr1->grh_present && hdr2->grh_present)
-	return !memcmp(hdr1->gid, hdr2->gid, 16);
+		return !memcmp(hdr1->gid, hdr2->gid, 16);
 
 	return 0;
 }
@@ -461,7 +461,7 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
 	if (count < hdr_size(file) + IB_MGMT_RMPP_HDR)
 		return -EINVAL;
 
-	packet = kzalloc(sizeof *packet + IB_MGMT_RMPP_HDR, GFP_KERNEL);
+	packet = kzalloc(sizeof(*packet) + IB_MGMT_RMPP_HDR, GFP_KERNEL);
 	if (!packet)
 		return -ENOMEM;
 
@@ -490,7 +490,7 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
 		goto err_up;
 	}
 
-	memset(&ah_attr, 0, sizeof ah_attr);
+	memset(&ah_attr, 0, sizeof(ah_attr));
 	ah_attr.type = rdma_ah_find_type(file->port->ib_dev,
 					 file->port->port_num);
 	rdma_ah_set_dlid(&ah_attr, be16_to_cpu(packet->mad.hdr.lid));
@@ -642,7 +642,7 @@ static int ib_umad_reg_agent(struct ib_umad_file *file, void __user *arg,
 		goto out;
 	}
 
-	if (copy_from_user(&ureq, arg, sizeof ureq)) {
+	if (copy_from_user(&ureq, arg, sizeof(ureq))) {
 		ret = -EFAULT;
 		goto out;
 	}
@@ -670,7 +670,7 @@ found:
 		memset(&req, 0, sizeof(req));
 		req.mgmt_class         = ureq.mgmt_class;
 		req.mgmt_class_version = ureq.mgmt_class_version;
-		memcpy(req.oui, ureq.oui, sizeof req.oui);
+		memcpy(req.oui, ureq.oui, sizeof(req.oui));
 
 		if (compat_method_mask) {
 			u32 *umm = (u32 *)ureq.method_mask;
@@ -681,7 +681,7 @@ found:
 					umm[i * 2] | ((u64)umm[i * 2 + 1] << 32);
 		} else
 			memcpy(req.method_mask, ureq.method_mask,
-			       sizeof req.method_mask);
+			       sizeof(req.method_mask));
 	}
 
 	agent = ib_register_mad_agent(file->port->ib_dev, file->port->port_num,
@@ -942,7 +942,7 @@ static int ib_umad_open(struct inode *inode, struct file *filp)
 		goto out;
 
 	ret = -ENOMEM;
-	file = kzalloc(sizeof *file, GFP_KERNEL);
+	file = kzalloc(sizeof(*file), GFP_KERNEL);
 	if (!file)
 		goto out;
 
@@ -1287,7 +1287,7 @@ static void ib_umad_add_one(struct ib_device *device)
 	s = rdma_start_port(device);
 	e = rdma_end_port(device);
 
-	umad_dev = kzalloc(sizeof *umad_dev +
+	umad_dev = kzalloc(sizeof(*umad_dev) +
 			   (e - s + 1) * sizeof(struct ib_umad_port),
 			   GFP_KERNEL);
 	if (!umad_dev)

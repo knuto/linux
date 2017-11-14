@@ -129,7 +129,7 @@ static inline struct ib_pool_fmr *ib_fmr_cache_lookup(struct ib_fmr_pool *pool,
 		if (io_virtual_address == fmr->io_virtual_address &&
 		    page_list_len      == fmr->page_list_len      &&
 		    !memcmp(page_list, fmr->page_list,
-			    page_list_len * sizeof *page_list))
+			    page_list_len * sizeof(*page_list)))
 			return fmr;
 
 	return NULL;
@@ -222,7 +222,7 @@ struct ib_fmr_pool *ib_create_fmr_pool(struct ib_pd             *pd,
 	else
 		max_remaps = device->attrs.max_map_per_fmr;
 
-	pool = kmalloc(sizeof *pool, GFP_KERNEL);
+	pool = kmalloc(sizeof(*pool), GFP_KERNEL);
 	if (!pool)
 		return ERR_PTR(-ENOMEM);
 
@@ -235,7 +235,7 @@ struct ib_fmr_pool *ib_create_fmr_pool(struct ib_pd             *pd,
 
 	if (params->cache) {
 		pool->cache_bucket =
-			kmalloc(IB_FMR_HASH_SIZE * sizeof *pool->cache_bucket,
+			kmalloc(IB_FMR_HASH_SIZE * sizeof(*pool->cache_bucket),
 				GFP_KERNEL);
 		if (!pool->cache_bucket) {
 			ret = -ENOMEM;
@@ -271,7 +271,7 @@ struct ib_fmr_pool *ib_create_fmr_pool(struct ib_pd             *pd,
 			.max_maps   = pool->max_remaps,
 			.page_shift = params->page_shift
 		};
-		int bytes_per_fmr = sizeof *fmr;
+		int bytes_per_fmr = sizeof(*fmr);
 
 		if (pool->cache_bucket)
 			bytes_per_fmr += params->max_pages_per_fmr * sizeof(u64);
