@@ -891,7 +891,7 @@ static int handle_outgoing_dr_smp(struct ib_mad_agent_private *mad_agent_priv,
 		if (port_priv) {
 			memcpy(mad_priv->mad, smp, mad_priv->mad_size);
 			recv_mad_agent = find_mad_agent(port_priv,
-						        (const struct ib_mad_hdr *)mad_priv->mad);
+							(const struct ib_mad_hdr *)mad_priv->mad);
 		}
 		if (!port_priv || !recv_mad_agent) {
 			/*
@@ -2376,9 +2376,9 @@ static void wait_for_response(struct ib_mad_send_wr_private *mad_send_wr)
 				       temp_mad_send_wr->timeout))
 				break;
 		}
-	}
-	else
+	} else {
 		list_item = &mad_agent_priv->wait_list;
+	}
 	list_add(&mad_send_wr->agent_list, list_item);
 
 	/* Reschedule a work item if we have a shorter timeout */

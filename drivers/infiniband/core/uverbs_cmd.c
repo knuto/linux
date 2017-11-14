@@ -322,8 +322,8 @@ ssize_t ib_uverbs_alloc_pd(struct ib_uverbs_file *file,
 
 	INIT_UDATA(&udata, buf + sizeof(cmd),
 		   (unsigned long) cmd.response + sizeof(resp),
-                   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
-                   out_len - sizeof(resp));
+		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
+		   out_len - sizeof(resp));
 
 	uobj  = uobj_alloc(uobj_get_type(pd), file->ucontext);
 	if (IS_ERR(uobj))
@@ -492,8 +492,8 @@ ssize_t ib_uverbs_open_xrcd(struct ib_uverbs_file *file,
 
 	INIT_UDATA(&udata, buf + sizeof(cmd),
 		   (unsigned long) cmd.response + sizeof(resp),
-                   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
-                   out_len - sizeof(resp));
+		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
+		   out_len - sizeof(resp));
 
 	mutex_lock(&file->device->xrcd_tree_mutex);
 
@@ -657,8 +657,8 @@ ssize_t ib_uverbs_reg_mr(struct ib_uverbs_file *file,
 
 	INIT_UDATA(&udata, buf + sizeof(cmd),
 		   (unsigned long) cmd.response + sizeof(resp),
-                   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
-                   out_len - sizeof(resp));
+		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
+		   out_len - sizeof(resp));
 
 	if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
 		return -EINVAL;
@@ -750,8 +750,8 @@ ssize_t ib_uverbs_rereg_mr(struct ib_uverbs_file *file,
 
 	INIT_UDATA(&udata, buf + sizeof(cmd),
 		   (unsigned long) cmd.response + sizeof(resp),
-                   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
-                   out_len - sizeof(resp));
+		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
+		   out_len - sizeof(resp));
 
 	if (cmd.flags & ~IB_MR_REREG_SUPPORTED || !cmd.flags)
 		return -EINVAL;
