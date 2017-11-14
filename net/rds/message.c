@@ -221,7 +221,7 @@ out:
  */
 struct scatterlist *rds_message_alloc_sgs(struct rds_message *rm, int nents)
 {
-	struct scatterlist *sg_first = (struct scatterlist *) &rm[1];
+	struct scatterlist *sg_first = (struct scatterlist *)&rm[1];
 	struct scatterlist *sg_ret;
 
 	WARN_ON(rm->m_used_sgs + nents > rm->m_total_sgs);

@@ -412,7 +412,7 @@ void rds_ib_recv_refill(struct rds_connection *conn, int prefill, gfp_t gfp)
 
 		rdsdebug("recv %p ibinc %p page %p addr %lu\n", recv,
 			 recv->r_ibinc, sg_page(&recv->r_frag->f_sg),
-			 (long) ib_sg_dma_address(
+			 (long)ib_sg_dma_address(
 				ic->i_cm_id->device,
 				&recv->r_frag->f_sg));
 
@@ -655,7 +655,7 @@ static void rds_ib_send_ack(struct rds_ib_connection *ic, unsigned int adv_credi
 
 	seq = rds_ib_get_ack(ic);
 
-	rdsdebug("send_ack: ic %p ack %llu\n", ic, (unsigned long long) seq);
+	rdsdebug("send_ack: ic %p ack %llu\n", ic, (unsigned long long)seq);
 	rds_message_populate_header(hdr, 0, 0, 0);
 	hdr->h_ack = cpu_to_be64(seq);
 	hdr->h_credit = adv_credits;

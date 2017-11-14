@@ -125,9 +125,9 @@ static void release_in_xmit(struct rds_conn_path *cp)
  * down the connection at a time.
  *   Pro:
  *      - tx queueing is a simple fifo list
- *   	- reassembly is optional and easily done by transports per conn
+ *	- reassembly is optional and easily done by transports per conn
  *      - no per flow rx lookup at all, straight to the socket
- *   	- less per-frag memory and wire overhead
+ *	- less per-frag memory and wire overhead
  *   Con:
  *      - queued acks can be delayed behind large messages
  *   Depends:

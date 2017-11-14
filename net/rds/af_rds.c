@@ -231,7 +231,7 @@ static int rds_set_bool_option(unsigned char *optvar, char __user *optval,
 
 	if (optlen < sizeof(int))
 		return -EINVAL;
-	if (get_user(value, (int __user *) optval))
+	if (get_user(value, (int __user *)optval))
 		return -EFAULT;
 	*optvar = !!value;
 	return 0;
@@ -400,7 +400,7 @@ static int rds_getsockopt(struct socket *sock, int level, int optname,
 		if (len < sizeof(int))
 			ret = -EINVAL;
 		else
-		if (put_user(rs->rs_recverr, (int __user *) optval) ||
+		if (put_user(rs->rs_recverr, (int __user *)optval) ||
 		    put_user(sizeof(int), optlen))
 			ret = -EFAULT;
 		else
