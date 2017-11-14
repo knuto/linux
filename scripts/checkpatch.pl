@@ -48,6 +48,7 @@ my %ignore_type = ();
 my @ignore = ();
 my $help = 0;
 my $configuration_file = ".checkpatch.conf";
+my $ignore_cfg_file;
 my $max_line_length = 80;
 my $ignore_perl_version = 0;
 my $minimum_perl_version = 5.10.0;
@@ -90,6 +91,9 @@ Options:
   --list-types               list the possible message types
   --types TYPE(,TYPE2...)    show only these comma separated message types
   --ignore TYPE(,TYPE2...)   ignore various comma separated message types
+  --ignore-cfg FILE	     parse this file for a detailed file specific ignore list,
+			     silently exit without checking if an ignore config file
+			     is not found.
   --show-types               show the specific message type in the output
   --max-line-length=n        set the maximum line length, if exceeded, warn
   --min-conf-desc-length=n   set the min description length, if shorter, warn
@@ -201,6 +205,7 @@ GetOptions(
 	'terse!'	=> \$terse,
 	'showfile!'	=> \$showfile,
 	'f|file!'	=> \$file,
+	'ignore-cfg=s'	=> \$ignore_cfg_file,
 	'g|git!'	=> \$git,
 	'subjective!'	=> \$check,
 	'strict!'	=> \$check,
@@ -232,6 +237,9 @@ GetOptions(
 help(0) if ($help);
 
 list_types(0) if ($list_types);
+
+# Enforce --strict if used with a ignore configuration file:
+$check = 1 if defined($ignore_cfg_file);
 
 $fix = 1 if ($fix_inplace);
 $check_orig = $check;
@@ -291,6 +299,7 @@ sub hash_show_words {
 	}
 }
 
+parse_ignore_cfg_file(@ARGV) || exit(0);
 hash_save_array_words(\%ignore_type, \@ignore);
 hash_save_array_words(\%use_type, \@use);
 
@@ -2158,6 +2167,54 @@ sub pos_last_openparen {
 	}
 
 	return length(expand_tabs(substr($line, 0, $last_openparen))) + 1;
+}
+
+# Checkpatch suppression list configuration file support
+#
+# See Documentation/dev-tools/run-checkpatch.rst
+#
+sub parse_ignore_cfg_file {
+	defined($ignore_cfg_file) || return 1;
+	my $path = shift(@_);
+	my $filename = basename($path);
+	my $dir = dirname($path);
+	my %IgnoreCfgKeywords = (
+		'except'	=> sub { my $type = shift(@_);
+					 grep( /^$filename$/, @_ ) && push(@ignore, $type);
+				       },
+		'pervasive'	=> sub { push(@ignore, @_); },
+		'line_len'	=> sub { $max_line_length = shift(@_); }
+	);
+	my $ignfile;
+
+	( -f $ignore_cfg_file ) || ( $ignore_cfg_file = "$dir/$ignore_cfg_file" );
+	( ! -f $ignore_cfg_file ) && return 0;
+	open($ignfile, '<', "$ignore_cfg_file") || return 0;
+
+	($#_ >= 0) &&
+		die "$P: The --ignore-cfg option is only supported with one source file at a time!\n";
+
+	while (<$ignfile>) {
+		my $line = $_;
+
+		$line =~ s/\s*\n?$//g;
+		$line =~ s/^\s*//g;
+		$line =~ s/\s+/ /g;
+		$line =~ s/#.*//g;
+		$line =~ m/^\s*$/ && next;
+
+		my @words = split(" ", $line);
+		my $kw = shift(@words);
+		defined($kw) or next;
+		my $cmd = $IgnoreCfgKeywords{$kw};
+		if ( !defined($cmd) ) {
+			print "$line\n";
+			warn("Unknown keyword \"$kw\" in file \"$ignore_cfg_file\"\n");
+			next;
+		}
+		&$cmd(@words);
+	}
+	return 1;
 }
 
 sub process {
