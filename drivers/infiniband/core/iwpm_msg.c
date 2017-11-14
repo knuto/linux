@@ -380,7 +380,6 @@ int iwpm_register_pid_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	if (strcmp(pm_msg->dev_name, dev_name) ||
 	    strcmp(iwpm_ulib_name, iwpm_name) ||
 			iwpm_version != iwpm_ulib_version) {
-
 		pr_info("%s: Incorrect info (dev = %s name = %s version = %d)\n",
 			__func__, dev_name, iwpm_name, iwpm_version);
 		nlmsg_request->err_code = IWPM_USER_LIB_INFO_ERR;

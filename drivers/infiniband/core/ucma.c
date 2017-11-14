@@ -758,7 +758,6 @@ static void ucma_copy_ib_route(struct rdma_ucm_query_route_resp *resp,
 static void ucma_copy_iboe_route(struct rdma_ucm_query_route_resp *resp,
 				 struct rdma_route *route)
 {
-
 	resp->num_paths = route->num_paths;
 	switch (route->num_paths) {
 	case 0:

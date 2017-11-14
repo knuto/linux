@@ -198,7 +198,6 @@ static enum smi_action __smi_handle_dr_smp_recv(bool is_switch, int port_num,
 		return (*hop_ptr == hop_cnt + 1 ? IB_SMI_HANDLE : IB_SMI_DISCARD);
 
 	} else {
-
 		/* C14-13:1 */
 		if (hop_cnt && *hop_ptr == hop_cnt + 1) {
 			(*hop_ptr)--;
@@ -296,7 +295,6 @@ static enum smi_forward_action __smi_check_forward_dr_smp(u8 hop_ptr, u8 hop_cnt
 				IB_SMI_SEND : IB_SMI_LOCAL);
 	}
 	return IB_SMI_LOCAL;
-
 }
 
 enum smi_forward_action smi_check_forward_dr_smp(struct ib_smp *smp)

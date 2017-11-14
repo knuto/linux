@@ -157,7 +157,6 @@ static void ib_ucm_cleanup_events(struct ib_ucm_context *ctx)
 	mutex_lock(&ctx->file->file_mutex);
 	list_del(&ctx->file_list);
 	while (!list_empty(&ctx->events)) {
-
 		uevent = list_entry(ctx->events.next,
 				    struct ib_ucm_event, ctx_list);
 		list_del(&uevent->file_list);
@@ -718,7 +717,6 @@ static int ib_ucm_path_get(struct sa_path_rec **path, u64 src)
 
 	if (copy_from_user(&upath, (void __user *)(unsigned long)src,
 			   sizeof(upath))) {
-
 		kfree(sa_path);
 		return -EFAULT;
 	}

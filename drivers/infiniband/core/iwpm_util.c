@@ -88,7 +88,6 @@ static void free_reminfo_bucket(void);
 
 int iwpm_exit(u8 nl_client)
 {
-
 	if (!iwpm_valid_client(nl_client))
 		return -EINVAL;
 	mutex_lock(&iwpm_admin_lock);
@@ -165,10 +164,8 @@ int iwpm_remove_mapinfo(struct sockaddr_storage *local_sockaddr,
 
 		hlist_for_each_entry_safe(map_info, tmp_hlist_node,
 					  hash_bucket_head, hlist_node) {
-
 			if (!iwpm_compare_sockaddr(&map_info->mapped_sockaddr,
 						   mapped_local_addr)) {
-
 				hlist_del_init(&map_info->hlist_node);
 				kfree(map_info);
 				ret = 0;
@@ -193,7 +190,6 @@ static void free_hash_bucket(void)
 	for (i = 0; i < IWPM_MAPINFO_HASH_SIZE; i++) {
 		hlist_for_each_entry_safe(map_info, tmp_hlist_node,
 					  &iwpm_hash_bucket[i], hlist_node) {
-
 				hlist_del_init(&map_info->hlist_node);
 				kfree(map_info);
 			}
@@ -216,7 +212,6 @@ static void free_reminfo_bucket(void)
 	for (i = 0; i < IWPM_REMINFO_HASH_SIZE; i++) {
 		hlist_for_each_entry_safe(rem_info, tmp_hlist_node,
 					  &iwpm_reminfo_bucket[i], hlist_node) {
-
 				hlist_del_init(&rem_info->hlist_node);
 				kfree(rem_info);
 			}
@@ -270,12 +265,10 @@ int iwpm_get_remote_info(struct sockaddr_storage *mapped_loc_addr,
 			goto get_remote_info_exit;
 		hlist_for_each_entry_safe(rem_info, tmp_hlist_node,
 					  hash_bucket_head, hlist_node) {
-
 			if (!iwpm_compare_sockaddr(&rem_info->mapped_loc_sockaddr,
 						   mapped_loc_addr) &&
 				!iwpm_compare_sockaddr(&rem_info->mapped_rem_sockaddr,
 				mapped_rem_addr)) {
-
 				memcpy(remote_addr, &rem_info->remote_sockaddr,
 				       sizeof(struct sockaddr_storage));
 				iwpm_print_sockaddr(remote_addr,
