@@ -750,6 +750,7 @@ static struct cm_id_private * cm_insert_remote_sidr(struct cm_id_private
 			link = &(*link)->rb_right;
 		else {
 			int cmp;
+
 			cmp = memcmp(port_gid, &cur_cm_id_priv->av.dgid,
 				     sizeof *port_gid);
 			if (cmp < 0)

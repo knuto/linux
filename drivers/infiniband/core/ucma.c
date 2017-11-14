@@ -544,7 +544,6 @@ static int ucma_free_ctx(struct ucma_context *ctx)
 	struct ucma_event *uevent, *tmp;
 	LIST_HEAD(list);
 
-
 	ucma_cleanup_multicast(ctx);
 
 	/* Cleanup events not yet reported to the user. */
@@ -1570,7 +1569,7 @@ file_put:
 static ssize_t (*ucma_cmd_table[])(struct ucma_file *file,
 				   const char __user *inbuf,
 				   int in_len, int out_len) = {
-	[RDMA_USER_CM_CMD_CREATE_ID] 	 = ucma_create_id,
+	[RDMA_USER_CM_CMD_CREATE_ID]	 = ucma_create_id,
 	[RDMA_USER_CM_CMD_DESTROY_ID]	 = ucma_destroy_id,
 	[RDMA_USER_CM_CMD_BIND_IP]	 = ucma_bind_ip,
 	[RDMA_USER_CM_CMD_RESOLVE_IP]	 = ucma_resolve_ip,
@@ -1717,8 +1716,8 @@ static int ucma_close(struct inode *inode, struct file *filp)
 }
 
 static const struct file_operations ucma_fops = {
-	.owner 	 = THIS_MODULE,
-	.open 	 = ucma_open,
+	.owner	 = THIS_MODULE,
+	.open	 = ucma_open,
 	.release = ucma_close,
 	.write	 = ucma_write,
 	.poll    = ucma_poll,

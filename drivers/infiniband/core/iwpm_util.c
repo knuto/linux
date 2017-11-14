@@ -54,6 +54,7 @@ static struct iwpm_admin_data iwpm_admin;
 int iwpm_init(u8 nl_client)
 {
 	int ret = 0;
+
 	mutex_lock(&iwpm_admin_lock);
 	if (atomic_read(&iwpm_admin.refcount) == 0) {
 		iwpm_hash_bucket = kzalloc(IWPM_MAPINFO_HASH_SIZE *
