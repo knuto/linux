@@ -533,7 +533,7 @@ void rds_for_each_conn_info(struct socket *sock, unsigned int len,
 			  int (*visitor)(struct rds_connection *, void *),
 			  size_t item_len)
 {
-	uint64_t buffer[(item_len + 7) / 8];
+	u64 buffer[(item_len + 7) / 8];
 	struct hlist_head *head;
 	struct rds_connection *conn;
 	size_t i;
