@@ -267,8 +267,8 @@ ssize_t ib_uverbs_query_port(struct ib_uverbs_file *file,
 
 	memset(&resp, 0, sizeof resp);
 
-	resp.state 	     = attr.state;
-	resp.max_mtu 	     = attr.max_mtu;
+	resp.state	     = attr.state;
+	resp.max_mtu	     = attr.max_mtu;
 	resp.active_mtu      = attr.active_mtu;
 	resp.gid_tbl_len     = attr.gid_tbl_len;
 	resp.port_cap_flags  = attr.port_cap_flags;
@@ -284,9 +284,9 @@ ssize_t ib_uverbs_query_port(struct ib_uverbs_file *file,
 		resp.lid     = ib_lid_cpu16(attr.lid);
 		resp.sm_lid  = ib_lid_cpu16(attr.sm_lid);
 	}
-	resp.lmc 	     = attr.lmc;
+	resp.lmc	     = attr.lmc;
 	resp.max_vl_num      = attr.max_vl_num;
-	resp.sm_sl 	     = attr.sm_sl;
+	resp.sm_sl	     = attr.sm_sl;
 	resp.subnet_timeout  = attr.subnet_timeout;
 	resp.init_type_reply = attr.init_type_reply;
 	resp.active_width    = attr.active_width;
@@ -1311,9 +1311,9 @@ ssize_t ib_uverbs_destroy_cq(struct ib_uverbs_file *file,
 	struct ib_uverbs_destroy_cq      cmd;
 	struct ib_uverbs_destroy_cq_resp resp;
 	struct ib_uobject		*uobj;
-	struct ib_cq               	*cq;
-	struct ib_ucq_object        	*obj;
-	int                        	 ret = -EINVAL;
+	struct ib_cq			*cq;
+	struct ib_ucq_object		*obj;
+	int				 ret = -EINVAL;
 
 	if (copy_from_user(&cmd, buf, sizeof cmd))
 		return -EFAULT;
@@ -1806,7 +1806,6 @@ ssize_t ib_uverbs_open_qp(struct ib_uverbs_file *file,
 	qp->uobject = &obj->uevent.uobject;
 	uobj_put_read(xrcd_uobj);
 
-
 	uobj_alloc_commit(&obj->uevent.uobject);
 
 	return in_len;
@@ -2097,8 +2096,8 @@ ssize_t ib_uverbs_destroy_qp(struct ib_uverbs_file *file,
 	struct ib_uverbs_destroy_qp      cmd;
 	struct ib_uverbs_destroy_qp_resp resp;
 	struct ib_uobject		*uobj;
-	struct ib_uqp_object        	*obj;
-	int                        	 ret = -EINVAL;
+	struct ib_uqp_object		*obj;
+	int				 ret = -EINVAL;
 
 	if (copy_from_user(&cmd, buf, sizeof cmd))
 		return -EFAULT;
@@ -3746,8 +3745,8 @@ ssize_t ib_uverbs_destroy_srq(struct ib_uverbs_file *file,
 	struct ib_uverbs_destroy_srq      cmd;
 	struct ib_uverbs_destroy_srq_resp resp;
 	struct ib_uobject		 *uobj;
-	struct ib_uevent_object        	 *obj;
-	int                         	  ret = -EINVAL;
+	struct ib_uevent_object		 *obj;
+	int				  ret = -EINVAL;
 
 	if (copy_from_user(&cmd, buf, sizeof cmd))
 		return -EFAULT;

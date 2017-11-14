@@ -316,6 +316,7 @@ int cma_set_default_roce_tos(struct cma_device *cma_dev, unsigned int port,
 
 	return 0;
 }
+
 struct ib_device *cma_get_ib_dev(struct cma_device *cma_dev)
 {
 	return cma_dev->device;
@@ -628,7 +629,6 @@ static inline int cma_validate_port(struct ib_device *device, u8 port,
 		ndev = dev_get_by_index(&init_net, bound_if_index);
 	else
 		gid_type = IB_GID_TYPE_IB;
-
 
 	ret = ib_find_cached_gid_by_port(device, gid, gid_type, port,
 					 ndev, NULL);
@@ -2536,7 +2536,6 @@ static int cma_resolve_iboe_route(struct rdma_id_private *id_priv)
 					rdma_start_port(id_priv->cma_dev->device)];
 	u8 tos = id_priv->tos_set ? id_priv->tos : default_roce_tos;
 
-
 	work = kzalloc(sizeof *work, GFP_KERNEL);
 	if (!work)
 		return -ENOMEM;
@@ -2845,6 +2844,7 @@ static int cma_bind_addr(struct rdma_cm_id *id, struct sockaddr *src_addr,
 		    dst_addr->sa_family == AF_INET6) {
 			struct sockaddr_in6 *src_addr6 = (struct sockaddr_in6 *)src_addr;
 			struct sockaddr_in6 *dst_addr6 = (struct sockaddr_in6 *)dst_addr;
+
 			src_addr6->sin6_scope_id = dst_addr6->sin6_scope_id;
 			if (ipv6_addr_type(&dst_addr6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
 				id->route.addr.dev_addr.bound_dev_if = dst_addr6->sin6_scope_id;

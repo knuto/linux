@@ -293,6 +293,7 @@ static void enum_netdev_ipv4_ips(struct ib_device *ib_dev,
 	struct sin_list *sin_temp;
 
 	LIST_HEAD(sin_list);
+
 	if (ndev->reg_state >= NETREG_UNREGISTERING)
 		return;
 

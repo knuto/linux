@@ -561,7 +561,6 @@ static int ib_cache_gid_find_by_filter(struct ib_device *ib_dev,
 	unsigned long flags;
 	bool found = false;
 
-
 	if (!rdma_is_port_valid(ib_dev, port) ||
 	    !rdma_protocol_roce(ib_dev, port))
 		return -EPROTONOSUPPORT;

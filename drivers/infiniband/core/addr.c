@@ -774,7 +774,6 @@ int rdma_addr_find_l2_eth_by_grh(const union ib_gid *sgid,
 		struct sockaddr_in6 _sockaddr_in6;
 	} sgid_addr, dgid_addr;
 
-
 	rdma_gid2ip(&sgid_addr._sockaddr, sgid);
 	rdma_gid2ip(&dgid_addr._sockaddr, dgid);
 

@@ -2707,6 +2707,7 @@ static void local_completions(struct work_struct *work)
 		free_mad = 0;
 		if (local->mad_priv) {
 			u8 base_version;
+
 			recv_mad_agent = local->recv_mad_agent;
 			if (!recv_mad_agent) {
 				dev_err(&mad_agent_priv->agent.device->dev,

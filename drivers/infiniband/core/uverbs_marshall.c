@@ -90,7 +90,7 @@ void ib_copy_ah_attr_to_user(struct ib_device *device,
 		dst->grh.traffic_class     = grh->traffic_class;
 	}
 	dst->port_num		   = rdma_ah_get_port_num(src);
-	dst->reserved 		   = 0;
+	dst->reserved		   = 0;
 }
 EXPORT_SYMBOL(ib_copy_ah_attr_to_user);
 

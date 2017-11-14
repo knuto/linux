@@ -116,7 +116,7 @@ static struct ctl_table iwcm_ctl_table[] = {
 /*
  * The following services provide a mechanism for pre-allocating iwcm_work
  * elements.  The design pre-allocates them  based on the cm_id type:
- *	LISTENING IDS: 	Get enough elements preallocated to handle the
+ *	LISTENING IDS:	Get enough elements preallocated to handle the
  *			listen backlog.
  *	ACTIVE IDS:	4: CONNECT_REPLY, ESTABLISHED, DISCONNECT, CLOSE
  *	PASSIVE IDS:	3: ESTABLISHED, DISCONNECT, CLOSE
@@ -221,6 +221,7 @@ static int iwcm_deref_id(struct iwcm_id_private *cm_id_priv)
 static void add_ref(struct iw_cm_id *cm_id)
 {
 	struct iwcm_id_private *cm_id_priv;
+
 	cm_id_priv = container_of(cm_id, struct iwcm_id_private, id);
 	atomic_inc(&cm_id_priv->refcount);
 }
@@ -263,7 +264,6 @@ struct iw_cm_id *iw_create_cm_id(struct ib_device *device,
 	return &cm_id_priv->id;
 }
 EXPORT_SYMBOL(iw_create_cm_id);
-
 
 static int iwcm_modify_qp_err(struct ib_qp *qp)
 {
@@ -939,6 +939,7 @@ static int cm_close_handler(struct iwcm_id_private *cm_id_priv,
 {
 	unsigned long flags;
 	int ret = 0;
+
 	spin_lock_irqsave(&cm_id_priv->lock, flags);
 
 	if (cm_id_priv->qp) {
@@ -1047,7 +1048,7 @@ static void cm_work_handler(struct work_struct *_work)
  * deleted.
  *
  * Returns:
- * 	      0	- the event was handled.
+ *	      0	- the event was handled.
  *	-ENOMEM	- the event was not handled due to lack of resources.
  */
 static int cm_event_handler(struct iw_cm_id *cm_id,

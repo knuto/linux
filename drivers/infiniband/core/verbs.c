@@ -195,6 +195,7 @@ EXPORT_SYMBOL(rdma_node_get_transport);
 enum rdma_link_layer rdma_port_get_link_layer(struct ib_device *device, u8 port_num)
 {
 	enum rdma_transport_type lt;
+
 	if (device->get_link_layer)
 		return device->get_link_layer(device, port_num);
 
@@ -618,8 +619,8 @@ struct ib_srq *ib_create_srq(struct ib_pd *pd,
 	srq = pd->device->create_srq(pd, srq_init_attr, NULL);
 
 	if (!IS_ERR(srq)) {
-		srq->device    	   = pd->device;
-		srq->pd        	   = pd;
+		srq->device	   = pd->device;
+		srq->pd		   = pd;
 		srq->uobject       = NULL;
 		srq->event_handler = srq_init_attr->event_handler;
 		srq->srq_context   = srq_init_attr->srq_context;
@@ -1038,7 +1039,7 @@ static const struct {
 				 [IB_QPT_GSI] = (IB_QP_CUR_STATE		|
 						 IB_QP_QKEY),
 				 [IB_QPT_RAW_PACKET] = IB_QP_RATE_LIMIT,
-			 }
+			}
 		}
 	},
 	[IB_QPS_RTS]   = {
@@ -1896,6 +1897,7 @@ struct ib_flow *ib_create_flow(struct ib_qp *qp,
 			       int domain)
 {
 	struct ib_flow *flow_id;
+
 	if (!qp->device->create_flow)
 		return ERR_PTR(-ENOSYS);
 

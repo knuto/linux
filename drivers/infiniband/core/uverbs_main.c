@@ -1154,13 +1154,13 @@ static void ib_uverbs_free_hw_resources(struct ib_uverbs_device *uverbs_dev,
 	mutex_lock(&uverbs_dev->lists_mutex);
 	while (!list_empty(&uverbs_dev->uverbs_file_list)) {
 		struct ib_ucontext *ucontext;
+
 		file = list_first_entry(&uverbs_dev->uverbs_file_list,
 					struct ib_uverbs_file, list);
 		file->is_closed = 1;
 		list_del(&file->list);
 		kref_get(&file->ref);
 		mutex_unlock(&uverbs_dev->lists_mutex);
-
 
 		mutex_lock(&file->cleanup_mutex);
 		ucontext = file->ucontext;

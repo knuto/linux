@@ -51,6 +51,7 @@ struct gid_attr_group {
 	struct attribute_group	ndev;
 	struct attribute_group	type;
 };
+
 struct ib_port {
 	struct kobject         kobj;
 	struct ib_device      *ibdev;
@@ -816,6 +817,7 @@ static ssize_t show_stats_lifespan(struct kobject *kobj,
 		msecs = jiffies_to_msecs(dev->hw_stats->lifespan);
 	} else {
 		struct ib_port *p = container_of(kobj, struct ib_port, kobj);
+
 		msecs = jiffies_to_msecs(p->hw_stats->lifespan);
 	}
 	return sprintf(buf, "%d\n", msecs);
@@ -843,6 +845,7 @@ static ssize_t set_stats_lifespan(struct kobject *kobj,
 		dev->hw_stats->lifespan = jiffies;
 	} else {
 		struct ib_port *p = container_of(kobj, struct ib_port, kobj);
+
 		p->hw_stats->lifespan = jiffies;
 	}
 	return count;
@@ -944,6 +947,7 @@ static void setup_hw_stats(struct ib_device *device, struct ib_port *port,
 
 	if (port) {
 		struct kobject *kobj = &port->kobj;
+
 		ret = sysfs_create_group(kobj, hsag);
 		if (ret)
 			goto err;
@@ -951,6 +955,7 @@ static void setup_hw_stats(struct ib_device *device, struct ib_port *port,
 		port->hw_stats = stats;
 	} else {
 		struct kobject *kobj = &device->dev.kobj;
+
 		ret = sysfs_create_group(kobj, hsag);
 		if (ret)
 			goto err;
@@ -1235,6 +1240,7 @@ static void free_port_list_attributes(struct ib_device *device)
 
 	list_for_each_entry_safe(p, t, &device->port_list, entry) {
 		struct ib_port *port = container_of(p, struct ib_port, kobj);
+
 		list_del(&p->entry);
 		if (port->hw_stats) {
 			kfree(port->hw_stats);

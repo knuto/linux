@@ -404,10 +404,10 @@ static int same_destination(struct ib_user_mad_hdr *hdr1,
 			    struct ib_user_mad_hdr *hdr2)
 {
 	if (!hdr1->grh_present && !hdr2->grh_present)
-	   return (hdr1->lid == hdr2->lid);
+	return (hdr1->lid == hdr2->lid);
 
 	if (hdr1->grh_present && hdr2->grh_present)
-	   return !memcmp(hdr1->gid, hdr2->gid, 16);
+	return !memcmp(hdr1->gid, hdr2->gid, 16);
 
 	return 0;
 }
@@ -837,7 +837,6 @@ out:
 
 	return ret;
 }
-
 
 static int ib_umad_unreg_agent(struct ib_umad_file *file, u32 __user *arg)
 {
