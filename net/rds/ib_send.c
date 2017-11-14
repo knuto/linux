@@ -509,8 +509,7 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 	BUG_ON(hdr_off != 0 && hdr_off != sizeof(struct rds_header));
 
 	/* Do not send cong updates to IB loopback */
-	if (conn->c_loopback
-	    && rm->m_inc.i_hdr.h_flags & RDS_FLAG_CONG_BITMAP) {
+	if (conn->c_loopback && rm->m_inc.i_hdr.h_flags & RDS_FLAG_CONG_BITMAP) {
 		rds_cong_map_updated(conn->c_fcong, ~(u64)0);
 		scat = &rm->data.op_sg[sg];
 		ret = max_t(int, RDS_CONG_MAP_BYTES, scat->length);
@@ -641,8 +640,7 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 		memcpy(&ic->i_send_hdrs[pos], &rm->m_inc.i_hdr, sizeof(struct rds_header));
 
 		/* Set up the data, if present */
-		if (i < work_alloc
-		    && scat != &rm->data.op_sg[rm->data.op_count]) {
+		if (i < work_alloc && scat != &rm->data.op_sg[rm->data.op_count]) {
 			len = min(RDS_FRAG_SIZE,
 				ib_sg_dma_len(dev, scat) - rm->data.op_dmaoff);
 			send->s_wr.num_sge = 2;
@@ -694,8 +692,7 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 		send = &ic->i_sends[pos];
 		i++;
 
-	} while (i < work_alloc
-		 && scat != &rm->data.op_sg[rm->data.op_count]);
+	} while (i < work_alloc && scat != &rm->data.op_sg[rm->data.op_count]);
 
 	/* Account the RDS header in the number of bytes we sent, but just once.
 	 * The caller has no concept of fragmentation. */

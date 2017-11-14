@@ -564,8 +564,8 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 	unsigned int i, j;
 	int ret = 0;
 
-	if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct rds_rdma_args))
-	    || rm->rdma.op_active)
+	if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct rds_rdma_args)) ||
+	    rm->rdma.op_active)
 		return -EINVAL;
 
 	args = CMSG_DATA(cmsg);
@@ -791,8 +791,8 @@ int rds_cmsg_atomic(struct rds_sock *rs, struct rds_message *rm,
 	struct rds_atomic_args *args;
 	int ret = 0;
 
-	if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct rds_atomic_args))
-	 || rm->atomic.op_active)
+	if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct rds_atomic_args)) ||
+	    rm->atomic.op_active)
 		return -EINVAL;
 
 	args = CMSG_DATA(cmsg);

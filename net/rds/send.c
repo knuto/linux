@@ -338,8 +338,7 @@ restart:
 			if (rm->rdma.op_active && !rm->rdma.op_silent)
 				all_ops_are_silent = 0;
 
-			if (ops_present && all_ops_are_silent
-			    && !rm->m_rdma_cookie)
+			if (ops_present && all_ops_are_silent && !rm->m_rdma_cookie)
 				rm->data.op_active = 0;
 		}
 
@@ -522,8 +521,8 @@ void rds_atomic_send_complete(struct rds_message *rm, int status)
 	spin_lock_irqsave(&rm->m_rs_lock, flags);
 
 	ao = &rm->atomic;
-	if (test_bit(RDS_MSG_ON_SOCK, &rm->m_flags)
-	    && ao->op_active && ao->op_notify && ao->op_notifier) {
+	if (test_bit(RDS_MSG_ON_SOCK, &rm->m_flags) &&
+	    ao->op_active && ao->op_notify && ao->op_notifier) {
 		notifier = ao->op_notifier;
 		rs = rm->m_rs;
 		sock_hold(rds_rs_to_sk(rs));
