@@ -119,7 +119,7 @@ static void rds_recv_rcvbuf_delta(struct rds_sock *rs, struct sock *sk,
 	/* was -> aren't congested */
 	/* Require more free space before reporting uncongested to prevent
 	   bouncing cong/uncong state too often */
-	else if (rs->rs_congested && (rs->rs_rcv_bytes < (rds_sk_rcvbuf(rs)/2))) {
+	else if (rs->rs_congested && (rs->rs_rcv_bytes < (rds_sk_rcvbuf(rs) / 2))) {
 		rs->rs_congested = 0;
 		rds_cong_clear_bit(map, port);
 		rds_cong_queue_updates(map);

@@ -282,7 +282,7 @@ static int __rds_rdma_map(struct rds_sock *rs, struct rds_get_mr_args *args,
 	mr->r_trans_private = trans_private;
 
 	rdsdebug("RDS: get_mr put_user key is %x cookie_addr %p\n",
-	       mr->r_key, (void *)(unsigned long) args->cookie_addr);
+	       mr->r_key, (void *)(unsigned long)args->cookie_addr);
 
 	/* The user may pass us an unaligned address, but we can only
 	 * map page aligned regions. So we keep the offset, and build
@@ -292,7 +292,7 @@ static int __rds_rdma_map(struct rds_sock *rs, struct rds_get_mr_args *args,
 	if (cookie_ret)
 		*cookie_ret = cookie;
 
-	if (args->cookie_addr && put_user(cookie, (u64 __user *)(unsigned long) args->cookie_addr)) {
+	if (args->cookie_addr && put_user(cookie, (u64 __user *)(unsigned long)args->cookie_addr)) {
 		ret = -EFAULT;
 		goto out;
 	}
@@ -523,7 +523,7 @@ int rds_rdma_extra_size(struct rds_rdma_args *args)
 	unsigned int nr_pages;
 	unsigned int i;
 
-	local_vec = (struct rds_iovec __user *)(unsigned long) args->local_vec_addr;
+	local_vec = (struct rds_iovec __user *)(unsigned long)args->local_vec_addr;
 
 	/* figure out the number of pages in the vector */
 	for (i = 0; i < args->nr_local; i++) {
@@ -591,7 +591,7 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 		}
 	}
 
-	if (copy_from_user(iovs, (struct rds_iovec __user *)(unsigned long) args->local_vec_addr, iov_size)) {
+	if (copy_from_user(iovs, (struct rds_iovec __user *)(unsigned long)args->local_vec_addr, iov_size)) {
 		ret = -EFAULT;
 		goto out;
 	}
@@ -707,7 +707,7 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 	if (nr_bytes > args->remote_vec.bytes) {
 		rdsdebug("RDS nr_bytes %u remote_bytes %u do not match\n",
 				nr_bytes,
-				(unsigned int) args->remote_vec.bytes);
+				(unsigned int)args->remote_vec.bytes);
 		ret = -EINVAL;
 		goto out;
 	}

@@ -68,7 +68,7 @@ static int rds_loop_xmit(struct rds_connection *conn, struct rds_message *rm,
 
 	/* Do not send cong updates to loopback */
 	if (rm->m_inc.i_hdr.h_flags & RDS_FLAG_CONG_BITMAP) {
-		rds_cong_map_updated(conn->c_fcong, ~(u64) 0);
+		rds_cong_map_updated(conn->c_fcong, ~(u64)0);
 		ret = min_t(int, ret, sgp->length - conn->c_xmit_data_off);
 		goto out;
 	}

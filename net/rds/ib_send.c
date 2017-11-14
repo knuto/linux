@@ -512,7 +512,7 @@ int rds_ib_xmit(struct rds_connection *conn, struct rds_message *rm,
 	/* Do not send cong updates to IB loopback */
 	if (conn->c_loopback
 	    && rm->m_inc.i_hdr.h_flags & RDS_FLAG_CONG_BITMAP) {
-		rds_cong_map_updated(conn->c_fcong, ~(u64) 0);
+		rds_cong_map_updated(conn->c_fcong, ~(u64)0);
 		scat = &rm->data.op_sg[sg];
 		ret = max_t(int, RDS_CONG_MAP_BYTES, scat->length);
 		return sizeof(struct rds_header) + ret;

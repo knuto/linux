@@ -143,7 +143,7 @@ static void rds_tcp_cong_recv(struct rds_connection *conn,
 		}
 	}
 
-	rds_cong_map_updated(map, ~(u64) 0);
+	rds_cong_map_updated(map, ~(u64)0);
 }
 
 struct rds_tcp_desc_arg {
