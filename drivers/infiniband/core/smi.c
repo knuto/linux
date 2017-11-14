@@ -178,7 +178,7 @@ static enum smi_action __smi_handle_dr_smp_recv(bool is_switch, int port_num,
 
 			return_path[*hop_ptr] = port_num;
 			/* hop_ptr updated when sending */
-			return (initial_path[*hop_ptr+1] <= phys_port_cnt ?
+			return (initial_path[*hop_ptr + 1] <= phys_port_cnt ?
 				IB_SMI_HANDLE : IB_SMI_DISCARD);
 		}
 
@@ -212,7 +212,7 @@ static enum smi_action __smi_handle_dr_smp_recv(bool is_switch, int port_num,
 				return IB_SMI_DISCARD;
 
 			/* hop_ptr updated when sending */
-			return (return_path[*hop_ptr-1] <= phys_port_cnt ?
+			return (return_path[*hop_ptr - 1] <= phys_port_cnt ?
 				IB_SMI_HANDLE : IB_SMI_DISCARD);
 		}
 
@@ -323,8 +323,8 @@ enum smi_forward_action opa_smi_check_forward_dr_smp(struct opa_smp *smp)
  */
 int smi_get_fwd_port(struct ib_smp *smp)
 {
-	return (!ib_get_smp_direction(smp) ? smp->initial_path[smp->hop_ptr+1] :
-		smp->return_path[smp->hop_ptr-1]);
+	return (!ib_get_smp_direction(smp) ? smp->initial_path[smp->hop_ptr + 1] :
+		smp->return_path[smp->hop_ptr - 1]);
 }
 
 /*
@@ -333,6 +333,6 @@ int smi_get_fwd_port(struct ib_smp *smp)
  */
 int opa_smi_get_fwd_port(struct opa_smp *smp)
 {
-	return !opa_get_smp_direction(smp) ? smp->route.dr.initial_path[smp->hop_ptr+1] :
-		smp->route.dr.return_path[smp->hop_ptr-1];
+	return !opa_get_smp_direction(smp) ? smp->route.dr.initial_path[smp->hop_ptr + 1] :
+		smp->route.dr.return_path[smp->hop_ptr - 1];
 }

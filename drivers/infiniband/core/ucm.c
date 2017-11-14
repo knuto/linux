@@ -680,7 +680,7 @@ static ssize_t ib_ucm_notify(struct ib_ucm_file *file,
 	if (IS_ERR(ctx))
 		return PTR_ERR(ctx);
 
-	result = ib_cm_notify(ctx->cm_id, (enum ib_event_type) cmd.event);
+	result = ib_cm_notify(ctx->cm_id, (enum ib_event_type)cmd.event);
 	ib_ucm_ctx_put(ctx);
 	return result;
 }

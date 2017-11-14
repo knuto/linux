@@ -763,7 +763,7 @@ static ssize_t ib_uverbs_write(struct file *filp, const char __user *buf,
 			}
 
 			if (!access_ok(VERIFY_WRITE,
-				       (void __user *) (unsigned long) ex_hdr.response,
+				       (void __user *)(unsigned long)ex_hdr.response,
 				       (hdr.out_words + ex_hdr.provider_out_words) * 8)) {
 				ret = -EFAULT;
 				goto out;
@@ -775,12 +775,12 @@ static ssize_t ib_uverbs_write(struct file *filp, const char __user *buf,
 			}
 		}
 
-		INIT_UDATA_BUF_OR_NULL(&ucore, buf, (unsigned long) ex_hdr.response,
+		INIT_UDATA_BUF_OR_NULL(&ucore, buf, (unsigned long)ex_hdr.response,
 				       hdr.in_words * 8, hdr.out_words * 8);
 
 		INIT_UDATA_BUF_OR_NULL(&uhw,
 				       buf + ucore.inlen,
-				       (unsigned long) ex_hdr.response + ucore.outlen,
+				       (unsigned long)ex_hdr.response + ucore.outlen,
 				       ex_hdr.provider_in_words * 8,
 				       ex_hdr.provider_out_words * 8);
 

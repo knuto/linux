@@ -149,8 +149,8 @@ static struct kobj_type ib_umad_dev_ktype = {
 
 static int hdr_size(struct ib_umad_file *file)
 {
-	return file->use_pkey_index ? sizeof (struct ib_user_mad_hdr) :
-		sizeof (struct ib_user_mad_hdr_old);
+	return file->use_pkey_index ? sizeof(struct ib_user_mad_hdr) :
+		sizeof(struct ib_user_mad_hdr_old);
 }
 
 /* caller must hold file->mutex */
@@ -305,7 +305,7 @@ static ssize_t copy_recv_mad(struct ib_umad_file *file, char __user *buf,
 			recv_buf = container_of(recv_buf->list.next,
 						struct ib_mad_recv_buf, list);
 			seg_payload = min(left, max_seg_payload);
-			if (copy_to_user(buf, ((void *) recv_buf->mad) + offset,
+			if (copy_to_user(buf, ((void *)recv_buf->mad) + offset,
 					 seg_payload))
 				return -EFAULT;
 		}
@@ -418,9 +418,9 @@ static int is_duplicate(struct ib_umad_file *file,
 	struct ib_umad_packet *sent_packet;
 	struct ib_mad_hdr *sent_hdr, *hdr;
 
-	hdr = (struct ib_mad_hdr *) packet->mad.data;
+	hdr = (struct ib_mad_hdr *)packet->mad.data;
 	list_for_each_entry(sent_packet, &file->send_list, list) {
-		sent_hdr = (struct ib_mad_hdr *) sent_packet->mad.data;
+		sent_hdr = (struct ib_mad_hdr *)sent_packet->mad.data;
 
 		if ((hdr->tid != sent_hdr->tid) ||
 		    (hdr->mgmt_class != sent_hdr->mgmt_class))
@@ -512,7 +512,7 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
 		goto err_up;
 	}
 
-	rmpp_mad = (struct ib_rmpp_mad *) packet->mad.data;
+	rmpp_mad = (struct ib_rmpp_mad *)packet->mad.data;
 	hdr_len = ib_get_mad_data_offset(rmpp_mad->mad_hdr.mgmt_class);
 
 	if (ib_is_mad_class_rmpp(rmpp_mad->mad_hdr.mgmt_class)
@@ -564,8 +564,8 @@ static ssize_t ib_umad_write(struct file *filp, const char __user *buf,
 	 * original requestor.
 	 */
 	if (!ib_response_mad(packet->msg->mad)) {
-		tid = &((struct ib_mad_hdr *) packet->msg->mad)->tid;
-		*tid = cpu_to_be64(((u64) agent->hi_tid) << 32 |
+		tid = &((struct ib_mad_hdr *)packet->msg->mad)->tid;
+		*tid = cpu_to_be64(((u64)agent->hi_tid) << 32 |
 				   (be64_to_cpup(tid) & 0xffffffff));
 		rmpp_mad->mad_hdr.tid = *tid;
 	}
@@ -673,12 +673,12 @@ found:
 		memcpy(req.oui, ureq.oui, sizeof req.oui);
 
 		if (compat_method_mask) {
-			u32 *umm = (u32 *) ureq.method_mask;
+			u32 *umm = (u32 *)ureq.method_mask;
 			int i;
 
 			for (i = 0; i < BITS_TO_LONGS(IB_MGMT_MAX_METHODS); ++i)
 				req.method_mask[i] =
-					umm[i * 2] | ((u64) umm[i * 2 + 1] << 32);
+					umm[i * 2] | ((u64)umm[i * 2 + 1] << 32);
 		} else
 			memcpy(req.method_mask, ureq.method_mask,
 			       sizeof req.method_mask);
@@ -696,7 +696,7 @@ found:
 	}
 
 	if (put_user(agent_id,
-		     (u32 __user *) (arg + offsetof(struct ib_user_mad_reg_req, id)))) {
+		     (u32 __user *)(arg + offsetof(struct ib_user_mad_reg_req, id)))) {
 		ret = -EFAULT;
 		goto out;
 	}
@@ -764,7 +764,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 		ret = -EINVAL;
 
 		if (put_user((u32)IB_USER_MAD_REG_FLAGS_CAP,
-				(u32 __user *) (arg + offsetof(struct
+				(u32 __user *)(arg + offsetof(struct
 				ib_user_mad_reg_req2, flags))))
 			ret = -EFAULT;
 
@@ -889,13 +889,13 @@ static long ib_umad_ioctl(struct file *filp, unsigned int cmd,
 {
 	switch (cmd) {
 	case IB_USER_MAD_REGISTER_AGENT:
-		return ib_umad_reg_agent(filp->private_data, (void __user *) arg, 0);
+		return ib_umad_reg_agent(filp->private_data, (void __user *)arg, 0);
 	case IB_USER_MAD_UNREGISTER_AGENT:
-		return ib_umad_unreg_agent(filp->private_data, (__u32 __user *) arg);
+		return ib_umad_unreg_agent(filp->private_data, (__u32 __user *)arg);
 	case IB_USER_MAD_ENABLE_PKEY:
 		return ib_umad_enable_pkey(filp->private_data);
 	case IB_USER_MAD_REGISTER_AGENT2:
-		return ib_umad_reg_agent2(filp->private_data, (void __user *) arg);
+		return ib_umad_reg_agent2(filp->private_data, (void __user *)arg);
 	default:
 		return -ENOIOCTLCMD;
 	}
@@ -1289,7 +1289,7 @@ static void ib_umad_add_one(struct ib_device *device)
 	e = rdma_end_port(device);
 
 	umad_dev = kzalloc(sizeof *umad_dev +
-			   (e - s + 1) * sizeof (struct ib_umad_port),
+			   (e - s + 1) * sizeof(struct ib_umad_port),
 			   GFP_KERNEL);
 	if (!umad_dev)
 		return;

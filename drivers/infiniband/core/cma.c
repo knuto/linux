@@ -541,12 +541,12 @@ static void cma_release_dev(struct rdma_id_private *id_priv)
 
 static inline struct sockaddr *cma_src_addr(struct rdma_id_private *id_priv)
 {
-	return (struct sockaddr *) &id_priv->id.route.addr.src_addr;
+	return (struct sockaddr *)&id_priv->id.route.addr.src_addr;
 }
 
 static inline struct sockaddr *cma_dst_addr(struct rdma_id_private *id_priv)
 {
-	return (struct sockaddr *) &id_priv->id.route.addr.dst_addr;
+	return (struct sockaddr *)&id_priv->id.route.addr.dst_addr;
 }
 
 static inline unsigned short cma_family(struct rdma_id_private *id_priv)
@@ -592,7 +592,7 @@ static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
 static void cma_translate_ib(struct sockaddr_ib *sib, struct rdma_dev_addr *dev_addr)
 {
 	dev_addr->dev_type = ARPHRD_INFINIBAND;
-	rdma_addr_set_sgid(dev_addr, (union ib_gid *) &sib->sib_addr);
+	rdma_addr_set_sgid(dev_addr, (union ib_gid *)&sib->sib_addr);
 	ib_addr_set_pkey(dev_addr, ntohs(sib->sib_pkey));
 }
 
@@ -603,7 +603,7 @@ static int cma_translate_addr(struct sockaddr *addr, struct rdma_dev_addr *dev_a
 	if (addr->sa_family != AF_IB) {
 		ret = rdma_translate_ip(addr, dev_addr, NULL);
 	} else {
-		cma_translate_ib((struct sockaddr_ib *) addr, dev_addr);
+		cma_translate_ib((struct sockaddr_ib *)addr, dev_addr);
 		ret = 0;
 	}
 
@@ -722,8 +722,8 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
 	int i;
 
 	cma_dev = NULL;
-	addr = (struct sockaddr_ib *) cma_dst_addr(id_priv);
-	dgid = (union ib_gid *) &addr->sib_addr;
+	addr = (struct sockaddr_ib *)cma_dst_addr(id_priv);
+	dgid = (union ib_gid *)&addr->sib_addr;
 	pkey = ntohs(addr->sib_pkey);
 
 	list_for_each_entry(cur_dev, &dev_list, list) {
@@ -762,7 +762,7 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
 
 found:
 	cma_attach_to_dev(id_priv, cma_dev);
-	addr = (struct sockaddr_ib *) cma_src_addr(id_priv);
+	addr = (struct sockaddr_ib *)cma_src_addr(id_priv);
 	memcpy(&addr->sib_addr, &sgid, sizeof sgid);
 	cma_translate_ib(addr, &id_priv->id.route.addr.dev_addr);
 	return 0;
@@ -1049,9 +1049,9 @@ static inline int cma_zero_addr(struct sockaddr *addr)
 	case AF_INET:
 		return ipv4_is_zeronet(((struct sockaddr_in *)addr)->sin_addr.s_addr);
 	case AF_INET6:
-		return ipv6_addr_any(&((struct sockaddr_in6 *) addr)->sin6_addr);
+		return ipv6_addr_any(&((struct sockaddr_in6 *)addr)->sin6_addr);
 	case AF_IB:
-		return ib_addr_any(&((struct sockaddr_ib *) addr)->sib_addr);
+		return ib_addr_any(&((struct sockaddr_ib *)addr)->sib_addr);
 	default:
 		return 0;
 	}
@@ -1061,11 +1061,11 @@ static inline int cma_loopback_addr(struct sockaddr *addr)
 {
 	switch (addr->sa_family) {
 	case AF_INET:
-		return ipv4_is_loopback(((struct sockaddr_in *) addr)->sin_addr.s_addr);
+		return ipv4_is_loopback(((struct sockaddr_in *)addr)->sin_addr.s_addr);
 	case AF_INET6:
-		return ipv6_addr_loopback(&((struct sockaddr_in6 *) addr)->sin6_addr);
+		return ipv6_addr_loopback(&((struct sockaddr_in6 *)addr)->sin6_addr);
 	case AF_IB:
-		return ib_addr_loopback(&((struct sockaddr_ib *) addr)->sib_addr);
+		return ib_addr_loopback(&((struct sockaddr_ib *)addr)->sib_addr);
 	default:
 		return 0;
 	}
@@ -1083,14 +1083,14 @@ static int cma_addr_cmp(struct sockaddr *src, struct sockaddr *dst)
 
 	switch (src->sa_family) {
 	case AF_INET:
-		return ((struct sockaddr_in *) src)->sin_addr.s_addr !=
-		       ((struct sockaddr_in *) dst)->sin_addr.s_addr;
+		return ((struct sockaddr_in *)src)->sin_addr.s_addr !=
+		       ((struct sockaddr_in *)dst)->sin_addr.s_addr;
 	case AF_INET6:
-		return ipv6_addr_cmp(&((struct sockaddr_in6 *) src)->sin6_addr,
-				     &((struct sockaddr_in6 *) dst)->sin6_addr);
+		return ipv6_addr_cmp(&((struct sockaddr_in6 *)src)->sin6_addr,
+				     &((struct sockaddr_in6 *)dst)->sin6_addr);
 	default:
-		return ib_addr_cmp(&((struct sockaddr_ib *) src)->sib_addr,
-				   &((struct sockaddr_ib *) dst)->sib_addr);
+		return ib_addr_cmp(&((struct sockaddr_ib *)src)->sib_addr,
+				   &((struct sockaddr_ib *)dst)->sib_addr);
 	}
 }
 
@@ -1100,12 +1100,12 @@ static __be16 cma_port(struct sockaddr *addr)
 
 	switch (addr->sa_family) {
 	case AF_INET:
-		return ((struct sockaddr_in *) addr)->sin_port;
+		return ((struct sockaddr_in *)addr)->sin_port;
 	case AF_INET6:
-		return ((struct sockaddr_in6 *) addr)->sin6_port;
+		return ((struct sockaddr_in6 *)addr)->sin6_port;
 	case AF_IB:
-		sib = (struct sockaddr_ib *) addr;
-		return htons((u16) (be64_to_cpu(sib->sib_sid) &
+		sib = (struct sockaddr_ib *)addr;
+		return htons((u16)(be64_to_cpu(sib->sib_sid) &
 				    be64_to_cpu(sib->sib_sid_mask)));
 	default:
 		return 0;
@@ -1124,7 +1124,7 @@ static void cma_save_ib_info(struct sockaddr *src_addr,
 {
 	struct sockaddr_ib *listen_ib, *ib;
 
-	listen_ib = (struct sockaddr_ib *) &listen_id->route.addr.src_addr;
+	listen_ib = (struct sockaddr_ib *)&listen_id->route.addr.src_addr;
 	if (src_addr) {
 		ib = (struct sockaddr_ib *)src_addr;
 		ib->sib_family = AF_IB;
@@ -2032,7 +2032,7 @@ net_dev_put:
 __be64 rdma_get_service_id(struct rdma_cm_id *id, struct sockaddr *addr)
 {
 	if (addr->sa_family == AF_IB)
-		return ((struct sockaddr_ib *) addr)->sib_sid;
+		return ((struct sockaddr_ib *)addr)->sib_sid;
 
 	return cpu_to_be64(((u64)id->ps << 16) + be16_to_cpu(cma_port(addr)));
 }
@@ -2289,7 +2289,7 @@ void rdma_set_service_type(struct rdma_cm_id *id, int tos)
 	struct rdma_id_private *id_priv;
 
 	id_priv = container_of(id, struct rdma_id_private, id);
-	id_priv->tos = (u8) tos;
+	id_priv->tos = (u8)tos;
 	id_priv->tos_set = true;
 }
 EXPORT_SYMBOL(rdma_set_service_type);
@@ -2346,17 +2346,17 @@ static int cma_query_ib_route(struct rdma_id_private *id_priv, int timeout_ms,
 
 	switch (cma_family(id_priv)) {
 	case AF_INET:
-		path_rec.qos_class = cpu_to_be16((u16) id_priv->tos);
+		path_rec.qos_class = cpu_to_be16((u16)id_priv->tos);
 		comp_mask |= IB_SA_PATH_REC_QOS_CLASS;
 		break;
 	case AF_INET6:
-		sin6 = (struct sockaddr_in6 *) cma_src_addr(id_priv);
-		path_rec.traffic_class = (u8) (be32_to_cpu(sin6->sin6_flowinfo) >> 20);
+		sin6 = (struct sockaddr_in6 *)cma_src_addr(id_priv);
+		path_rec.traffic_class = (u8)(be32_to_cpu(sin6->sin6_flowinfo) >> 20);
 		comp_mask |= IB_SA_PATH_REC_TRAFFIC_CLASS;
 		break;
 	case AF_IB:
-		sib = (struct sockaddr_ib *) cma_src_addr(id_priv);
-		path_rec.traffic_class = (u8) (be32_to_cpu(sib->sib_flowinfo) >> 20);
+		sib = (struct sockaddr_ib *)cma_src_addr(id_priv);
+		path_rec.traffic_class = (u8)(be32_to_cpu(sib->sib_flowinfo) >> 20);
 		comp_mask |= IB_SA_PATH_REC_TRAFFIC_CLASS;
 		break;
 	}
@@ -2660,14 +2660,14 @@ static void cma_set_loopback(struct sockaddr *addr)
 {
 	switch (addr->sa_family) {
 	case AF_INET:
-		((struct sockaddr_in *) addr)->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+		((struct sockaddr_in *)addr)->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 		break;
 	case AF_INET6:
-		ipv6_addr_set(&((struct sockaddr_in6 *) addr)->sin6_addr,
+		ipv6_addr_set(&((struct sockaddr_in6 *)addr)->sin6_addr,
 			      0, 0, 0, htonl(1));
 		break;
 	default:
-		ib_addr_set(&((struct sockaddr_ib *) addr)->sib_addr,
+		ib_addr_set(&((struct sockaddr_ib *)addr)->sib_addr,
 			    0, 0, 0, htonl(1));
 		break;
 	}
@@ -2821,7 +2821,7 @@ static int cma_resolve_ib_addr(struct rdma_id_private *id_priv)
 	}
 
 	rdma_addr_set_dgid(&id_priv->id.route.addr.dev_addr, (union ib_gid *)
-		&(((struct sockaddr_ib *) &id_priv->id.route.addr.dst_addr)->sib_addr));
+		&(((struct sockaddr_ib *)&id_priv->id.route.addr.dst_addr)->sib_addr));
 
 	work->id = id_priv;
 	INIT_WORK(&work->work, cma_work_handler);
@@ -2839,18 +2839,18 @@ static int cma_bind_addr(struct rdma_cm_id *id, struct sockaddr *src_addr,
 			 struct sockaddr *dst_addr)
 {
 	if (!src_addr || !src_addr->sa_family) {
-		src_addr = (struct sockaddr *) &id->route.addr.src_addr;
+		src_addr = (struct sockaddr *)&id->route.addr.src_addr;
 		src_addr->sa_family = dst_addr->sa_family;
 		if (IS_ENABLED(CONFIG_IPV6) &&
 		    dst_addr->sa_family == AF_INET6) {
-			struct sockaddr_in6 *src_addr6 = (struct sockaddr_in6 *) src_addr;
-			struct sockaddr_in6 *dst_addr6 = (struct sockaddr_in6 *) dst_addr;
+			struct sockaddr_in6 *src_addr6 = (struct sockaddr_in6 *)src_addr;
+			struct sockaddr_in6 *dst_addr6 = (struct sockaddr_in6 *)dst_addr;
 			src_addr6->sin6_scope_id = dst_addr6->sin6_scope_id;
 			if (ipv6_addr_type(&dst_addr6->sin6_addr) & IPV6_ADDR_LINKLOCAL)
 				id->route.addr.dev_addr.bound_dev_if = dst_addr6->sin6_scope_id;
 		} else if (dst_addr->sa_family == AF_IB) {
-			((struct sockaddr_ib *) src_addr)->sib_pkey =
-				((struct sockaddr_ib *) dst_addr)->sib_pkey;
+			((struct sockaddr_ib *)src_addr)->sib_pkey =
+				((struct sockaddr_ib *)dst_addr)->sib_pkey;
 		}
 	}
 	return rdma_bind_addr(id, src_addr);
@@ -2957,16 +2957,16 @@ static void cma_bind_port(struct rdma_bind_list *bind_list,
 
 	switch (addr->sa_family) {
 	case AF_INET:
-		((struct sockaddr_in *) addr)->sin_port = port;
+		((struct sockaddr_in *)addr)->sin_port = port;
 		break;
 	case AF_INET6:
-		((struct sockaddr_in6 *) addr)->sin6_port = port;
+		((struct sockaddr_in6 *)addr)->sin6_port = port;
 		break;
 	case AF_IB:
-		sib = (struct sockaddr_ib *) addr;
+		sib = (struct sockaddr_ib *)addr;
 		sid = be64_to_cpu(sib->sib_sid);
 		mask = be64_to_cpu(sib->sib_sid_mask);
-		sib->sib_sid = cpu_to_be64((sid & mask) | (u64) ntohs(port));
+		sib->sib_sid = cpu_to_be64((sid & mask) | (u64)ntohs(port));
 		sib->sib_sid_mask = cpu_to_be64(~0ULL);
 		break;
 	}
@@ -3168,7 +3168,7 @@ static enum rdma_port_space cma_select_ib_ps(struct rdma_id_private *id_priv)
 	struct sockaddr_ib *sib;
 	u64 sid_ps, mask, sid;
 
-	sib = (struct sockaddr_ib *) cma_src_addr(id_priv);
+	sib = (struct sockaddr_ib *)cma_src_addr(id_priv);
 	mask = be64_to_cpu(sib->sib_sid_mask) & RDMA_IB_IP_PS_MASK;
 	sid = be64_to_cpu(sib->sib_sid) & mask;
 
@@ -3186,7 +3186,7 @@ static enum rdma_port_space cma_select_ib_ps(struct rdma_id_private *id_priv)
 	}
 
 	if (ps) {
-		sib->sib_sid = cpu_to_be64(sid_ps | ntohs(cma_port((struct sockaddr *) sib)));
+		sib->sib_sid = cpu_to_be64(sid_ps | ntohs(cma_port((struct sockaddr *)sib)));
 		sib->sib_sid_mask = cpu_to_be64(RDMA_IB_IP_PS_MASK |
 						be64_to_cpu(sib->sib_sid_mask));
 	}
@@ -3224,7 +3224,7 @@ static int cma_check_linklocal(struct rdma_dev_addr *dev_addr,
 	if (addr->sa_family != AF_INET6)
 		return 0;
 
-	sin6 = (struct sockaddr_in6 *) addr;
+	sin6 = (struct sockaddr_in6 *)addr;
 
 	if (!(ipv6_addr_type(&sin6->sin6_addr) & IPV6_ADDR_LINKLOCAL))
 		return 0;
@@ -3350,8 +3350,8 @@ static int cma_format_hdr(void *hdr, struct rdma_id_private *id_priv)
 	if (cma_family(id_priv) == AF_INET) {
 		struct sockaddr_in *src4, *dst4;
 
-		src4 = (struct sockaddr_in *) cma_src_addr(id_priv);
-		dst4 = (struct sockaddr_in *) cma_dst_addr(id_priv);
+		src4 = (struct sockaddr_in *)cma_src_addr(id_priv);
+		dst4 = (struct sockaddr_in *)cma_dst_addr(id_priv);
 
 		cma_set_ip_ver(cma_hdr, 4);
 		cma_hdr->src_addr.ip4.addr = src4->sin_addr.s_addr;
@@ -3360,8 +3360,8 @@ static int cma_format_hdr(void *hdr, struct rdma_id_private *id_priv)
 	} else if (cma_family(id_priv) == AF_INET6) {
 		struct sockaddr_in6 *src6, *dst6;
 
-		src6 = (struct sockaddr_in6 *) cma_src_addr(id_priv);
-		dst6 = (struct sockaddr_in6 *) cma_dst_addr(id_priv);
+		src6 = (struct sockaddr_in6 *)cma_src_addr(id_priv);
+		dst6 = (struct sockaddr_in6 *)cma_dst_addr(id_priv);
 
 		cma_set_ip_ver(cma_hdr, 6);
 		cma_hdr->src_addr.ip6 = src6->sin6_addr;
@@ -3908,8 +3908,8 @@ static void cma_set_mgid(struct rdma_id_private *id_priv,
 {
 	unsigned char mc_map[MAX_ADDR_LEN];
 	struct rdma_dev_addr *dev_addr = &id_priv->id.route.addr.dev_addr;
-	struct sockaddr_in *sin = (struct sockaddr_in *) addr;
-	struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) addr;
+	struct sockaddr_in *sin = (struct sockaddr_in *)addr;
+	struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *)addr;
 
 	if (cma_any_addr(addr)) {
 		memset(mgid, 0, sizeof *mgid);
@@ -3919,17 +3919,17 @@ static void cma_set_mgid(struct rdma_id_private *id_priv,
 		/* IPv6 address is an SA assigned MGID. */
 		memcpy(mgid, &sin6->sin6_addr, sizeof *mgid);
 	} else if (addr->sa_family == AF_IB) {
-		memcpy(mgid, &((struct sockaddr_ib *) addr)->sib_addr, sizeof *mgid);
+		memcpy(mgid, &((struct sockaddr_ib *)addr)->sib_addr, sizeof *mgid);
 	} else if ((addr->sa_family == AF_INET6)) {
 		ipv6_ib_mc_map(&sin6->sin6_addr, dev_addr->broadcast, mc_map);
 		if (id_priv->id.ps == RDMA_PS_UDP)
 			mc_map[7] = 0x01;	/* Use RDMA CM signature */
-		*mgid = *(union ib_gid *) (mc_map + 4);
+		*mgid = *(union ib_gid *)(mc_map + 4);
 	} else {
 		ip_ib_mc_map(sin->sin_addr.s_addr, dev_addr->broadcast, mc_map);
 		if (id_priv->id.ps == RDMA_PS_UDP)
 			mc_map[7] = 0x01;	/* Use RDMA CM signature */
-		*mgid = *(union ib_gid *) (mc_map + 4);
+		*mgid = *(union ib_gid *)(mc_map + 4);
 	}
 }
 
@@ -3951,7 +3951,7 @@ static int cma_join_ib_multicast(struct rdma_id_private *id_priv,
 	if (ret)
 		return ret;
 
-	cma_set_mgid(id_priv, (struct sockaddr *) &mc->addr, &rec.mgid);
+	cma_set_mgid(id_priv, (struct sockaddr *)&mc->addr, &rec.mgid);
 	rec.qkey = cpu_to_be32(id_priv->qkey);
 	rdma_addr_get_sgid(dev_addr, &rec.port_gid);
 	rec.pkey = cpu_to_be16(ib_addr_get_pkey(dev_addr));

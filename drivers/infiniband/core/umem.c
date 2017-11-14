@@ -146,7 +146,7 @@ struct ib_umem *ib_umem_get(struct ib_ucontext *context, unsigned long addr,
 	/* We assume the memory is from hugetlb until proved otherwise */
 	umem->hugetlb   = 1;
 
-	page_list = (struct page **) __get_free_page(GFP_KERNEL);
+	page_list = (struct page **)__get_free_page(GFP_KERNEL);
 	if (!page_list) {
 		put_pid(umem->pid);
 		kfree(umem);
@@ -157,7 +157,7 @@ struct ib_umem *ib_umem_get(struct ib_ucontext *context, unsigned long addr,
 	 * if we can't alloc the vma_list, it's not so bad;
 	 * just assume the memory is not hugetlb memory
 	 */
-	vma_list = (struct vm_area_struct **) __get_free_page(GFP_KERNEL);
+	vma_list = (struct vm_area_struct **)__get_free_page(GFP_KERNEL);
 	if (!vma_list)
 		umem->hugetlb = 0;
 
@@ -193,7 +193,7 @@ struct ib_umem *ib_umem_get(struct ib_ucontext *context, unsigned long addr,
 	while (npages) {
 		ret = get_user_pages(cur_base,
 				     min_t(unsigned long, npages,
-					   PAGE_SIZE / sizeof (struct page *)),
+					   PAGE_SIZE / sizeof(struct page *)),
 				     gup_flags, page_list, vma_list);
 
 		if (ret < 0)
@@ -238,8 +238,8 @@ out:
 
 	up_write(&current->mm->mmap_sem);
 	if (vma_list)
-		free_page((unsigned long) vma_list);
-	free_page((unsigned long) page_list);
+		free_page((unsigned long)vma_list);
+	free_page((unsigned long)page_list);
 
 	return ret < 0 ? ERR_PTR(ret) : umem;
 }

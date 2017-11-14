@@ -208,7 +208,7 @@ static void free_cm_id(struct iwcm_id_private *cm_id_priv)
  */
 static int iwcm_deref_id(struct iwcm_id_private *cm_id_priv)
 {
-	BUG_ON(atomic_read(&cm_id_priv->refcount)==0);
+	BUG_ON(atomic_read(&cm_id_priv->refcount) == 0);
 	if (atomic_dec_and_test(&cm_id_priv->refcount)) {
 		BUG_ON(!list_empty(&cm_id_priv->work_list));
 		free_cm_id(cm_id_priv);
@@ -1106,7 +1106,7 @@ static int iwcm_init_qp_init_attr(struct iwcm_id_private *cm_id_priv,
 	case IW_CM_STATE_CONN_RECV:
 	case IW_CM_STATE_ESTABLISHED:
 		*qp_attr_mask = IB_QP_STATE | IB_QP_ACCESS_FLAGS;
-		qp_attr->qp_access_flags = IB_ACCESS_REMOTE_WRITE|
+		qp_attr->qp_access_flags = IB_ACCESS_REMOTE_WRITE |
 					   IB_ACCESS_REMOTE_READ;
 		ret = 0;
 		break;

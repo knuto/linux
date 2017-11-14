@@ -966,7 +966,7 @@ static int alloc_send_rmpp_list(struct ib_mad_send_wr_private *send_wr,
 
 	/* Allocate data segments. */
 	for (left = send_buf->data_len + pad; left > 0; left -= seg_size) {
-		seg = kmalloc(sizeof (*seg) + seg_size, gfp_mask);
+		seg = kmalloc(sizeof(*seg) + seg_size, gfp_mask);
 		if (!seg) {
 			free_send_rmpp_list(send_wr);
 			return -ENOMEM;
@@ -1254,7 +1254,7 @@ int ib_post_send_mad(struct ib_mad_send_buf *send_buf,
 			goto error;
 		}
 
-		if (!ib_is_mad_class_rmpp(((struct ib_mad_hdr *) send_buf->mad)->mgmt_class)) {
+		if (!ib_is_mad_class_rmpp(((struct ib_mad_hdr *)send_buf->mad)->mgmt_class)) {
 			if (mad_agent_priv->agent.rmpp_version) {
 				ret = -EINVAL;
 				goto error;
@@ -1269,7 +1269,7 @@ int ib_post_send_mad(struct ib_mad_send_buf *send_buf,
 		next_send_buf = send_buf->next;
 		mad_send_wr->send_wr.ah = send_buf->ah;
 
-		if (((struct ib_mad_hdr *) send_buf->mad)->mgmt_class ==
+		if (((struct ib_mad_hdr *)send_buf->mad)->mgmt_class ==
 		    IB_MGMT_CLASS_SUBN_DIRECTED_ROUTE) {
 			ret = handle_outgoing_dr_smp(mad_agent_priv,
 						     mad_send_wr);
@@ -1279,7 +1279,7 @@ int ib_post_send_mad(struct ib_mad_send_buf *send_buf,
 				continue;
 		}
 
-		mad_send_wr->tid = ((struct ib_mad_hdr *) send_buf->mad)->tid;
+		mad_send_wr->tid = ((struct ib_mad_hdr *)send_buf->mad)->tid;
 		/* Timeout will be updated after send completes */
 		mad_send_wr->timeout = msecs_to_jiffies(send_buf->timeout_ms);
 		mad_send_wr->max_retries = send_buf->retries;
@@ -1857,7 +1857,7 @@ static inline int rcv_has_same_class(const struct ib_mad_send_wr_private *wr,
 
 static inline int rcv_has_same_gid(const struct ib_mad_agent_private *mad_agent_priv,
 				   const struct ib_mad_send_wr_private *wr,
-				   const struct ib_mad_recv_wc *rwc )
+				   const struct ib_mad_recv_wc *rwc)
 {
 	struct rdma_ah_attr attr;
 	u8 send_resp, rcv_resp;
@@ -2432,7 +2432,7 @@ void ib_mad_complete_send_wr(struct ib_mad_send_wr_private *mad_send_wr,
 	adjust_timeout(mad_agent_priv);
 	spin_unlock_irqrestore(&mad_agent_priv->lock, flags);
 
-	if (mad_send_wr->status != IB_WC_SUCCESS )
+	if (mad_send_wr->status != IB_WC_SUCCESS)
 		mad_send_wc->status = mad_send_wr->status;
 	if (ret == IB_RMPP_RESULT_INTERNAL)
 		ib_rmpp_send_handler(mad_send_wc);

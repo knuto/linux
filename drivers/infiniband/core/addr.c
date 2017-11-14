@@ -614,8 +614,8 @@ static void process_req(struct work_struct *work)
 	mutex_lock(&lock);
 	list_for_each_entry_safe(req, temp_req, &req_list, list) {
 		if (req->status == -ENODATA) {
-			src_in = (struct sockaddr *) &req->src_addr;
-			dst_in = (struct sockaddr *) &req->dst_addr;
+			src_in = (struct sockaddr *)&req->src_addr;
+			dst_in = (struct sockaddr *)&req->dst_addr;
 			req->status = addr_resolve(src_in, dst_in, req->addr,
 						   true, req->seq);
 			if (req->status && time_after_eq(jiffies, req->timeout))
@@ -637,7 +637,7 @@ static void process_req(struct work_struct *work)
 		 * with this single threaded work queue.
 		 */
 		cancel_delayed_work(&req->work);
-		req->callback(req->status, (struct sockaddr *) &req->src_addr,
+		req->callback(req->status, (struct sockaddr *)&req->src_addr,
 			req->addr, req->context);
 		put_client(req->client);
 		kfree(req);
@@ -659,8 +659,8 @@ int rdma_resolve_ip(struct rdma_addr_client *client,
 	if (!req)
 		return -ENOMEM;
 
-	src_in = (struct sockaddr *) &req->src_addr;
-	dst_in = (struct sockaddr *) &req->dst_addr;
+	src_in = (struct sockaddr *)&req->src_addr;
+	dst_in = (struct sockaddr *)&req->dst_addr;
 
 	if (src_addr) {
 		if (src_addr->sa_family != dst_addr->sa_family) {

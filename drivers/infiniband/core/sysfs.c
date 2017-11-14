@@ -416,14 +416,14 @@ static ssize_t show_port_pkey(struct ib_port *p, struct port_attribute *attr,
 struct port_table_attribute port_pma_attr_##_name = {			\
 	.attr  = __ATTR(_name, S_IRUGO, show_pma_counter, NULL),	\
 	.index = (_offset) | ((_width) << 16) | ((_counter) << 24),	\
-	.attr_id = IB_PMA_PORT_COUNTERS ,				\
+	.attr_id = IB_PMA_PORT_COUNTERS,				\
 }
 
 #define PORT_PMA_ATTR_EXT(_name, _width, _offset)			\
 struct port_table_attribute port_pma_attr_ext_##_name = {		\
 	.attr  = __ATTR(_name, S_IRUGO, show_pma_counter, NULL),	\
 	.index = (_offset) | ((_width) << 16),				\
-	.attr_id = IB_PMA_PORT_COUNTERS_EXT ,				\
+	.attr_id = IB_PMA_PORT_COUNTERS_EXT,				\
 }
 
 /*
@@ -519,35 +519,35 @@ static ssize_t show_pma_counter(struct ib_port *p, struct port_attribute *attr,
 	return ret;
 }
 
-static PORT_PMA_ATTR(symbol_error		    ,  0, 16,  32);
-static PORT_PMA_ATTR(link_error_recovery	    ,  1,  8,  48);
-static PORT_PMA_ATTR(link_downed		    ,  2,  8,  56);
-static PORT_PMA_ATTR(port_rcv_errors		    ,  3, 16,  64);
+static PORT_PMA_ATTR(symbol_error,		       0, 16,  32);
+static PORT_PMA_ATTR(link_error_recovery,	       1,  8,  48);
+static PORT_PMA_ATTR(link_downed,		       2,  8,  56);
+static PORT_PMA_ATTR(port_rcv_errors,		       3, 16,  64);
 static PORT_PMA_ATTR(port_rcv_remote_physical_errors,  4, 16,  80);
-static PORT_PMA_ATTR(port_rcv_switch_relay_errors   ,  5, 16,  96);
-static PORT_PMA_ATTR(port_xmit_discards		    ,  6, 16, 112);
-static PORT_PMA_ATTR(port_xmit_constraint_errors    ,  7,  8, 128);
-static PORT_PMA_ATTR(port_rcv_constraint_errors	    ,  8,  8, 136);
-static PORT_PMA_ATTR(local_link_integrity_errors    ,  9,  4, 152);
+static PORT_PMA_ATTR(port_rcv_switch_relay_errors,     5, 16,  96);
+static PORT_PMA_ATTR(port_xmit_discards,	       6, 16, 112);
+static PORT_PMA_ATTR(port_xmit_constraint_errors,      7,  8, 128);
+static PORT_PMA_ATTR(port_rcv_constraint_errors,       8,  8, 136);
+static PORT_PMA_ATTR(local_link_integrity_errors,      9,  4, 152);
 static PORT_PMA_ATTR(excessive_buffer_overrun_errors, 10,  4, 156);
-static PORT_PMA_ATTR(VL15_dropped		    , 11, 16, 176);
-static PORT_PMA_ATTR(port_xmit_data		    , 12, 32, 192);
-static PORT_PMA_ATTR(port_rcv_data		    , 13, 32, 224);
-static PORT_PMA_ATTR(port_xmit_packets		    , 14, 32, 256);
-static PORT_PMA_ATTR(port_rcv_packets		    , 15, 32, 288);
-static PORT_PMA_ATTR(port_xmit_wait		    ,  0, 32, 320);
+static PORT_PMA_ATTR(VL15_dropped,		      11, 16, 176);
+static PORT_PMA_ATTR(port_xmit_data,		      12, 32, 192);
+static PORT_PMA_ATTR(port_rcv_data,		      13, 32, 224);
+static PORT_PMA_ATTR(port_xmit_packets,		      14, 32, 256);
+static PORT_PMA_ATTR(port_rcv_packets,		      15, 32, 288);
+static PORT_PMA_ATTR(port_xmit_wait,		       0, 32, 320);
 
 /*
  * Counters added by extended set
  */
-static PORT_PMA_ATTR_EXT(port_xmit_data		    , 64,  64);
-static PORT_PMA_ATTR_EXT(port_rcv_data		    , 64, 128);
-static PORT_PMA_ATTR_EXT(port_xmit_packets	    , 64, 192);
-static PORT_PMA_ATTR_EXT(port_rcv_packets	    , 64, 256);
-static PORT_PMA_ATTR_EXT(unicast_xmit_packets	    , 64, 320);
-static PORT_PMA_ATTR_EXT(unicast_rcv_packets	    , 64, 384);
-static PORT_PMA_ATTR_EXT(multicast_xmit_packets	    , 64, 448);
-static PORT_PMA_ATTR_EXT(multicast_rcv_packets	    , 64, 512);
+static PORT_PMA_ATTR_EXT(port_xmit_data,	      64,  64);
+static PORT_PMA_ATTR_EXT(port_rcv_data,		      64, 128);
+static PORT_PMA_ATTR_EXT(port_xmit_packets,	      64, 192);
+static PORT_PMA_ATTR_EXT(port_rcv_packets,	      64, 256);
+static PORT_PMA_ATTR_EXT(unicast_xmit_packets,	      64, 320);
+static PORT_PMA_ATTR_EXT(unicast_rcv_packets,	      64, 384);
+static PORT_PMA_ATTR_EXT(multicast_xmit_packets,      64, 448);
+static PORT_PMA_ATTR_EXT(multicast_rcv_packets,	      64, 512);
 
 static struct attribute *pma_attrs[] = {
 	&port_pma_attr_symbol_error.attr.attr,
@@ -1160,10 +1160,10 @@ static ssize_t show_sys_image_guid(struct device *device,
 	struct ib_device *dev = container_of(device, struct ib_device, dev);
 
 	return sprintf(buf, "%04x:%04x:%04x:%04x\n",
-		       be16_to_cpu(((__be16 *) &dev->attrs.sys_image_guid)[0]),
-		       be16_to_cpu(((__be16 *) &dev->attrs.sys_image_guid)[1]),
-		       be16_to_cpu(((__be16 *) &dev->attrs.sys_image_guid)[2]),
-		       be16_to_cpu(((__be16 *) &dev->attrs.sys_image_guid)[3]));
+		       be16_to_cpu(((__be16 *)&dev->attrs.sys_image_guid)[0]),
+		       be16_to_cpu(((__be16 *)&dev->attrs.sys_image_guid)[1]),
+		       be16_to_cpu(((__be16 *)&dev->attrs.sys_image_guid)[2]),
+		       be16_to_cpu(((__be16 *)&dev->attrs.sys_image_guid)[3]));
 }
 
 static ssize_t show_node_guid(struct device *device,
@@ -1172,10 +1172,10 @@ static ssize_t show_node_guid(struct device *device,
 	struct ib_device *dev = container_of(device, struct ib_device, dev);
 
 	return sprintf(buf, "%04x:%04x:%04x:%04x\n",
-		       be16_to_cpu(((__be16 *) &dev->node_guid)[0]),
-		       be16_to_cpu(((__be16 *) &dev->node_guid)[1]),
-		       be16_to_cpu(((__be16 *) &dev->node_guid)[2]),
-		       be16_to_cpu(((__be16 *) &dev->node_guid)[3]));
+		       be16_to_cpu(((__be16 *)&dev->node_guid)[0]),
+		       be16_to_cpu(((__be16 *)&dev->node_guid)[1]),
+		       be16_to_cpu(((__be16 *)&dev->node_guid)[2]),
+		       be16_to_cpu(((__be16 *)&dev->node_guid)[3]));
 }
 
 static ssize_t show_node_desc(struct device *device,
