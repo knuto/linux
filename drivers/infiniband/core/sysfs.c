@@ -432,7 +432,7 @@ struct port_table_attribute port_pma_attr_ext_##_name = {		\
  * Returns error code or the number of bytes retrieved.
  */
 static int get_perf_mad(struct ib_device *dev, int port_num, __be16 attr,
-		void *data, int offset, size_t size)
+			void *data, int offset, size_t size)
 {
 	struct ib_mad *in_mad;
 	struct ib_mad *out_mad;
@@ -460,7 +460,7 @@ static int get_perf_mad(struct ib_device *dev, int port_num, __be16 attr,
 		in_mad->data[41] = port_num;	/* PortSelect field */
 
 	if ((dev->process_mad(dev, IB_MAD_IGNORE_MKEY,
-		 port_num, NULL, NULL,
+			      port_num, NULL, NULL,
 		 (const struct ib_mad_hdr *)in_mad, mad_size,
 		 (struct ib_mad_hdr *)out_mad, &mad_size,
 		 &out_mad_pkey_index) &
@@ -488,7 +488,7 @@ static ssize_t show_pma_counter(struct ib_port *p, struct port_attribute *attr,
 	u8 data[8];
 
 	ret = get_perf_mad(p->ibdev, p->port_num, tab_attr->attr_id, &data,
-			40 + offset / 8, sizeof(data));
+			   40 + offset / 8, sizeof(data));
 	if (ret < 0)
 		return sprintf(buf, "N/A (no PMA)\n");
 
@@ -510,7 +510,7 @@ static ssize_t show_pma_counter(struct ib_port *p, struct port_attribute *attr,
 		break;
 	case 64:
 		ret = sprintf(buf, "%llu\n",
-				be64_to_cpup((__be64 *)data));
+			      be64_to_cpup((__be64 *)data));
 		break;
 
 	default:
@@ -743,7 +743,7 @@ static struct attribute_group *get_counter_table(struct ib_device *dev,
 	struct ib_class_port_info cpi;
 
 	if (get_perf_mad(dev, port_num, IB_PMA_CLASS_PORT_INFO,
-				&cpi, 40, sizeof(cpi)) >= 0) {
+			 &cpi, 40, sizeof(cpi)) >= 0) {
 		if (cpi.capability_mask & IB_PMA_CLASS_CAP_EXT_WIDTH)
 			/* We have extended counters */
 			return &pma_group_ext;

@@ -78,7 +78,7 @@ init_exit:
 		iwpm_set_valid(nl_client, 1);
 		iwpm_set_registration(nl_client, IWPM_REG_UNDEF);
 		pr_debug("%s: Mapinfo and reminfo tables are created\n",
-				__func__);
+			 __func__);
 	}
 	return ret;
 }
@@ -109,7 +109,7 @@ int iwpm_exit(u8 nl_client)
 }
 
 static struct hlist_head *get_mapinfo_hash_bucket(struct sockaddr_storage *,
-					       struct sockaddr_storage *);
+						  struct sockaddr_storage *);
 
 int iwpm_create_mapinfo(struct sockaddr_storage *local_sockaddr,
 			struct sockaddr_storage *mapped_sockaddr,
@@ -164,10 +164,10 @@ int iwpm_remove_mapinfo(struct sockaddr_storage *local_sockaddr,
 			goto remove_mapinfo_exit;
 
 		hlist_for_each_entry_safe(map_info, tmp_hlist_node,
-					hash_bucket_head, hlist_node) {
+					  hash_bucket_head, hlist_node) {
 
 			if (!iwpm_compare_sockaddr(&map_info->mapped_sockaddr,
-						mapped_local_addr)) {
+						   mapped_local_addr)) {
 
 				hlist_del_init(&map_info->hlist_node);
 				kfree(map_info);
@@ -192,7 +192,7 @@ static void free_hash_bucket(void)
 	spin_lock_irqsave(&iwpm_mapinfo_lock, flags);
 	for (i = 0; i < IWPM_MAPINFO_HASH_SIZE; i++) {
 		hlist_for_each_entry_safe(map_info, tmp_hlist_node,
-			&iwpm_hash_bucket[i], hlist_node) {
+					  &iwpm_hash_bucket[i], hlist_node) {
 
 				hlist_del_init(&map_info->hlist_node);
 				kfree(map_info);
@@ -215,7 +215,7 @@ static void free_reminfo_bucket(void)
 	spin_lock_irqsave(&iwpm_reminfo_lock, flags);
 	for (i = 0; i < IWPM_REMINFO_HASH_SIZE; i++) {
 		hlist_for_each_entry_safe(rem_info, tmp_hlist_node,
-			&iwpm_reminfo_bucket[i], hlist_node) {
+					  &iwpm_reminfo_bucket[i], hlist_node) {
 
 				hlist_del_init(&rem_info->hlist_node);
 				kfree(rem_info);
@@ -228,7 +228,7 @@ static void free_reminfo_bucket(void)
 }
 
 static struct hlist_head *get_reminfo_hash_bucket(struct sockaddr_storage *,
-						struct sockaddr_storage *);
+						  struct sockaddr_storage *);
 
 void iwpm_add_remote_info(struct iwpm_remote_info *rem_info)
 {
@@ -269,17 +269,17 @@ int iwpm_get_remote_info(struct sockaddr_storage *mapped_loc_addr,
 		if (!hash_bucket_head)
 			goto get_remote_info_exit;
 		hlist_for_each_entry_safe(rem_info, tmp_hlist_node,
-					hash_bucket_head, hlist_node) {
+					  hash_bucket_head, hlist_node) {
 
 			if (!iwpm_compare_sockaddr(&rem_info->mapped_loc_sockaddr,
-				mapped_loc_addr) &&
+						   mapped_loc_addr) &&
 				!iwpm_compare_sockaddr(&rem_info->mapped_rem_sockaddr,
 				mapped_rem_addr)) {
 
 				memcpy(remote_addr, &rem_info->remote_sockaddr,
-					sizeof(struct sockaddr_storage));
+				       sizeof(struct sockaddr_storage));
 				iwpm_print_sockaddr(remote_addr,
-						"get_remote_info: Remote sockaddr:");
+						    "get_remote_info: Remote sockaddr:");
 
 				hlist_del_init(&rem_info->hlist_node);
 				kfree(rem_info);
@@ -294,7 +294,7 @@ get_remote_info_exit:
 }
 
 struct iwpm_nlmsg_request *iwpm_get_nlmsg_request(__u32 nlmsg_seq,
-					u8 nl_client, gfp_t gfp)
+						  u8 nl_client, gfp_t gfp)
 {
 	struct iwpm_nlmsg_request *nlmsg_request = NULL;
 	unsigned long flags;
@@ -331,7 +331,7 @@ void iwpm_free_nlmsg_request(struct kref *kref)
 
 	if (!nlmsg_request->request_done)
 		pr_debug("%s Freeing incomplete nlmsg request (seq = %u).\n",
-			__func__, nlmsg_request->nlmsg_seq);
+			 __func__, nlmsg_request->nlmsg_seq);
 	kfree(nlmsg_request);
 }
 
@@ -404,7 +404,7 @@ u32 iwpm_check_registration(u8 nl_client, u32 reg)
 }
 
 int iwpm_compare_sockaddr(struct sockaddr_storage *a_sockaddr,
-				struct sockaddr_storage *b_sockaddr)
+			  struct sockaddr_storage *b_sockaddr)
 {
 	if (a_sockaddr->ss_family != b_sockaddr->ss_family)
 		return 1;
@@ -414,7 +414,7 @@ int iwpm_compare_sockaddr(struct sockaddr_storage *a_sockaddr,
 		struct sockaddr_in *b4_sockaddr =
 			(struct sockaddr_in *)b_sockaddr;
 		if (!memcmp(&a4_sockaddr->sin_addr,
-			&b4_sockaddr->sin_addr, sizeof(struct in_addr))
+			    &b4_sockaddr->sin_addr, sizeof(struct in_addr))
 			&& a4_sockaddr->sin_port == b4_sockaddr->sin_port)
 				return 0;
 
@@ -424,7 +424,7 @@ int iwpm_compare_sockaddr(struct sockaddr_storage *a_sockaddr,
 		struct sockaddr_in6 *b6_sockaddr =
 			(struct sockaddr_in6 *)b_sockaddr;
 		if (!memcmp(&a6_sockaddr->sin6_addr,
-			&b6_sockaddr->sin6_addr, sizeof(struct in6_addr))
+			    &b6_sockaddr->sin6_addr, sizeof(struct in6_addr))
 			&& a6_sockaddr->sin6_port == b6_sockaddr->sin6_port)
 				return 0;
 
@@ -435,7 +435,7 @@ int iwpm_compare_sockaddr(struct sockaddr_storage *a_sockaddr,
 }
 
 struct sk_buff *iwpm_create_nlmsg(u32 nl_op, struct nlmsghdr **nlh,
-						int nl_client)
+				  int nl_client)
 {
 	struct sk_buff *skb = NULL;
 
@@ -455,7 +455,7 @@ create_nlmsg_exit:
 }
 
 int iwpm_parse_nlmsg(struct netlink_callback *cb, int policy_max,
-				   const struct nla_policy *nlmsg_policy,
+		     const struct nla_policy *nlmsg_policy,
 				   struct nlattr *nltb[], const char *msg_type)
 {
 	int nlh_len = 0;
@@ -482,7 +482,7 @@ int iwpm_parse_nlmsg(struct netlink_callback *cb, int policy_max,
 	return 0;
 parse_nlmsg_error:
 	pr_warn("%s: %s (msg type %s ret = %d)\n",
-			__func__, err_str, msg_type, ret);
+		__func__, err_str, msg_type, ret);
 	return ret;
 }
 
@@ -495,14 +495,14 @@ void iwpm_print_sockaddr(struct sockaddr_storage *sockaddr, char *msg)
 	case AF_INET:
 		sockaddr_v4 = (struct sockaddr_in *)sockaddr;
 		pr_debug("%s IPV4 %pI4: %u(0x%04X)\n",
-			msg, &sockaddr_v4->sin_addr,
+			 msg, &sockaddr_v4->sin_addr,
 			ntohs(sockaddr_v4->sin_port),
 			ntohs(sockaddr_v4->sin_port));
 		break;
 	case AF_INET6:
 		sockaddr_v6 = (struct sockaddr_in6 *)sockaddr;
 		pr_debug("%s IPV6 %pI6: %u(0x%04X)\n",
-			msg, &sockaddr_v6->sin6_addr,
+			 msg, &sockaddr_v6->sin6_addr,
 			ntohs(sockaddr_v6->sin6_port),
 			ntohs(sockaddr_v6->sin6_port));
 		break;
@@ -526,7 +526,7 @@ static u32 iwpm_ipv4_jhash(struct sockaddr_in *ipv4_sockaddr)
 }
 
 static int get_hash_bucket(struct sockaddr_storage *a_sockaddr,
-				struct sockaddr_storage *b_sockaddr, u32 *hash)
+			   struct sockaddr_storage *b_sockaddr, u32 *hash)
 {
 	u32 a_hash, b_hash;
 
@@ -595,7 +595,7 @@ static int send_mapinfo_num(u32 mapping_num, u8 nl_client, int iwpm_pid)
 	if (ret)
 		goto mapinfo_num_error;
 	ret = ibnl_put_attr(skb, nlh, sizeof(u32),
-				&mapping_num, IWPM_NLA_MAPINFO_SEND_NUM);
+			    &mapping_num, IWPM_NLA_MAPINFO_SEND_NUM);
 	if (ret)
 		goto mapinfo_num_error;
 
@@ -662,21 +662,21 @@ int iwpm_send_mapinfo(u8 nl_client, int iwpm_pid)
 				continue;
 			nlh = NULL;
 			if (!(ibnl_put_msg(skb, &nlh, 0, 0, nl_client,
-					RDMA_NL_IWPM_MAPINFO, NLM_F_MULTI))) {
+					   RDMA_NL_IWPM_MAPINFO, NLM_F_MULTI))) {
 				ret = -ENOMEM;
 				err_str = "Unable to put the nlmsg header";
 				goto send_mapping_info_unlock;
 			}
 			err_str = "Unable to put attribute of the nlmsg";
 			ret = ibnl_put_attr(skb, nlh,
-					sizeof(struct sockaddr_storage),
+					    sizeof(struct sockaddr_storage),
 					&map_info->local_sockaddr,
 					IWPM_NLA_MAPINFO_LOCAL_ADDR);
 			if (ret)
 				goto send_mapping_info_unlock;
 
 			ret = ibnl_put_attr(skb, nlh,
-					sizeof(struct sockaddr_storage),
+					    sizeof(struct sockaddr_storage),
 					&map_info->mapped_sockaddr,
 					IWPM_NLA_MAPINFO_MAPPED_ADDR);
 			if (ret)
@@ -685,9 +685,9 @@ int iwpm_send_mapinfo(u8 nl_client, int iwpm_pid)
 			nlmsg_end(skb, nlh);
 
 			iwpm_print_sockaddr(&map_info->local_sockaddr,
-				"send_mapping_info: Local sockaddr:");
+					    "send_mapping_info: Local sockaddr:");
 			iwpm_print_sockaddr(&map_info->mapped_sockaddr,
-				"send_mapping_info: Mapped local sockaddr:");
+					    "send_mapping_info: Mapped local sockaddr:");
 			mapping_num++;
 			nlmsg_bytes += nlh->nlmsg_len;
 

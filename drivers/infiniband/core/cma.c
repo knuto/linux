@@ -1012,7 +1012,7 @@ static int cma_ib_init_qp_attr(struct rdma_id_private *id_priv,
 }
 
 int rdma_init_qp_attr(struct rdma_cm_id *id, struct ib_qp_attr *qp_attr,
-		       int *qp_attr_mask)
+		      int *qp_attr_mask)
 {
 	struct rdma_id_private *id_priv;
 	int ret = 0;
@@ -3668,7 +3668,7 @@ out:
 }
 
 static int cma_accept_iw(struct rdma_id_private *id_priv,
-		  struct rdma_conn_param *conn_param)
+			 struct rdma_conn_param *conn_param)
 {
 	struct iw_cm_conn_param iw_param;
 	int ret;

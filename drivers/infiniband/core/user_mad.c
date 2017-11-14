@@ -705,10 +705,10 @@ found:
 		file->already_used = 1;
 		if (!file->use_pkey_index) {
 			dev_warn(file->port->dev,
-				"process %s did not enable P_Key index support.\n",
+				 "process %s did not enable P_Key index support.\n",
 				current->comm);
 			dev_warn(file->port->dev,
-				"   Documentation/infiniband/user_mad.txt has info on the new ABI.\n");
+				 "   Documentation/infiniband/user_mad.txt has info on the new ABI.\n");
 		}
 	}
 
@@ -764,7 +764,7 @@ static int ib_umad_reg_agent2(struct ib_umad_file *file, void __user *arg)
 		ret = -EINVAL;
 
 		if (put_user((u32)IB_USER_MAD_REG_FLAGS_CAP,
-				(u32 __user *)(arg + offsetof(struct
+			     (u32 __user *)(arg + offsetof(struct
 				ib_user_mad_reg_req2, flags))))
 			ret = -EFAULT;
 
@@ -797,7 +797,7 @@ found:
 		req.oui[1] = (ureq.oui & 0x00ff00) >> 8;
 		req.oui[0] = (ureq.oui & 0xff0000) >> 16;
 		memcpy(req.method_mask, ureq.method_mask,
-			sizeof(req.method_mask));
+		       sizeof(req.method_mask));
 	}
 
 	agent = ib_register_mad_agent(file->port->ib_dev, file->port->port_num,

@@ -67,7 +67,7 @@ int iwpm_register_pid(struct iwpm_dev_data *pm_msg, u8 nl_client)
 		goto pid_query_error;
 	}
 	if (iwpm_check_registration(nl_client, IWPM_REG_VALID) ||
-			iwpm_user_pid == IWPM_PID_UNAVAILABLE)
+	    iwpm_user_pid == IWPM_PID_UNAVAILABLE)
 		return 0;
 	skb = iwpm_create_nlmsg(RDMA_NL_IWPM_REG_PID, &nlh, nl_client);
 	if (!skb) {
@@ -92,18 +92,18 @@ int iwpm_register_pid(struct iwpm_dev_data *pm_msg, u8 nl_client)
 	if (ret)
 		goto pid_query_error;
 	ret = ibnl_put_attr(skb, nlh, IWPM_DEVNAME_SIZE,
-				pm_msg->dev_name, IWPM_NLA_REG_IBDEV_NAME);
+			    pm_msg->dev_name, IWPM_NLA_REG_IBDEV_NAME);
 	if (ret)
 		goto pid_query_error;
 	ret = ibnl_put_attr(skb, nlh, IWPM_ULIBNAME_SIZE,
-				(char *)iwpm_ulib_name, IWPM_NLA_REG_ULIB_NAME);
+			    (char *)iwpm_ulib_name, IWPM_NLA_REG_ULIB_NAME);
 	if (ret)
 		goto pid_query_error;
 
 	nlmsg_end(skb, nlh);
 
 	pr_debug("%s: Multicasting a nlmsg (dev = %s ifname = %s iwpm = %s)\n",
-		__func__, pm_msg->dev_name, pm_msg->if_name, iwpm_ulib_name);
+		 __func__, pm_msg->dev_name, pm_msg->if_name, iwpm_ulib_name);
 
 	ret = rdma_nl_multicast(skb, RDMA_NL_GROUP_IWPM, GFP_KERNEL);
 	if (ret) {
@@ -165,11 +165,11 @@ int iwpm_add_mapping(struct iwpm_sa_data *pm_msg, u8 nl_client)
 	/* fill in the add mapping message */
 	err_str = "Unable to put attribute of the nlmsg";
 	ret = ibnl_put_attr(skb, nlh, sizeof(u32), &msg_seq,
-				IWPM_NLA_MANAGE_MAPPING_SEQ);
+			    IWPM_NLA_MANAGE_MAPPING_SEQ);
 	if (ret)
 		goto add_mapping_error;
 	ret = ibnl_put_attr(skb, nlh, sizeof(struct sockaddr_storage),
-				&pm_msg->loc_addr, IWPM_NLA_MANAGE_ADDR);
+			    &pm_msg->loc_addr, IWPM_NLA_MANAGE_ADDR);
 	if (ret)
 		goto add_mapping_error;
 
@@ -229,7 +229,7 @@ int iwpm_add_and_query_mapping(struct iwpm_sa_data *pm_msg, u8 nl_client)
 	}
 	nlh->nlmsg_seq = iwpm_get_nlmsg_seq();
 	nlmsg_request = iwpm_get_nlmsg_request(nlh->nlmsg_seq,
-				nl_client, GFP_KERNEL);
+					       nl_client, GFP_KERNEL);
 	if (!nlmsg_request) {
 		err_str = "Unable to allocate netlink request";
 		goto query_mapping_error;
@@ -239,15 +239,15 @@ int iwpm_add_and_query_mapping(struct iwpm_sa_data *pm_msg, u8 nl_client)
 	/* fill in the query message */
 	err_str = "Unable to put attribute of the nlmsg";
 	ret = ibnl_put_attr(skb, nlh, sizeof(u32), &msg_seq,
-				IWPM_NLA_QUERY_MAPPING_SEQ);
+			    IWPM_NLA_QUERY_MAPPING_SEQ);
 	if (ret)
 		goto query_mapping_error;
 	ret = ibnl_put_attr(skb, nlh, sizeof(struct sockaddr_storage),
-				&pm_msg->loc_addr, IWPM_NLA_QUERY_LOCAL_ADDR);
+			    &pm_msg->loc_addr, IWPM_NLA_QUERY_LOCAL_ADDR);
 	if (ret)
 		goto query_mapping_error;
 	ret = ibnl_put_attr(skb, nlh, sizeof(struct sockaddr_storage),
-				&pm_msg->rem_addr, IWPM_NLA_QUERY_REMOTE_ADDR);
+			    &pm_msg->rem_addr, IWPM_NLA_QUERY_REMOTE_ADDR);
 	if (ret)
 		goto query_mapping_error;
 
@@ -306,11 +306,11 @@ int iwpm_remove_mapping(struct sockaddr_storage *local_addr, u8 nl_client)
 	nlh->nlmsg_seq = iwpm_get_nlmsg_seq();
 	err_str = "Unable to put attribute of the nlmsg";
 	ret = ibnl_put_attr(skb, nlh, sizeof(u32), &msg_seq,
-				IWPM_NLA_MANAGE_MAPPING_SEQ);
+			    IWPM_NLA_MANAGE_MAPPING_SEQ);
 	if (ret)
 		goto remove_mapping_error;
 	ret = ibnl_put_attr(skb, nlh, sizeof(struct sockaddr_storage),
-				local_addr, IWPM_NLA_MANAGE_ADDR);
+			    local_addr, IWPM_NLA_MANAGE_ADDR);
 	if (ret)
 		goto remove_mapping_error;
 
@@ -324,7 +324,7 @@ int iwpm_remove_mapping(struct sockaddr_storage *local_addr, u8 nl_client)
 		goto remove_mapping_error;
 	}
 	iwpm_print_sockaddr(local_addr,
-			"remove_mapping: Local sockaddr:");
+			    "remove_mapping: Local sockaddr:");
 	return 0;
 remove_mapping_error:
 	pr_info("%s: %s (client = %d)\n", __func__, err_str, nl_client);
@@ -360,14 +360,14 @@ int iwpm_register_pid_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	const char *msg_type = "Register Pid response";
 
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_RREG_PID_MAX,
-				resp_reg_policy, nltb, msg_type))
+			     resp_reg_policy, nltb, msg_type))
 		return -EINVAL;
 
 	msg_seq = nla_get_u32(nltb[IWPM_NLA_RREG_PID_SEQ]);
 	nlmsg_request = iwpm_find_nlmsg_request(msg_seq);
 	if (!nlmsg_request) {
 		pr_info("%s: Could not find a matching request (seq = %u)\n",
-				 __func__, msg_seq);
+			__func__, msg_seq);
 		return -EINVAL;
 	}
 	pm_msg = nlmsg_request->req_buffer;
@@ -378,18 +378,18 @@ int iwpm_register_pid_cb(struct sk_buff *skb, struct netlink_callback *cb)
 
 	/* check device name, ulib name and version */
 	if (strcmp(pm_msg->dev_name, dev_name) ||
-			strcmp(iwpm_ulib_name, iwpm_name) ||
+	    strcmp(iwpm_ulib_name, iwpm_name) ||
 			iwpm_version != iwpm_ulib_version) {
 
 		pr_info("%s: Incorrect info (dev = %s name = %s version = %d)\n",
-				__func__, dev_name, iwpm_name, iwpm_version);
+			__func__, dev_name, iwpm_name, iwpm_version);
 		nlmsg_request->err_code = IWPM_USER_LIB_INFO_ERR;
 		goto register_pid_response_exit;
 	}
 	iwpm_user_pid = cb->nlh->nlmsg_pid;
 	atomic_set(&echo_nlmsg_seq, cb->nlh->nlmsg_seq);
 	pr_debug("%s: iWarp Port Mapper (pid = %d) is available!\n",
-			__func__, iwpm_user_pid);
+		 __func__, iwpm_user_pid);
 	if (iwpm_valid_client(nl_client))
 		iwpm_set_registration(nl_client, IWPM_REG_VALID);
 register_pid_response_exit:
@@ -425,7 +425,7 @@ int iwpm_add_mapping_cb(struct sk_buff *skb, struct netlink_callback *cb)
 
 	msg_type = "Add Mapping response";
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_RMANAGE_MAPPING_MAX,
-				resp_add_policy, nltb, msg_type))
+			     resp_add_policy, nltb, msg_type))
 		return -EINVAL;
 
 	atomic_set(&echo_nlmsg_seq, cb->nlh->nlmsg_seq);
@@ -434,7 +434,7 @@ int iwpm_add_mapping_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	nlmsg_request = iwpm_find_nlmsg_request(msg_seq);
 	if (!nlmsg_request) {
 		pr_info("%s: Could not find a matching request (seq = %u)\n",
-				 __func__, msg_seq);
+			__func__, msg_seq);
 		return -EINVAL;
 	}
 	pm_msg = nlmsg_request->req_buffer;
@@ -449,16 +449,16 @@ int iwpm_add_mapping_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	}
 	if (mapped_sockaddr->ss_family != local_sockaddr->ss_family) {
 		pr_info("%s: Sockaddr family doesn't match the requested one\n",
-				__func__);
+			__func__);
 		nlmsg_request->err_code = IWPM_USER_LIB_INFO_ERR;
 		goto add_mapping_response_exit;
 	}
 	memcpy(&pm_msg->mapped_loc_addr, mapped_sockaddr,
-			sizeof(*mapped_sockaddr));
+	       sizeof(*mapped_sockaddr));
 	iwpm_print_sockaddr(&pm_msg->loc_addr,
-			"add_mapping: Local sockaddr:");
+			    "add_mapping: Local sockaddr:");
 	iwpm_print_sockaddr(&pm_msg->mapped_loc_addr,
-			"add_mapping: Mapped local sockaddr:");
+			    "add_mapping: Mapped local sockaddr:");
 
 add_mapping_response_exit:
 	nlmsg_request->request_done = 1;
@@ -485,7 +485,7 @@ static const struct nla_policy resp_query_policy[IWPM_NLA_RQUERY_MAPPING_MAX] = 
  *                                 iwpm_add_and_query_mapping()
  */
 int iwpm_add_and_query_mapping_cb(struct sk_buff *skb,
-				struct netlink_callback *cb)
+				  struct netlink_callback *cb)
 {
 	struct iwpm_sa_data *pm_msg;
 	struct iwpm_nlmsg_request *nlmsg_request = NULL;
@@ -498,7 +498,7 @@ int iwpm_add_and_query_mapping_cb(struct sk_buff *skb,
 
 	msg_type = "Query Mapping response";
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_RQUERY_MAPPING_MAX,
-				resp_query_policy, nltb, msg_type))
+			     resp_query_policy, nltb, msg_type))
 		return -EINVAL;
 	atomic_set(&echo_nlmsg_seq, cb->nlh->nlmsg_seq);
 
@@ -506,7 +506,7 @@ int iwpm_add_and_query_mapping_cb(struct sk_buff *skb,
 	nlmsg_request = iwpm_find_nlmsg_request(msg_seq);
 	if (!nlmsg_request) {
 		pr_info("%s: Could not find a matching request (seq = %u)\n",
-				 __func__, msg_seq);
+			__func__, msg_seq);
 		return -EINVAL;
 	}
 	pm_msg = nlmsg_request->req_buffer;
@@ -526,31 +526,31 @@ int iwpm_add_and_query_mapping_cb(struct sk_buff *skb,
 		nlmsg_request->err_code = IWPM_REMOTE_QUERY_REJECT;
 	}
 	if (iwpm_compare_sockaddr(local_sockaddr, &pm_msg->loc_addr) ||
-		iwpm_compare_sockaddr(remote_sockaddr, &pm_msg->rem_addr)) {
+	    iwpm_compare_sockaddr(remote_sockaddr, &pm_msg->rem_addr)) {
 		pr_info("%s: Incorrect local sockaddr\n", __func__);
 		nlmsg_request->err_code = IWPM_USER_LIB_INFO_ERR;
 		goto query_mapping_response_exit;
 	}
 	if (mapped_loc_sockaddr->ss_family != local_sockaddr->ss_family ||
-		mapped_rem_sockaddr->ss_family != remote_sockaddr->ss_family) {
+	    mapped_rem_sockaddr->ss_family != remote_sockaddr->ss_family) {
 		pr_info("%s: Sockaddr family doesn't match the requested one\n",
-				__func__);
+			__func__);
 		nlmsg_request->err_code = IWPM_USER_LIB_INFO_ERR;
 		goto query_mapping_response_exit;
 	}
 	memcpy(&pm_msg->mapped_loc_addr, mapped_loc_sockaddr,
-			sizeof(*mapped_loc_sockaddr));
+	       sizeof(*mapped_loc_sockaddr));
 	memcpy(&pm_msg->mapped_rem_addr, mapped_rem_sockaddr,
-			sizeof(*mapped_rem_sockaddr));
+	       sizeof(*mapped_rem_sockaddr));
 
 	iwpm_print_sockaddr(&pm_msg->loc_addr,
-			"query_mapping: Local sockaddr:");
+			    "query_mapping: Local sockaddr:");
 	iwpm_print_sockaddr(&pm_msg->mapped_loc_addr,
-			"query_mapping: Mapped local sockaddr:");
+			    "query_mapping: Mapped local sockaddr:");
 	iwpm_print_sockaddr(&pm_msg->rem_addr,
-			"query_mapping: Remote sockaddr:");
+			    "query_mapping: Remote sockaddr:");
 	iwpm_print_sockaddr(&pm_msg->mapped_rem_addr,
-			"query_mapping: Mapped remote sockaddr:");
+			    "query_mapping: Mapped remote sockaddr:");
 query_mapping_response_exit:
 	nlmsg_request->request_done = 1;
 	/* always for found request */
@@ -576,13 +576,13 @@ int iwpm_remote_info_cb(struct sk_buff *skb, struct netlink_callback *cb)
 
 	msg_type = "Remote Mapping info";
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_RQUERY_MAPPING_MAX,
-				resp_query_policy, nltb, msg_type))
+			     resp_query_policy, nltb, msg_type))
 		return ret;
 
 	nl_client = RDMA_NL_GET_CLIENT(cb->nlh->nlmsg_type);
 	if (!iwpm_valid_client(nl_client)) {
 		pr_info("%s: Invalid port mapper client = %d\n",
-				__func__, nl_client);
+			__func__, nl_client);
 		return ret;
 	}
 	atomic_set(&echo_nlmsg_seq, cb->nlh->nlmsg_seq);
@@ -597,9 +597,9 @@ int iwpm_remote_info_cb(struct sk_buff *skb, struct netlink_callback *cb)
 			nla_data(nltb[IWPM_NLA_RQUERY_MAPPED_REM_ADDR]);
 
 	if (mapped_loc_sockaddr->ss_family != local_sockaddr->ss_family ||
-		mapped_rem_sockaddr->ss_family != remote_sockaddr->ss_family) {
+	    mapped_rem_sockaddr->ss_family != remote_sockaddr->ss_family) {
 		pr_info("%s: Sockaddr family doesn't match the requested one\n",
-				__func__);
+			__func__);
 		return ret;
 	}
 	rem_info = kzalloc(sizeof(struct iwpm_remote_info), GFP_ATOMIC);
@@ -618,13 +618,13 @@ int iwpm_remote_info_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	iwpm_add_remote_info(rem_info);
 
 	iwpm_print_sockaddr(local_sockaddr,
-			"remote_info: Local sockaddr:");
+			    "remote_info: Local sockaddr:");
 	iwpm_print_sockaddr(mapped_loc_sockaddr,
-			"remote_info: Mapped local sockaddr:");
+			    "remote_info: Mapped local sockaddr:");
 	iwpm_print_sockaddr(remote_sockaddr,
-			"remote_info: Remote sockaddr:");
+			    "remote_info: Remote sockaddr:");
 	iwpm_print_sockaddr(mapped_rem_sockaddr,
-			"remote_info: Mapped remote sockaddr:");
+			    "remote_info: Mapped remote sockaddr:");
 	return ret;
 }
 
@@ -648,22 +648,22 @@ int iwpm_mapping_info_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	int ret = -EINVAL;
 
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_MAPINFO_REQ_MAX,
-				resp_mapinfo_policy, nltb, msg_type)) {
+			     resp_mapinfo_policy, nltb, msg_type)) {
 		pr_info("%s: Unable to parse nlmsg\n", __func__);
 		return ret;
 	}
 	iwpm_name = (char *)nla_data(nltb[IWPM_NLA_MAPINFO_ULIB_NAME]);
 	iwpm_version = nla_get_u16(nltb[IWPM_NLA_MAPINFO_ULIB_VER]);
 	if (strcmp(iwpm_ulib_name, iwpm_name) ||
-			iwpm_version != iwpm_ulib_version) {
+	    iwpm_version != iwpm_ulib_version) {
 		pr_info("%s: Invalid port mapper name = %s version = %d\n",
-				__func__, iwpm_name, iwpm_version);
+			__func__, iwpm_name, iwpm_version);
 		return ret;
 	}
 	nl_client = RDMA_NL_GET_CLIENT(cb->nlh->nlmsg_type);
 	if (!iwpm_valid_client(nl_client)) {
 		pr_info("%s: Invalid port mapper client = %d\n",
-				__func__, nl_client);
+			__func__, nl_client);
 		return ret;
 	}
 	iwpm_set_registration(nl_client, IWPM_REG_INCOMPL);
@@ -695,7 +695,7 @@ int iwpm_ack_mapping_info_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	const char *msg_type = "Mapping Info Ack";
 
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_MAPINFO_NUM_MAX,
-				ack_mapinfo_policy, nltb, msg_type))
+			     ack_mapinfo_policy, nltb, msg_type))
 		return -EINVAL;
 	mapinfo_send = nla_get_u32(nltb[IWPM_NLA_MAPINFO_SEND_NUM]);
 	mapinfo_ack = nla_get_u32(nltb[IWPM_NLA_MAPINFO_ACK_NUM]);
@@ -725,13 +725,13 @@ int iwpm_mapping_error_cb(struct sk_buff *skb, struct netlink_callback *cb)
 	const char *msg_type = "Mapping Error Msg";
 
 	if (iwpm_parse_nlmsg(cb, IWPM_NLA_ERR_MAX,
-				map_error_policy, nltb, msg_type))
+			     map_error_policy, nltb, msg_type))
 		return -EINVAL;
 
 	msg_seq = nla_get_u32(nltb[IWPM_NLA_ERR_SEQ]);
 	err_code = nla_get_u16(nltb[IWPM_NLA_ERR_CODE]);
 	pr_info("%s: Received msg seq = %u err code = %u client = %d\n",
-				__func__, msg_seq, err_code, nl_client);
+		__func__, msg_seq, err_code, nl_client);
 	/* look for nlmsg_request */
 	nlmsg_request = iwpm_find_nlmsg_request(msg_seq);
 	if (!nlmsg_request) {

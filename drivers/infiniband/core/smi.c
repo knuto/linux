@@ -139,7 +139,7 @@ enum smi_action smi_handle_dr_smp_send(struct ib_smp *smp,
 }
 
 enum smi_action opa_smi_handle_dr_smp_send(struct opa_smp *smp,
-				       bool is_switch, int port_num)
+					   bool is_switch, int port_num)
 {
 	return __smi_handle_dr_smp_send(is_switch, port_num,
 					&smp->hop_ptr, smp->hop_cnt,

@@ -1693,7 +1693,7 @@ err1:
 EXPORT_SYMBOL(ib_sa_path_rec_get);
 
 static void ib_sa_service_rec_callback(struct ib_sa_query *sa_query,
-				    int status,
+				       int status,
 				    struct ib_sa_mad *mad)
 {
 	struct ib_sa_service_query *query =

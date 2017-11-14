@@ -935,7 +935,7 @@ static void cm_disconnect_handler(struct iwcm_id_private *cm_id_priv,
  * the app thread blocked in iw_destroy_cm_id.
  */
 static int cm_close_handler(struct iwcm_id_private *cm_id_priv,
-				  struct iw_cm_event *iw_event)
+			    struct iw_cm_event *iw_event)
 {
 	unsigned long flags;
 	int ret = 0;
@@ -1052,7 +1052,7 @@ static void cm_work_handler(struct work_struct *_work)
  *	-ENOMEM	- the event was not handled due to lack of resources.
  */
 static int cm_event_handler(struct iw_cm_id *cm_id,
-			     struct iw_cm_event *iw_event)
+			    struct iw_cm_event *iw_event)
 {
 	struct iwcm_work *work;
 	struct iwcm_id_private *cm_id_priv;
@@ -1120,7 +1120,7 @@ static int iwcm_init_qp_init_attr(struct iwcm_id_private *cm_id_priv,
 }
 
 static int iwcm_init_qp_rts_attr(struct iwcm_id_private *cm_id_priv,
-				  struct ib_qp_attr *qp_attr,
+				 struct ib_qp_attr *qp_attr,
 				  int *qp_attr_mask)
 {
 	unsigned long flags;

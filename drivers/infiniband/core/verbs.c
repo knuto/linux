@@ -220,7 +220,7 @@ EXPORT_SYMBOL(rdma_port_get_link_layer);
  * memory operations.
  */
 struct ib_pd *__ib_alloc_pd(struct ib_device *device, unsigned int flags,
-		const char *caller)
+			    const char *caller)
 {
 	struct ib_pd *pd;
 	int mr_access_flags = 0;
@@ -768,7 +768,7 @@ struct ib_qp *ib_open_qp(struct ib_xrcd *xrcd,
 EXPORT_SYMBOL(ib_open_qp);
 
 static struct ib_qp *ib_create_xrc_qp(struct ib_qp *qp,
-		struct ib_qp_init_attr *qp_init_attr)
+				      struct ib_qp_init_attr *qp_init_attr)
 {
 	struct ib_qp *real_qp = qp;
 
@@ -2028,7 +2028,7 @@ EXPORT_SYMBOL(ib_map_mr_sg);
  * a page vector.
  */
 int ib_sg_to_pages(struct ib_mr *mr, struct scatterlist *sgl, int sg_nents,
-		unsigned int *sg_offset_p, int (*set_page)(struct ib_mr *, u64))
+		   unsigned int *sg_offset_p, int (*set_page)(struct ib_mr *, u64))
 {
 	struct scatterlist *sg;
 	u64 last_end_dma_addr = 0;

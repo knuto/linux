@@ -428,7 +428,7 @@ static int cm_alloc_response_msg(struct cm_port *port,
 }
 
 static void *cm_copy_private_data(const void *private_data,
-				   u8 private_data_len)
+				  u8 private_data_len)
 {
 	void *data;
 
@@ -443,7 +443,7 @@ static void *cm_copy_private_data(const void *private_data,
 }
 
 static void cm_set_private_data(struct cm_id_private *cm_id_priv,
-				 void *private_data, u8 private_data_len)
+				void *private_data, u8 private_data_len)
 {
 	if (cm_id_priv->private_data && cm_id_priv->private_data_len)
 		kfree(cm_id_priv->private_data);
@@ -622,7 +622,7 @@ static struct cm_id_private *cm_insert_listen(struct cm_id_private *cm_id_priv)
 }
 
 static struct cm_id_private *cm_find_listen(struct ib_device *device,
-					     __be64 service_id)
+					    __be64 service_id)
 {
 	struct rb_node *node = cm.listen_service_table.rb_node;
 	struct cm_id_private *cm_id_priv;
@@ -679,7 +679,7 @@ static struct cm_timewait_info *cm_insert_remote_id(struct cm_timewait_info
 }
 
 static struct cm_timewait_info *cm_find_remote_id(__be64 remote_ca_guid,
-						   __be32 remote_id)
+						  __be32 remote_id)
 {
 	struct rb_node *node = cm.remote_id_table.rb_node;
 	struct cm_timewait_info *timewait_info;
@@ -1254,8 +1254,8 @@ static void cm_format_req(struct cm_req_msg *req_msg,
 	cm_req_set_primary_sl(req_msg, pri_path->sl);
 	cm_req_set_primary_subnet_local(req_msg, (pri_path->hop_limit <= 1));
 	cm_req_set_primary_local_ack_timeout(req_msg,
-		cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
-			       pri_path->packet_life_time));
+					     cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
+							    pri_path->packet_life_time));
 
 	if (alt_path) {
 		bool alt_ext = false;
@@ -1289,8 +1289,8 @@ static void cm_format_req(struct cm_req_msg *req_msg,
 		cm_req_set_alt_sl(req_msg, alt_path->sl);
 		cm_req_set_alt_subnet_local(req_msg, (alt_path->hop_limit <= 1));
 		cm_req_set_alt_local_ack_timeout(req_msg,
-			cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
-				       alt_path->packet_life_time));
+						 cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
+								alt_path->packet_life_time));
 	}
 
 	if (param->private_data && param->private_data_len)
@@ -1721,7 +1721,7 @@ free:	cm_free_msg(msg);
 }
 
 static struct cm_id_private *cm_match_req(struct cm_work *work,
-					   struct cm_id_private *cm_id_priv)
+					  struct cm_id_private *cm_id_priv)
 {
 	struct cm_id_private *listen_cm_id_priv, *cur_cm_id_priv;
 	struct cm_timewait_info *timewait_info;
@@ -2332,7 +2332,7 @@ out:
 }
 
 static void cm_format_dreq(struct cm_dreq_msg *dreq_msg,
-			  struct cm_id_private *cm_id_priv,
+			   struct cm_id_private *cm_id_priv,
 			  const void *private_data,
 			  u8 private_data_len)
 {
@@ -2396,7 +2396,7 @@ out:	spin_unlock_irqrestore(&cm_id_priv->lock, flags);
 EXPORT_SYMBOL(ib_send_cm_dreq);
 
 static void cm_format_drep(struct cm_drep_msg *drep_msg,
-			  struct cm_id_private *cm_id_priv,
+			   struct cm_id_private *cm_id_priv,
 			  const void *private_data,
 			  u8 private_data_len)
 {
@@ -2971,8 +2971,8 @@ static void cm_format_lap(struct cm_lap_msg *lap_msg,
 	cm_lap_set_sl(lap_msg, alternate_path->sl);
 	cm_lap_set_subnet_local(lap_msg, 1); /* local only... */
 	cm_lap_set_local_ack_timeout(lap_msg,
-		cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
-			       alternate_path->packet_life_time));
+				     cm_ack_timeout(cm_id_priv->av.port->cm_dev->ack_delay,
+						    alternate_path->packet_life_time));
 
 	if (private_data && private_data_len)
 		memcpy(lap_msg->private_data, private_data, private_data_len);
@@ -3324,7 +3324,7 @@ int ib_send_cm_sidr_req(struct ib_cm_id *cm_id,
 	int ret;
 
 	if (!param->path || (param->private_data &&
-	     param->private_data_len > IB_CM_SIDR_REQ_PRIVATE_DATA_SIZE))
+			     param->private_data_len > IB_CM_SIDR_REQ_PRIVATE_DATA_SIZE))
 		return -EINVAL;
 
 	cm_id_priv = container_of(cm_id, struct cm_id_private, id);

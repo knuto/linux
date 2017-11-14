@@ -214,7 +214,7 @@ struct ib_umem *ib_umem_get(struct ib_ucontext *context, unsigned long addr,
 	}
 
 	umem->nmap = ib_dma_map_sg_attrs(context->device,
-				  umem->sg_head.sgl,
+					 umem->sg_head.sgl,
 				  umem->npages,
 				  DMA_BIDIRECTIONAL,
 				  dma_attrs);

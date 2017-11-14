@@ -391,7 +391,7 @@ struct xrcd_table_entry {
 };
 
 static int xrcd_table_insert(struct ib_uverbs_device *dev,
-			    struct inode *inode,
+			     struct inode *inode,
 			    struct ib_xrcd *xrcd)
 {
 	struct xrcd_table_entry *entry, *scan;
@@ -967,7 +967,7 @@ ssize_t ib_uverbs_create_comp_channel(struct ib_uverbs_file *file,
 }
 
 static struct ib_ucq_object *create_cq(struct ib_uverbs_file *file,
-					struct ib_device *ib_dev,
+				       struct ib_device *ib_dev,
 				       struct ib_udata *ucore,
 				       struct ib_udata *uhw,
 				       struct ib_uverbs_ex_create_cq *cmd,
@@ -1123,7 +1123,7 @@ static int ib_uverbs_ex_create_cq_cb(struct ib_uverbs_file *file,
 }
 
 int ib_uverbs_ex_create_cq(struct ib_uverbs_file *file,
-			 struct ib_device *ib_dev,
+			   struct ib_device *ib_dev,
 			   struct ib_udata *ucore,
 			   struct ib_udata *uhw)
 {

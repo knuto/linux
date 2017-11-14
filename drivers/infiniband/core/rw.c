@@ -49,7 +49,7 @@ static inline bool rdma_rw_can_use_mr(struct ib_device *dev, u8 port_num)
  * input.
  */
 static inline bool rdma_rw_io_needs_mr(struct ib_device *dev, u8 port_num,
-		enum dma_data_direction dir, int dma_nents)
+				       enum dma_data_direction dir, int dma_nents)
 {
 	if (rdma_protocol_iwarp(dev, port_num) && dir == DMA_FROM_DEVICE)
 		return true;
@@ -66,7 +66,7 @@ static inline u32 rdma_rw_fr_page_list_len(struct ib_device *dev)
 
 /* Caller must have zero-initialized *reg. */
 static int rdma_rw_init_one_mr(struct ib_qp *qp, u8 port_num,
-		struct rdma_rw_reg_ctx *reg, struct scatterlist *sg,
+			       struct rdma_rw_reg_ctx *reg, struct scatterlist *sg,
 		u32 sg_cnt, u32 offset)
 {
 	u32 pages_per_mr = rdma_rw_fr_page_list_len(qp->pd->device);
@@ -105,7 +105,7 @@ static int rdma_rw_init_one_mr(struct ib_qp *qp, u8 port_num,
 }
 
 static int rdma_rw_init_mr_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		u8 port_num, struct scatterlist *sg, u32 sg_cnt, u32 offset,
+			       u8 port_num, struct scatterlist *sg, u32 sg_cnt, u32 offset,
 		u64 remote_addr, u32 rkey, enum dma_data_direction dir)
 {
 	struct rdma_rw_reg_ctx *prev = NULL;
@@ -124,7 +124,7 @@ static int rdma_rw_init_mr_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
 		u32 nents = min(sg_cnt, pages_per_mr);
 
 		ret = rdma_rw_init_one_mr(qp, port_num, reg, sg, sg_cnt,
-				offset);
+					  offset);
 		if (ret < 0)
 			goto out_free;
 		count += ret;
@@ -175,7 +175,7 @@ out:
 }
 
 static int rdma_rw_init_map_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		struct scatterlist *sg, u32 sg_cnt, u32 offset,
+				struct scatterlist *sg, u32 sg_cnt, u32 offset,
 		u64 remote_addr, u32 rkey, enum dma_data_direction dir)
 {
 	struct ib_device *dev = qp->pd->device;
@@ -232,7 +232,7 @@ out:
 }
 
 static int rdma_rw_init_single_wr(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		struct scatterlist *sg, u32 offset, u64 remote_addr, u32 rkey,
+				  struct scatterlist *sg, u32 offset, u64 remote_addr, u32 rkey,
 		enum dma_data_direction dir)
 {
 	struct ib_device *dev = qp->pd->device;
@@ -274,7 +274,7 @@ static int rdma_rw_init_single_wr(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
  * successful, or a negative error code.
  */
 int rdma_rw_ctx_init(struct rdma_rw_ctx *ctx, struct ib_qp *qp, u8 port_num,
-		struct scatterlist *sg, u32 sg_cnt, u32 sg_offset,
+		     struct scatterlist *sg, u32 sg_cnt, u32 sg_offset,
 		u64 remote_addr, u32 rkey, enum dma_data_direction dir)
 {
 	struct ib_device *dev = qp->pd->device;
@@ -305,13 +305,13 @@ int rdma_rw_ctx_init(struct rdma_rw_ctx *ctx, struct ib_qp *qp, u8 port_num,
 
 	if (rdma_rw_io_needs_mr(qp->device, port_num, dir, sg_cnt)) {
 		ret = rdma_rw_init_mr_wrs(ctx, qp, port_num, sg, sg_cnt,
-				sg_offset, remote_addr, rkey, dir);
+					  sg_offset, remote_addr, rkey, dir);
 	} else if (sg_cnt > 1) {
 		ret = rdma_rw_init_map_wrs(ctx, qp, sg, sg_cnt, sg_offset,
-				remote_addr, rkey, dir);
+					   remote_addr, rkey, dir);
 	} else {
 		ret = rdma_rw_init_single_wr(ctx, qp, sg, sg_offset,
-				remote_addr, rkey, dir);
+					     remote_addr, rkey, dir);
 	}
 
 	if (ret < 0)
@@ -342,7 +342,7 @@ EXPORT_SYMBOL(rdma_rw_ctx_init);
  * successful, or a negative error code.
  */
 int rdma_rw_ctx_signature_init(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		u8 port_num, struct scatterlist *sg, u32 sg_cnt,
+			       u8 port_num, struct scatterlist *sg, u32 sg_cnt,
 		struct scatterlist *prot_sg, u32 prot_sg_cnt,
 		struct ib_sig_attrs *sig_attrs,
 		u64 remote_addr, u32 rkey, enum dma_data_direction dir)
@@ -386,7 +386,7 @@ int rdma_rw_ctx_signature_init(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
 
 	if (prot_sg_cnt) {
 		ret = rdma_rw_init_one_mr(qp, port_num, &ctx->sig->prot,
-				prot_sg, prot_sg_cnt, 0);
+					  prot_sg, prot_sg_cnt, 0);
 		if (ret < 0)
 			goto out_destroy_data_mr;
 		count += ret;
@@ -493,7 +493,7 @@ static void rdma_rw_update_lkey(struct rdma_rw_reg_ctx *reg, bool need_inval)
  * completion notification.
  */
 struct ib_send_wr *rdma_rw_ctx_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		u8 port_num, struct ib_cqe *cqe, struct ib_send_wr *chain_wr)
+				   u8 port_num, struct ib_cqe *cqe, struct ib_send_wr *chain_wr)
 {
 	struct ib_send_wr *first_wr, *last_wr;
 	int i;
@@ -506,7 +506,7 @@ struct ib_send_wr *rdma_rw_ctx_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
 
 		ctx->sig->sig_mr->need_inval = true;
 		ib_update_fast_reg_key(ctx->sig->sig_mr,
-			ib_inc_rkey(ctx->sig->sig_mr->lkey));
+				       ib_inc_rkey(ctx->sig->sig_mr->lkey));
 		ctx->sig->sig_sge.lkey = ctx->sig->sig_mr->lkey;
 
 		if (ctx->sig->data.inv_wr.next)
@@ -518,7 +518,7 @@ struct ib_send_wr *rdma_rw_ctx_wrs(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
 	case RDMA_RW_MR:
 		for (i = 0; i < ctx->nr_ops; i++) {
 			rdma_rw_update_lkey(&ctx->reg[i],
-				ctx->reg[i].wr.wr.opcode !=
+					    ctx->reg[i].wr.wr.opcode !=
 					IB_WR_RDMA_READ_WITH_INV);
 		}
 
@@ -566,7 +566,7 @@ EXPORT_SYMBOL(rdma_rw_ctx_wrs);
  * notification.
  */
 int rdma_rw_ctx_post(struct rdma_rw_ctx *ctx, struct ib_qp *qp, u8 port_num,
-		struct ib_cqe *cqe, struct ib_send_wr *chain_wr)
+		     struct ib_cqe *cqe, struct ib_send_wr *chain_wr)
 {
 	struct ib_send_wr *first_wr, *bad_wr;
 
@@ -585,7 +585,7 @@ EXPORT_SYMBOL(rdma_rw_ctx_post);
  * @dir:	%DMA_TO_DEVICE for RDMA WRITE, %DMA_FROM_DEVICE for RDMA READ
  */
 void rdma_rw_ctx_destroy(struct rdma_rw_ctx *ctx, struct ib_qp *qp, u8 port_num,
-		struct scatterlist *sg, u32 sg_cnt, enum dma_data_direction dir)
+			 struct scatterlist *sg, u32 sg_cnt, enum dma_data_direction dir)
 {
 	int i;
 
@@ -623,7 +623,7 @@ EXPORT_SYMBOL(rdma_rw_ctx_destroy);
  * @dir:	%DMA_TO_DEVICE for RDMA WRITE, %DMA_FROM_DEVICE for RDMA READ
  */
 void rdma_rw_ctx_destroy_signature(struct rdma_rw_ctx *ctx, struct ib_qp *qp,
-		u8 port_num, struct scatterlist *sg, u32 sg_cnt,
+				   u8 port_num, struct scatterlist *sg, u32 sg_cnt,
 		struct scatterlist *prot_sg, u32 prot_sg_cnt,
 		enum dma_data_direction dir)
 {
@@ -716,21 +716,21 @@ int rdma_rw_init_mrs(struct ib_qp *qp, struct ib_qp_init_attr *attr)
 
 	if (nr_mrs) {
 		ret = ib_mr_pool_init(qp, &qp->rdma_mrs, nr_mrs,
-				IB_MR_TYPE_MEM_REG,
+				      IB_MR_TYPE_MEM_REG,
 				rdma_rw_fr_page_list_len(dev));
 		if (ret) {
 			pr_err("%s: failed to allocated %d MRs\n",
-				__func__, nr_mrs);
+			       __func__, nr_mrs);
 			return ret;
 		}
 	}
 
 	if (nr_sig_mrs) {
 		ret = ib_mr_pool_init(qp, &qp->sig_mrs, nr_sig_mrs,
-				IB_MR_TYPE_SIGNATURE, 2);
+				      IB_MR_TYPE_SIGNATURE, 2);
 		if (ret) {
 			pr_err("%s: failed to allocated %d SIG MRs\n",
-				__func__, nr_mrs);
+			       __func__, nr_mrs);
 			goto out_free_rdma_mrs;
 		}
 	}

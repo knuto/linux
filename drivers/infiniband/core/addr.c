@@ -230,7 +230,7 @@ void rdma_addr_unregister_client(struct rdma_addr_client *client)
 EXPORT_SYMBOL(rdma_addr_unregister_client);
 
 int rdma_copy_addr(struct rdma_dev_addr *dev_addr, struct net_device *dev,
-		     const unsigned char *dst_dev_addr)
+		   const unsigned char *dst_dev_addr)
 {
 	dev_addr->dev_type = dev->type;
 	memcpy(dev_addr->src_dev_addr, dev->dev_addr, MAX_ADDR_LEN);
@@ -261,7 +261,7 @@ int rdma_translate_ip(const struct sockaddr *addr,
 	switch (addr->sa_family) {
 	case AF_INET:
 		dev = ip_dev_find(dev_addr->net,
-			((const struct sockaddr_in *)addr)->sin_addr.s_addr);
+				  ((const struct sockaddr_in *)addr)->sin_addr.s_addr);
 
 		if (!dev)
 			return ret;
@@ -749,7 +749,7 @@ struct resolve_cb_context {
 };
 
 static void resolve_cb(int status, struct sockaddr *src_addr,
-	     struct rdma_dev_addr *addr, void *context)
+		       struct rdma_dev_addr *addr, void *context)
 {
 	if (!status)
 		memcpy(((struct resolve_cb_context *)context)->addr,
@@ -785,7 +785,7 @@ int rdma_addr_find_l2_eth_by_grh(const union ib_gid *sgid,
 	ctx.addr = &dev_addr;
 	init_completion(&ctx.comp);
 	ret = rdma_resolve_ip(&self, &sgid_addr._sockaddr, &dgid_addr._sockaddr,
-			&dev_addr, 1000, resolve_cb, &ctx);
+			      &dev_addr, 1000, resolve_cb, &ctx);
 	if (ret)
 		return ret;
 
@@ -834,7 +834,7 @@ int rdma_addr_find_smac_by_sgid(union ib_gid *sgid, u8 *smac, u16 *vlan_id)
 EXPORT_SYMBOL(rdma_addr_find_smac_by_sgid);
 
 static int netevent_callback(struct notifier_block *self, unsigned long event,
-	void *ctx)
+			     void *ctx)
 {
 	if (event == NETEVENT_NEIGH_UPDATE) {
 		struct neighbour *neigh = ctx;
