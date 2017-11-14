@@ -1134,7 +1134,7 @@ static ssize_t show_ibdev(struct device *dev, struct device_attribute *attr,
 
 	return sprintf(buf, "%s\n", dev_name(&port->ib_dev->dev));
 }
-static DEVICE_ATTR(ibdev, S_IRUGO, show_ibdev, NULL);
+static DEVICE_ATTR(ibdev, 0444, show_ibdev, NULL);
 
 static ssize_t show_port(struct device *dev, struct device_attribute *attr,
 			 char *buf)
@@ -1146,9 +1146,9 @@ static ssize_t show_port(struct device *dev, struct device_attribute *attr,
 
 	return sprintf(buf, "%d\n", port->port_num);
 }
-static DEVICE_ATTR(port, S_IRUGO, show_port, NULL);
+static DEVICE_ATTR(port, 0444, show_port, NULL);
 
-static CLASS_ATTR_STRING(abi_version, S_IRUGO,
+static CLASS_ATTR_STRING(abi_version, 0444,
 			 __stringify(IB_USER_MAD_ABI_VERSION));
 
 static int ib_umad_init_port(struct ib_device *device, int port_num,
