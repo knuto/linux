@@ -284,7 +284,7 @@ static int iwcm_modify_qp_sqd(struct ib_qp *qp)
 {
 	struct ib_qp_attr qp_attr;
 
-	BUG_ON(qp == NULL);
+	BUG_ON(!qp);
 	qp_attr.qp_state = IB_QPS_SQD;
 	return ib_modify_qp(qp, &qp_attr, IB_QP_STATE);
 }
