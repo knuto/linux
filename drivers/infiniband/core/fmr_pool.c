@@ -93,7 +93,7 @@ struct ib_fmr_pool {
 	struct hlist_head        *cache_bucket;
 
 	void                     (*flush_function)(struct ib_fmr_pool *pool,
-						   void *              arg);
+						   void *arg);
 	void                     *flush_arg;
 
 	struct kthread_worker	  *worker;

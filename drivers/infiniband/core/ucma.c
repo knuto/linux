@@ -209,7 +209,7 @@ error:
 	return NULL;
 }
 
-static struct ucma_multicast* ucma_alloc_multicast(struct ucma_context *ctx)
+static struct ucma_multicast *ucma_alloc_multicast(struct ucma_context *ctx)
 {
 	struct ucma_multicast *mc;
 
