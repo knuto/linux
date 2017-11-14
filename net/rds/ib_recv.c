@@ -105,7 +105,7 @@ static int rds_ib_recv_alloc_cache(struct rds_ib_refill_cache *cache, gfp_t gfp)
 
 	cache->percpu = alloc_percpu_gfp(struct rds_ib_cache_head, gfp);
 	if (!cache->percpu)
-	       return -ENOMEM;
+		return -ENOMEM;
 
 	for_each_possible_cpu(cpu) {
 		head = per_cpu_ptr(cache->percpu, cpu);
