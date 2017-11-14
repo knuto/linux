@@ -79,7 +79,7 @@ static const char *const rds_stat_names[] = {
 };
 
 void rds_stats_info_copy(struct rds_info_iterator *iter,
-			 uint64_t *values, const char *const *names, size_t nr)
+			 u64 *values, const char *const *names, size_t nr)
 {
 	struct rds_info_counter ctr;
 	size_t i;
@@ -110,8 +110,8 @@ static void rds_stats_info(struct socket *sock, unsigned int len,
 			   struct rds_info_lengths *lens)
 {
 	struct rds_statistics stats = {0, };
-	uint64_t *src;
-	uint64_t *sum;
+	u64 *src;
+	u64 *sum;
 	size_t i;
 	int cpu;
 	unsigned int avail;

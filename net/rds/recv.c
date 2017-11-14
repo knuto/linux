@@ -514,7 +514,7 @@ int rds_notify_queue_get(struct rds_sock *rs, struct msghdr *msghdr)
  */
 static int rds_notify_cong(struct rds_sock *rs, struct msghdr *msghdr)
 {
-	uint64_t notify = rs->rs_cong_notify;
+	u64 notify = rs->rs_cong_notify;
 	unsigned long flags;
 	int err;
 

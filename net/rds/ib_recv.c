@@ -778,7 +778,7 @@ static void rds_ib_cong_recv(struct rds_connection *conn,
 	unsigned long frag_off;
 	unsigned long to_copy;
 	unsigned long copied;
-	uint64_t uncongested = 0;
+	u64 uncongested = 0;
 	void *addr;
 
 	/* catch completely corrupt packets */
@@ -795,7 +795,7 @@ static void rds_ib_cong_recv(struct rds_connection *conn,
 	copied = 0;
 
 	while (copied < RDS_CONG_MAP_BYTES) {
-		uint64_t *src, *dst;
+		u64 *src, *dst;
 		unsigned int k;
 
 		to_copy = min(RDS_FRAG_SIZE - frag_off, PAGE_SIZE - map_off);
