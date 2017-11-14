@@ -75,14 +75,14 @@ void rds_connect_path_complete(struct rds_conn_path *cp, int curr)
 {
 	if (!rds_conn_path_transition(cp, curr, RDS_CONN_UP)) {
 		printk(KERN_WARNING "%s: Cannot transition to state UP, current state is %d\n",
-				__func__,
-				atomic_read(&cp->cp_state));
+		       __func__,
+		       atomic_read(&cp->cp_state));
 		rds_conn_path_drop(cp, false);
 		return;
 	}
 
 	rdsdebug("conn %p for %pI4 to %pI4 complete\n",
-	  cp->cp_conn, &cp->cp_conn->c_laddr, &cp->cp_conn->c_faddr);
+		 cp->cp_conn, &cp->cp_conn->c_laddr, &cp->cp_conn->c_faddr);
 
 	cp->cp_reconnect_jiffies = 0;
 	set_bit(0, &cp->cp_conn->c_map_queued);
@@ -121,8 +121,8 @@ void rds_queue_reconnect(struct rds_conn_path *cp)
 	struct rds_connection *conn = cp->cp_conn;
 
 	rdsdebug("conn %p for %pI4 to %pI4 reconnect jiffies %lu\n",
-	  conn, &conn->c_laddr, &conn->c_faddr,
-	  cp->cp_reconnect_jiffies);
+		 conn, &conn->c_laddr, &conn->c_faddr,
+		 cp->cp_reconnect_jiffies);
 
 	/* let peer with smaller addr initiate reconnect, to avoid duels */
 	if (conn->c_trans->t_type == RDS_TRANS_TCP &&
@@ -144,7 +144,7 @@ void rds_queue_reconnect(struct rds_conn_path *cp)
 			   rand % cp->cp_reconnect_jiffies);
 
 	cp->cp_reconnect_jiffies = min(cp->cp_reconnect_jiffies * 2,
-					rds_sysctl_reconnect_max_jiffies);
+				       rds_sysctl_reconnect_max_jiffies);
 }
 
 void rds_connect_worker(struct work_struct *work)
@@ -163,7 +163,7 @@ void rds_connect_worker(struct work_struct *work)
 	if (ret) {
 		ret = conn->c_trans->conn_path_connect(cp);
 		rdsdebug("conn %p for %pI4 to %pI4 dispatched, ret %d\n",
-			conn, &conn->c_laddr, &conn->c_faddr, ret);
+			 conn, &conn->c_laddr, &conn->c_faddr, ret);
 
 		if (ret) {
 			if (rds_conn_path_transition(cp,

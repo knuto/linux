@@ -99,7 +99,7 @@ static void rds_destroy_mr(struct rds_mr *mr)
 	unsigned long flags;
 
 	rdsdebug("RDS: destroy mr key is %x refcnt %u\n",
-			mr->r_key, refcount_read(&mr->r_refcount));
+		 mr->r_key, refcount_read(&mr->r_refcount));
 
 	if (test_and_set_bit(RDS_MR_DEAD, &mr->r_state))
 		return;
@@ -154,7 +154,7 @@ void rds_rdma_drop_keys(struct rds_sock *rs)
  * Helper function to pin user pages.
  */
 static int rds_pin_pages(unsigned long user_addr, unsigned int nr_pages,
-			struct page **pages, int write)
+			 struct page **pages, int write)
 {
 	int ret;
 
@@ -170,7 +170,7 @@ static int rds_pin_pages(unsigned long user_addr, unsigned int nr_pages,
 }
 
 static int __rds_rdma_map(struct rds_sock *rs, struct rds_get_mr_args *args,
-				u64 *cookie_ret, struct rds_mr **mr_ret)
+			  u64 *cookie_ret, struct rds_mr **mr_ret)
 {
 	struct rds_mr *mr = NULL, *found;
 	unsigned int nr_pages;
@@ -208,7 +208,7 @@ static int __rds_rdma_map(struct rds_sock *rs, struct rds_get_mr_args *args,
 	}
 
 	rdsdebug("RDS: get_mr addr %llx len %llu nr_pages %u\n",
-		args->vec.addr, args->vec.bytes, nr_pages);
+		 args->vec.addr, args->vec.bytes, nr_pages);
 
 	/* XXX clamp nr_pages to limit the size of this alloc? */
 	pages = kcalloc(nr_pages, sizeof(struct page *), GFP_KERNEL);
@@ -282,7 +282,7 @@ static int __rds_rdma_map(struct rds_sock *rs, struct rds_get_mr_args *args,
 	mr->r_trans_private = trans_private;
 
 	rdsdebug("RDS: get_mr put_user key is %x cookie_addr %p\n",
-	       mr->r_key, (void *)(unsigned long)args->cookie_addr);
+		 mr->r_key, (void *)(unsigned long)args->cookie_addr);
 
 	/* The user may pass us an unaligned address, but we can only
 	 * map page aligned regions. So we keep the offset, and build
@@ -552,7 +552,7 @@ int rds_rdma_extra_size(struct rds_rdma_args *args)
  * Extract all arguments and set up the rdma_op
  */
 int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
-			  struct cmsghdr *cmsg)
+		       struct cmsghdr *cmsg)
 {
 	struct rds_rdma_args *args;
 	struct rm_rdma_op *op = &rm->rdma;
@@ -658,9 +658,9 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 	nr_bytes = 0;
 
 	rdsdebug("RDS: rdma prepare nr_local %llu rva %llx rkey %x\n",
-	       (unsigned long long)args->nr_local,
-	       (unsigned long long)args->remote_vec.addr,
-	       op->op_rkey);
+		 (unsigned long long)args->nr_local,
+		 (unsigned long long)args->remote_vec.addr,
+		 op->op_rkey);
 
 	for (i = 0; i < args->nr_local; i++) {
 		struct rds_iovec *iov = &iovs[i];
@@ -690,11 +690,11 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 
 			sg = &op->op_sg[op->op_nents + j];
 			sg_set_page(sg, pages[j],
-					min_t(unsigned int, iov->bytes, PAGE_SIZE - offset),
-					offset);
+				    min_t(unsigned int, iov->bytes, PAGE_SIZE - offset),
+				    offset);
 
 			rdsdebug("RDS: sg->offset %x sg->len %x iov->addr %llx iov->bytes %llu\n",
-			       sg->offset, sg->length, iov->addr, iov->bytes);
+				 sg->offset, sg->length, iov->addr, iov->bytes);
 
 			iov->addr += sg->length;
 			iov->bytes -= sg->length;
@@ -705,8 +705,8 @@ int rds_cmsg_rdma_args(struct rds_sock *rs, struct rds_message *rm,
 
 	if (nr_bytes > args->remote_vec.bytes) {
 		rdsdebug("RDS nr_bytes %u remote_bytes %u do not match\n",
-				nr_bytes,
-				(unsigned int)args->remote_vec.bytes);
+			 nr_bytes,
+			 (unsigned int)args->remote_vec.bytes);
 		ret = -EINVAL;
 		goto out;
 	}
@@ -730,7 +730,7 @@ out_ret:
  * to the remote
  */
 int rds_cmsg_rdma_dest(struct rds_sock *rs, struct rds_message *rm,
-			  struct cmsghdr *cmsg)
+		       struct cmsghdr *cmsg)
 {
 	unsigned long flags;
 	struct rds_mr *mr;
@@ -772,7 +772,7 @@ int rds_cmsg_rdma_dest(struct rds_sock *rs, struct rds_message *rm,
  * in an extension header.
  */
 int rds_cmsg_rdma_map(struct rds_sock *rs, struct rds_message *rm,
-			  struct cmsghdr *cmsg)
+		      struct cmsghdr *cmsg)
 {
 	if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct rds_get_mr_args)) ||
 	    rm->m_rdma_cookie != 0)

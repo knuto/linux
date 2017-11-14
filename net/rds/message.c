@@ -145,7 +145,9 @@ EXPORT_SYMBOL_GPL(rds_message_add_extension);
  * }
  */
 int rds_message_next_extension(struct rds_header *hdr,
-		unsigned int *pos, void *buf, unsigned int *buflen)
+			       unsigned int *pos,
+			       void *buf,
+			       unsigned int *buflen)
 {
 	unsigned int offset, ext_type, ext_len;
 	u8 *src = hdr->h_exthdr;
@@ -258,8 +260,8 @@ struct rds_message *rds_message_map_pages(unsigned long *page_addrs, unsigned in
 
 	for (i = 0; i < rm->data.op_nents; ++i) {
 		sg_set_page(&rm->data.op_sg[i],
-				virt_to_page(page_addrs[i]),
-				PAGE_SIZE, 0);
+			    virt_to_page(page_addrs[i]),
+			    PAGE_SIZE, 0);
 	}
 
 	return rm;
@@ -355,7 +357,7 @@ int rds_message_inc_copy_to_user(struct rds_incoming *inc, struct iov_iter *to)
 void rds_message_wait(struct rds_message *rm)
 {
 	wait_event_interruptible(rm->m_flush_wait,
-			!test_bit(RDS_MSG_MAPPED, &rm->m_flags));
+				 !test_bit(RDS_MSG_MAPPED, &rm->m_flags));
 }
 
 void rds_message_unmapped(struct rds_message *rm)
@@ -364,4 +366,3 @@ void rds_message_unmapped(struct rds_message *rm)
 	wake_up_interruptible(&rm->m_flush_wait);
 }
 EXPORT_SYMBOL_GPL(rds_message_unmapped);
-

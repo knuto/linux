@@ -165,7 +165,7 @@ static void rds_ib_add_one(struct ib_device *device)
 					 GFP_KERNEL);
 	if (!rds_ibdev->vector_load) {
 		pr_err("RDS/IB: %s failed to allocate vector memory\n",
-			__func__);
+		       __func__);
 		goto put_dev;
 	}
 
@@ -322,8 +322,8 @@ static void rds_ib_ic_info(struct socket *sock, unsigned int len,
 			   struct rds_info_lengths *lens)
 {
 	rds_for_each_conn_info(sock, len, iter, lens,
-				rds_ib_conn_info_visitor,
-				sizeof(struct rds_info_rdma_connection));
+			       rds_ib_conn_info_visitor,
+			       sizeof(struct rds_info_rdma_connection));
 }
 
 /*
@@ -362,8 +362,8 @@ static int rds_ib_laddr_check(struct net *net, __be32 addr)
 		ret = -EADDRNOTAVAIL;
 
 	rdsdebug("addr %pI4 ret %d node type %d\n",
-		&addr, ret,
-		cm_id->device ? cm_id->device->node_type : -1);
+		 &addr, ret,
+		 cm_id->device ? cm_id->device->node_type : -1);
 
 	rdma_destroy_id(cm_id);
 
@@ -454,4 +454,3 @@ out:
 }
 
 MODULE_LICENSE("GPL");
-

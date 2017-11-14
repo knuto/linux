@@ -133,8 +133,8 @@ static void rds_tcp_cong_recv(struct rds_connection *conn,
 
 			/* only returns 0 or -error */
 			ret = skb_copy_bits(skb, skb_off,
-				(void *)map->m_page_addrs[map_page] + map_off,
-				to_copy);
+					    (void *)map->m_page_addrs[map_page] + map_off,
+					    to_copy);
 			BUG_ON(ret != 0);
 
 			skb_off += to_copy;
@@ -332,9 +332,10 @@ out:
 
 int rds_tcp_recv_init(void)
 {
-	rds_tcp_incoming_slab = kmem_cache_create("rds_tcp_incoming",
-					sizeof(struct rds_tcp_incoming),
-					0, 0, NULL);
+	rds_tcp_incoming_slab =
+		kmem_cache_create("rds_tcp_incoming",
+				  sizeof(struct rds_tcp_incoming),
+				  0, 0, NULL);
 	if (!rds_tcp_incoming_slab)
 		return -ENOMEM;
 	return 0;

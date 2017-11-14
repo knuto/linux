@@ -66,8 +66,7 @@ struct rds_sock *rds_find_bound(__be32 addr, __be16 port)
 	else
 		rs = NULL;
 
-	rdsdebug("returning rs %p for %pI4:%u\n", rs, &addr,
-		ntohs(port));
+	rdsdebug("returning rs %p for %pI4:%u\n", rs, &addr, ntohs(port));
 
 	return rs;
 }
@@ -111,7 +110,7 @@ static int rds_add_bound(struct rds_sock *rs, __be32 addr, __be16 *port)
 			*port = rs->rs_bound_port;
 			ret = 0;
 			rdsdebug("rs %p binding to %pI4:%d\n",
-			  rs, &addr, (int)ntohs(*port));
+				 rs, &addr, (int)ntohs(*port));
 			break;
 		} else {
 			rds_sock_put(rs);

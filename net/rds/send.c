@@ -432,8 +432,8 @@ over_batch:
 		smp_mb();
 		raced = send_gen != READ_ONCE(cp->cp_send_gen);
 
-		if ((test_bit(0, &conn->c_map_queued) ||
-		    !list_empty(&cp->cp_send_queue)) && !raced) {
+		if ((test_bit(0, &conn->c_map_queued) || !list_empty(&cp->cp_send_queue)) &&
+		    !raced) {
 			if (batch_count < send_batch_count)
 				goto restart;
 			queue_delayed_work(rds_wq, &cp->cp_send_w, 1);
@@ -628,10 +628,10 @@ static void rds_send_remove_from_sock(struct list_head *messages, int status)
 			rds_send_sndbuf_remove(rs, rm);
 
 			if (ro->op_active && ro->op_notifier &&
-			       (ro->op_notify || (ro->op_recverr && status))) {
+			    (ro->op_notify || (ro->op_recverr && status))) {
 				notifier = ro->op_notifier;
 				list_add_tail(&notifier->n_list,
-						&rs->rs_notify_queue);
+					      &rs->rs_notify_queue);
 				if (!notifier->n_status)
 					notifier->n_status = status;
 				rm->rdma.op_notifier = NULL;
@@ -1130,14 +1130,14 @@ int rds_sendmsg(struct socket *sock, struct msghdr *msg, size_t payload_len)
 
 	if (rm->rdma.op_active && !conn->c_trans->xmit_rdma) {
 		printk_ratelimited(KERN_NOTICE "rdma_op %p conn xmit_rdma %p\n",
-			       &rm->rdma, conn->c_trans->xmit_rdma);
+				   &rm->rdma, conn->c_trans->xmit_rdma);
 		ret = -EOPNOTSUPP;
 		goto out;
 	}
 
 	if (rm->atomic.op_active && !conn->c_trans->xmit_atomic) {
 		printk_ratelimited(KERN_NOTICE "atomic_op %p conn xmit_atomic %p\n",
-			       &rm->atomic, conn->c_trans->xmit_atomic);
+				   &rm->atomic, conn->c_trans->xmit_atomic);
 		ret = -EOPNOTSUPP;
 		goto out;
 	}
@@ -1164,11 +1164,11 @@ int rds_sendmsg(struct socket *sock, struct msghdr *msg, size_t payload_len)
 		}
 
 		timeo = wait_event_interruptible_timeout(*sk_sleep(sk),
-					rds_send_queue_rm(rs, conn, cpath, rm,
-							  rs->rs_bound_port,
-							  dport,
-							  &queued),
-					timeo);
+							 rds_send_queue_rm(rs, conn, cpath, rm,
+									   rs->rs_bound_port,
+									   dport,
+									   &queued),
+							 timeo);
 		rdsdebug("sendmsg woke queued %d timeo %ld\n", queued, timeo);
 		if (timeo > 0 || timeo == MAX_SCHEDULE_TIMEOUT)
 			continue;

@@ -245,8 +245,7 @@ void rds_cong_queue_updates(struct rds_cong_map *map)
 
 void rds_cong_map_updated(struct rds_cong_map *map, uint64_t portmask)
 {
-	rdsdebug("waking map %p for %pI4\n",
-	  map, &map->m_addr);
+	rdsdebug("waking map %p for %pI4\n", map, &map->m_addr);
 	rds_stats_inc(s_cong_update_received);
 	atomic_inc(&rds_cong_generation);
 	if (waitqueue_active(&map->m_waitq))
@@ -295,7 +294,7 @@ void rds_cong_set_bit(struct rds_cong_map *map, __be16 port)
 	unsigned long off;
 
 	rdsdebug("setting congestion for %pI4:%u in map %p\n",
-	  &map->m_addr, ntohs(port), map);
+		 &map->m_addr, ntohs(port), map);
 
 	i = be16_to_cpu(port) / RDS_CONG_MAP_PAGE_BITS;
 	off = be16_to_cpu(port) % RDS_CONG_MAP_PAGE_BITS;
@@ -309,7 +308,7 @@ void rds_cong_clear_bit(struct rds_cong_map *map, __be16 port)
 	unsigned long off;
 
 	rdsdebug("clearing congestion for %pI4:%u in map %p\n",
-	  &map->m_addr, ntohs(port), map);
+		 &map->m_addr, ntohs(port), map);
 
 	i = be16_to_cpu(port) / RDS_CONG_MAP_PAGE_BITS;
 	off = be16_to_cpu(port) % RDS_CONG_MAP_PAGE_BITS;

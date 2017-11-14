@@ -100,7 +100,7 @@ static void rds_conn_path_reset(struct rds_conn_path *cp)
 	struct rds_connection *conn = cp->cp_conn;
 
 	rdsdebug("connection %pI4 to %pI4 reset\n",
-	  &conn->c_laddr, &conn->c_faddr);
+		 &conn->c_laddr, &conn->c_faddr);
 
 	rds_stats_inc(s_conn_reset);
 	rds_send_path_reset(cp);
@@ -229,9 +229,9 @@ static struct rds_connection *__rds_conn_create(struct net *net,
 	}
 
 	rdsdebug("allocated conn %p for %pI4 -> %pI4 over %s %s\n",
-	  conn, &laddr, &faddr,
-	  trans->t_name ? trans->t_name : "[unknown]",
-	  is_outgoing ? "(outgoing)" : "");
+		 conn, &laddr, &faddr,
+		 trans->t_name ? trans->t_name : "[unknown]",
+		 is_outgoing ? "(outgoing)" : "");
 
 	/*
 	 * Since we ran without holding the conn lock, someone could
@@ -527,10 +527,10 @@ static void rds_conn_message_info_retrans(struct socket *sock,
 }
 
 void rds_for_each_conn_info(struct socket *sock, unsigned int len,
-			  struct rds_info_iterator *iter,
-			  struct rds_info_lengths *lens,
-			  int (*visitor)(struct rds_connection *, void *),
-			  size_t item_len)
+			    struct rds_info_iterator *iter,
+			    struct rds_info_lengths *lens,
+			    int (*visitor)(struct rds_connection *, void *),
+			    size_t item_len)
 {
 	u64 buffer[(item_len + 7) / 8];
 	struct hlist_head *head;

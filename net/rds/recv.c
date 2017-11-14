@@ -106,9 +106,9 @@ static void rds_recv_rcvbuf_delta(struct rds_sock *rs, struct sock *sk,
 	now_congested = rs->rs_rcv_bytes > rds_sk_rcvbuf(rs);
 
 	rdsdebug("rs %p (%pI4:%u) recv bytes %d buf %d now_cong %d delta %d\n",
-	  rs, &rs->rs_bound_addr,
-	  ntohs(rs->rs_bound_port), rs->rs_rcv_bytes,
-	  rds_sk_rcvbuf(rs), now_congested, delta);
+		 rs, &rs->rs_bound_addr,
+		 ntohs(rs->rs_bound_port), rs->rs_rcv_bytes,
+		 rds_sk_rcvbuf(rs), now_congested, delta);
 
 	/* wasn't -> am congested */
 	if (!rs->rs_congested && now_congested) {
@@ -221,7 +221,7 @@ static void rds_recv_hs_exthdrs(struct rds_header *hdr,
 			break;
 		default:
 			pr_warn_ratelimited("ignoring unknown exthdr type 0x%x\n",
-					     type);
+					    type);
 		}
 	}
 	/* if RDS_EXTHDR_NPATHS was not found, default to a single-path */
@@ -469,7 +469,7 @@ int rds_notify_queue_get(struct rds_sock *rs, struct msghdr *msghdr)
 	spin_lock_irqsave(&rs->rs_lock, flags);
 	while (!list_empty(&rs->rs_notify_queue) && count < max_messages) {
 		notifier = list_entry(rs->rs_notify_queue.next,
-				struct rds_notifier, n_list);
+				      struct rds_notifier, n_list);
 		list_move(&notifier->n_list, &copy);
 		count++;
 	}
@@ -517,7 +517,7 @@ static int rds_notify_cong(struct rds_sock *rs, struct msghdr *msghdr)
 	int err;
 
 	err = put_cmsg(msghdr, SOL_RDS, RDS_CMSG_CONG_UPDATE,
-			sizeof(notify), &notify);
+		       sizeof(notify), &notify);
 	if (err)
 		return err;
 
@@ -538,7 +538,7 @@ static int rds_cmsg_recv(struct rds_incoming *inc, struct msghdr *msg,
 
 	if (inc->i_rdma_cookie) {
 		ret = put_cmsg(msg, SOL_RDS, RDS_CMSG_RDMA_DEST,
-				sizeof(inc->i_rdma_cookie), &inc->i_rdma_cookie);
+			       sizeof(inc->i_rdma_cookie), &inc->i_rdma_cookie);
 		if (ret)
 			goto out;
 	}
@@ -612,9 +612,10 @@ int rds_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
 			}
 
 			timeo = wait_event_interruptible_timeout(*sk_sleep(sk),
-					(!list_empty(&rs->rs_notify_queue) ||
-					 rs->rs_cong_notify ||
-					 rds_next_incoming(rs, &inc)), timeo);
+								 (!list_empty(&rs->rs_notify_queue) ||
+								  rs->rs_cong_notify ||
+								  rds_next_incoming(rs, &inc)),
+								 timeo);
 			rdsdebug("recvmsg woke inc %p timeo %ld\n", inc,
 				 timeo);
 			if (timeo > 0 || timeo == MAX_SCHEDULE_TIMEOUT)

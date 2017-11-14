@@ -48,7 +48,7 @@ void rds_trans_register(struct rds_transport *trans)
 
 	if (transports[trans->t_type])
 		printk(KERN_ERR "RDS Transport type %d already registered\n",
-			trans->t_type);
+		       trans->t_type);
 	else {
 		transports[trans->t_type] = trans;
 		printk(KERN_INFO "Registered RDS/%s transport\n", trans->t_name);
@@ -152,4 +152,3 @@ unsigned int rds_trans_stats_info_copy(struct rds_info_iterator *iter,
 
 	return total;
 }
-
