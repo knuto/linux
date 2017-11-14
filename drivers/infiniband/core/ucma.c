@@ -616,7 +616,7 @@ static ssize_t ucma_destroy_id(struct ucma_file *file, const char __user *inbuf,
 }
 
 static ssize_t ucma_bind_ip(struct ucma_file *file, const char __user *inbuf,
-			      int in_len, int out_len)
+			    int in_len, int out_len)
 {
 	struct rdma_ucm_bind_ip cmd;
 	struct ucma_context *ctx;

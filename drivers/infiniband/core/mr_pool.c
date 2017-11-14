@@ -42,7 +42,7 @@ void ib_mr_pool_put(struct ib_qp *qp, struct list_head *list, struct ib_mr *mr)
 EXPORT_SYMBOL(ib_mr_pool_put);
 
 int ib_mr_pool_init(struct ib_qp *qp, struct list_head *list, int nr,
-		enum ib_mr_type type, u32 max_num_sg)
+		    enum ib_mr_type type, u32 max_num_sg)
 {
 	struct ib_mr *mr;
 	unsigned long flags;

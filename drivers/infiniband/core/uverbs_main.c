@@ -167,7 +167,7 @@ static void ib_uverbs_release_async_event_file(struct kref *ref)
 }
 
 void ib_uverbs_release_ucq(struct ib_uverbs_file *file,
-			  struct ib_uverbs_completion_event_file *ev_file,
+			   struct ib_uverbs_completion_event_file *ev_file,
 			  struct ib_ucq_object *uobj)
 {
 	struct ib_uverbs_event *evt, *tmp;
@@ -649,7 +649,7 @@ static int verify_command_mask(struct ib_device *ib_dev, __u32 command)
 }
 
 static ssize_t ib_uverbs_write(struct file *filp, const char __user *buf,
-			     size_t count, loff_t *pos)
+			       size_t count, loff_t *pos)
 {
 	struct ib_uverbs_file *file = filp->private_data;
 	struct ib_device *ib_dev;
@@ -777,11 +777,11 @@ static ssize_t ib_uverbs_write(struct file *filp, const char __user *buf,
 		}
 
 		ib_uverbs_init_udata_buf_or_null(&ucore, buf,
-					u64_to_user_ptr(ex_hdr.response),
+						 u64_to_user_ptr(ex_hdr.response),
 					hdr.in_words * 8, hdr.out_words * 8);
 
 		ib_uverbs_init_udata_buf_or_null(&uhw,
-					buf + ucore.inlen,
+						 buf + ucore.inlen,
 					u64_to_user_ptr(ex_hdr.response) + ucore.outlen,
 					ex_hdr.provider_in_words * 8,
 					ex_hdr.provider_out_words * 8);

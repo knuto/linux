@@ -92,7 +92,7 @@ ssize_t ib_uverbs_get_context(struct ib_uverbs_file *file,
 	}
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -387,7 +387,7 @@ struct xrcd_table_entry {
 };
 
 static int xrcd_table_insert(struct ib_uverbs_device *dev,
-			    struct inode *inode,
+			     struct inode *inode,
 			    struct ib_xrcd *xrcd)
 {
 	struct xrcd_table_entry *entry, *scan;
@@ -861,7 +861,7 @@ ssize_t ib_uverbs_alloc_mw(struct ib_uverbs_file *file,
 	}
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -958,7 +958,7 @@ ssize_t ib_uverbs_create_comp_channel(struct ib_uverbs_file *file,
 }
 
 static struct ib_ucq_object *create_cq(struct ib_uverbs_file *file,
-					struct ib_device *ib_dev,
+				       struct ib_device *ib_dev,
 				       struct ib_udata *ucore,
 				       struct ib_udata *uhw,
 				       struct ib_uverbs_ex_create_cq *cmd,
@@ -1082,7 +1082,7 @@ ssize_t ib_uverbs_create_cq(struct ib_uverbs_file *file,
 			     sizeof(cmd), sizeof(resp));
 
 	ib_uverbs_init_udata(&uhw, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -1115,7 +1115,7 @@ static int ib_uverbs_ex_create_cq_cb(struct ib_uverbs_file *file,
 }
 
 int ib_uverbs_ex_create_cq(struct ib_uverbs_file *file,
-			 struct ib_device *ib_dev,
+			   struct ib_device *ib_dev,
 			   struct ib_udata *ucore,
 			   struct ib_udata *uhw)
 {
@@ -1166,7 +1166,7 @@ ssize_t ib_uverbs_resize_cq(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -1642,9 +1642,9 @@ ssize_t ib_uverbs_create_qp(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	ib_uverbs_init_udata(&ucore, buf, u64_to_user_ptr(cmd.response),
-		   sizeof(cmd), resp_size);
+			     sizeof(cmd), resp_size);
 	ib_uverbs_init_udata(&uhw, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + resp_size,
+			     u64_to_user_ptr(cmd.response) + resp_size,
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - resp_size);
 
@@ -1742,7 +1742,7 @@ ssize_t ib_uverbs_open_qp(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -2037,7 +2037,7 @@ ssize_t ib_uverbs_modify_qp(struct ib_uverbs_file *file,
 		return -EOPNOTSUPP;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd.base), NULL,
-		   in_len - sizeof(cmd.base) - sizeof(struct ib_uverbs_cmd_hdr),
+			     in_len - sizeof(cmd.base) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len);
 
 	ret = modify_qp(file, &cmd, &udata);
@@ -2538,7 +2538,7 @@ ssize_t ib_uverbs_create_ah(struct ib_uverbs_file *file,
 		return -EINVAL;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -3609,7 +3609,7 @@ ssize_t ib_uverbs_create_srq(struct ib_uverbs_file *file,
 	xcmd.srq_limit	 = cmd.srq_limit;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -3636,7 +3636,7 @@ ssize_t ib_uverbs_create_xsrq(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd),
-		   u64_to_user_ptr(cmd.response) + sizeof(resp),
+			     u64_to_user_ptr(cmd.response) + sizeof(resp),
 		   in_len - sizeof(cmd) - sizeof(struct ib_uverbs_cmd_hdr),
 		   out_len - sizeof(resp));
 
@@ -3662,7 +3662,7 @@ ssize_t ib_uverbs_modify_srq(struct ib_uverbs_file *file,
 		return -EFAULT;
 
 	ib_uverbs_init_udata(&udata, buf + sizeof(cmd), NULL, in_len - sizeof(cmd),
-		   out_len);
+			     out_len);
 
 	srq = uobj_get_obj_read(srq, cmd.srq_handle, file->ucontext);
 	if (!srq)

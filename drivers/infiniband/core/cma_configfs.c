@@ -224,7 +224,7 @@ static int make_cma_ports(struct cma_dev_group *cma_dev_group,
 					    port_str,
 					    &cma_port_group_type);
 		configfs_add_default_group(&ports[i].group,
-				&cma_dev_group->ports_group);
+					   &cma_dev_group->ports_group);
 
 	}
 	cma_dev_group->ports = ports;
@@ -307,7 +307,7 @@ static struct config_group *make_cma_dev(struct config_group *group,
 	config_group_init_type_name(&cma_dev_group->device_group, name,
 				    &cma_device_group_type);
 	configfs_add_default_group(&cma_dev_group->ports_group,
-			&cma_dev_group->device_group);
+				   &cma_dev_group->device_group);
 
 	cma_deref_dev(cma_dev);
 	return &cma_dev_group->device_group;

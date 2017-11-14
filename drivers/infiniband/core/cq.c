@@ -35,7 +35,7 @@ static int __ib_process_cq(struct ib_cq *cq, int budget)
 	 * minimum here.
 	 */
 	while ((n = ib_poll_cq(cq, min_t(u32, IB_POLL_BATCH,
-			budget - completed), cq->wc)) > 0) {
+					 budget - completed), cq->wc)) > 0) {
 		for (i = 0; i < n; i++) {
 			struct ib_wc *wc = &cq->wc[i];
 
@@ -130,7 +130,7 @@ static void ib_cq_completion_workqueue(struct ib_cq *cq, void *private)
  * to use this CQ abstraction.
  */
 struct ib_cq *ib_alloc_cq(struct ib_device *dev, void *private,
-		int nr_cqe, int comp_vector, enum ib_poll_context poll_ctx)
+			  int nr_cqe, int comp_vector, enum ib_poll_context poll_ctx)
 {
 	struct ib_cq_init_attr cq_attr = {
 		.cqe		= nr_cqe,

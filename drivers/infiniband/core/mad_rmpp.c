@@ -391,7 +391,7 @@ static inline int get_seg_num(struct ib_mad_recv_buf *seg)
 }
 
 static inline struct ib_mad_recv_buf *get_next_seg(struct list_head *rmpp_list,
-						    struct ib_mad_recv_buf *seg)
+						   struct ib_mad_recv_buf *seg)
 {
 	if (seg->list.next == rmpp_list)
 		return NULL;
@@ -405,7 +405,7 @@ static inline int window_size(struct ib_mad_agent_private *agent)
 }
 
 static struct ib_mad_recv_buf *find_seg_location(struct list_head *rmpp_list,
-						  int seg_num)
+						 int seg_num)
 {
 	struct ib_mad_recv_buf *seg_buf;
 	int cur_seg_num;
@@ -741,7 +741,7 @@ static void process_rmpp_ack(struct ib_mad_agent_private *agent,
 
 		mad_send_wr->refcount++;
 		list_move_tail(&mad_send_wr->agent_list,
-			      &mad_send_wr->mad_agent_priv->send_list);
+			       &mad_send_wr->mad_agent_priv->send_list);
 	}
 out:
 	spin_unlock_irqrestore(&agent->lock, flags);

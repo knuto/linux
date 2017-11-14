@@ -208,7 +208,7 @@ static int rdma_nl_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh,
  * for that consumer only.
  */
 static int rdma_nl_rcv_skb(struct sk_buff *skb, int (*cb)(struct sk_buff *,
-						   struct nlmsghdr *,
+							  struct nlmsghdr *,
 						   struct netlink_ext_ack *))
 {
 	struct netlink_ext_ack extack = {};
