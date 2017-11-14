@@ -234,7 +234,6 @@ static void rds_tcp_tc_info(struct socket *rds_sock, unsigned int len,
 		goto out;
 
 	list_for_each_entry(tc, &rds_tcp_tc_list, t_list_item) {
-
 		sock = tc->t_sock;
 		if (sock) {
 			sock->ops->getname(sock, (struct sockaddr *)&sin,
@@ -675,4 +674,3 @@ module_init(rds_tcp_init);
 MODULE_AUTHOR("Oracle Corporation <rds-devel@oss.oracle.com>");
 MODULE_DESCRIPTION("RDS: TCP transport");
 MODULE_LICENSE("Dual BSD/GPL");
-

@@ -424,7 +424,6 @@ static int rds_getsockopt(struct socket *sock, int level, int optname,
 
 out:
 	return ret;
-
 }
 
 static int rds_connect(struct socket *sock, struct sockaddr *uaddr,

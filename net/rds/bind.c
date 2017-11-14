@@ -125,7 +125,6 @@ static int rds_add_bound(struct rds_sock *rs, __be32 addr, __be16 *port)
 
 void rds_remove_bound(struct rds_sock *rs)
 {
-
 	if (!rs->rs_bound_addr)
 		return;
 

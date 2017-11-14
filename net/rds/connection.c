@@ -545,7 +545,6 @@ void rds_for_each_conn_info(struct socket *sock, unsigned int len,
 	for (i = 0, head = rds_conn_hash; i < ARRAY_SIZE(rds_conn_hash);
 	     i++, head++) {
 		hlist_for_each_entry_rcu(conn, head, c_hash_node) {
-
 			/* XXX no c_lock usage.. */
 			if (!visitor(conn, buffer))
 				continue;

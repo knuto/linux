@@ -412,7 +412,7 @@ static int rds_next_incoming(struct rds_sock *rs, struct rds_incoming **inc)
 		read_unlock_irqrestore(&rs->rs_recv_lock, flags);
 	}
 
-	return *inc != NULL;
+	return !!(*inc);
 }
 
 static int rds_still_queued(struct rds_sock *rs, struct rds_incoming *inc,
