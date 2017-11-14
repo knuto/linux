@@ -54,7 +54,7 @@ MODULE_LICENSE("Dual BSD/GPL");
 struct ib_client_data {
 	struct list_head  list;
 	struct ib_client *client;
-	void *            data;
+	void		 *data;
 	/* The device or client is going down. Do not call client or device
 	 * callbacks other than remove(). */
 	bool		  going_down;
