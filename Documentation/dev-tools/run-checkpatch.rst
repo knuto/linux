@@ -26,17 +26,20 @@ number of challenges:
 This is the purpose of supplying the option ``--ignore-cfg checkpatch.cfg`` to
 ``scripts/checkpatch.pl``. It will then look for a file named ``checkpatch.cfg``
 in the current directory or alternatively in the directory of the source
-file. If that file exists, checkpatch parses a set of rules from it, and use
-them to determine how to invoke checkpatch for a particular file. The kernel
-Makefile system supports using this feature as an integrated part of compiling
-the code.
+file. If neither is found, and the file is within the kernel tree, checkpatch
+will recursively look for a file with the same name in the directories above
+until a file is found or the top of the tree is reached.
+
+If a match is found, checkpatch parses a set of rules from it, and use them to
+determine how to invoke checkpatch for a particular file.  The kernel Makefile
+system supports using this feature as an integrated part of compiling the code.
 
 The ignore configuration file
 -----------------------------
 
 The ignore configuration file can be used to set policies and "rein in"
-checkpatch errors piece by piece for a particular subsystem or driver.
-The the following syntax is supported::
+checkpatch errors piece by piece for a particular subsystem or driver.  The the
+following syntax is supported::
 
 	# comments
 	line_len <n>
@@ -55,9 +58,9 @@ exceptions.
 Running checkpatch from make
 ----------------------------
 
-You can run checkpatch subject to rules defined in ``checkpatch.cfg`` in the
-directory of the source file by using "make P=1" to run checkpatch on all files
-that gets recompiled, or "make P=2" to run checkpatch on all source files.
+You can run checkpatch subject to rules defined in the closest matching
+``checkpatch.cfg`` file in the tree by using "make P=1" to run checkpatch on all
+files that gets recompiled, or "make P=2" to run checkpatch on all source files.
 
 A make variable ``PF`` allows passing additional parameters to
 checkpatch.pl. You can for instance use::
@@ -70,15 +73,15 @@ selectively enabling of types of errors via changes to the local
 ``checkpatch.cfg``, and you can focus on fixing up errors subsystem or driver by
 driver on a type by type basis.
 
-By default checkpatch will skip all files in directories without a
-checkpatch.cfg file when invoked with the --ignore-cfg parameter.  This is to
-allow builds with P=2 to pass even for subsystems that has not yet done anything
-to rein in checkpatch errors. At some point when all subsystems and drivers
-either have fixed all checkpatch errors or added proper checkpatch.cfg files,
-this can be changed.
+When invoked with the --ignore-cfg parameter, by default checkpatch will skip
+all files in directories without a matching checkpatch.cfg according to the
+algorithm described above. This is to allow builds with P=2 to pass even for
+subsystems that has not yet done anything to rein in checkpatch errors. At some
+point when all subsystems and drivers either have fixed all checkpatch errors or
+added proper checkpatch.cfg files, this can be changed.
 
-To force checkpatch to run a full run in directories without a checkpatch.cfg
-file as well, use::
+To force checkpatch to run a full run in directories without a
+checkpatch.cfg file as well, use::
 
 	make P=2 PF="--req-ignore-cfg"
 
@@ -96,10 +99,11 @@ with the -k option to ``make`` to let it continue upon errors.
 Ever tightening checkpatch rules
 --------------------------------
 
-Commit the changes to checkpatch.cfg together with the code changes that fixes a
-particular type of issue, this will allow automatic checkpatch testing. This way
-we can ensure that new errors of that particular type do not inadvertently sneak
-in again! This can be done at any subsystem or module maintainer's discretion
-and at the right time without having to do it all at the same time.
+Commit the changes to the relevant checkpatch.cfg together with the code changes
+that fixes a particular type of issue, this will allow automatic checkpatch
+testing. This way we can ensure that new errors of that particular type do not
+inadvertently sneak in again! This can be done at any subsystem or module
+maintainer's discretion and at the right time without having to do it all at the
+same time.
 
 Before submitting your changes, verify that "make P=2" passes with no errors.
