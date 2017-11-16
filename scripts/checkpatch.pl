@@ -2186,15 +2186,47 @@ sub pos_last_openparen {
 	return length(expand_tabs(substr($line, 0, $last_openparen))) + 1;
 }
 
+
 # Checkpatch suppression list configuration file support
 #
 # See Documentation/dev-tools/run-checkpatch.rst
 #
-sub parse_ignore_cfg_file {
-	defined($ignore_cfg_file) || return 1;
+
+# Usage: find_ignore_cfg_file(filename,ignorefilename)
+# If filename contains a directory, use it directly with no further attempts,
+# If no directory is specified, whether relative or absolute,
+# look for 'filename' in the following order until a match is found:
+#   1) current dir,
+#   2) the directory of the source file
+#   3) if an in-source source-file (same source tree as this script)
+#      look in directories above for the first match.
+#
+sub find_ignore_cfg_file {
 	my $path = shift(@_);
+	my $ipath = shift(@_);
+	my $ifile = basename($ipath);
 	my $filename = basename($path);
 	my $dir = dirname($path);
+	my $root = dirname($D);
+	( -f $ipath ) && return ($filename, $ipath);
+	( $ipath =~ m/\// ) && return ($filename,"");
+
+	do {
+		$ipath = "$dir/$ifile";
+		#print "*** Trying $ipath ***\n";
+		( -f $ipath ) && return ($filename, $ipath);
+		$dir = dirname($dir);
+	} while ( $dir =~ m/^$root/ && ! -f $ifile );
+	return ($filename,"");
+}
+
+
+sub parse_ignore_cfg_file {
+	my $path = shift(@_);
+	my $filename; # The file to check
+	my $ifile;    # The ignore file name
+	my $ignfile;  # The ignore file handle
+	defined($ignore_cfg_file) || return 1;
 	my %IgnoreCfgKeywords = (
 		'except'	=> sub { my $type = shift(@_);
 					 grep( /^$filename$/, @_ ) && push(@ignore, $type);
@@ -2202,11 +2234,11 @@ sub parse_ignore_cfg_file {
 		'pervasive'	=> sub { push(@ignore, @_); },
 		'line_len'	=> sub { $max_line_length = shift(@_); }
 	);
-	my $ignfile;
 
-	( -f $ignore_cfg_file ) || ( $ignore_cfg_file = "$dir/$ignore_cfg_file" );
-	( ! -f $ignore_cfg_file ) && return 0;
-	open($ignfile, '<', "$ignore_cfg_file") || return 0;
+	($filename, $ifile) = find_ignore_cfg_file($path, $ignore_cfg_file);
+	( $ifile eq "" ) && return 0;
+	open($ignfile, '<', "$ifile") || return 0;
+	#print "*** Found $ifile ***\n";
 
 	($#_ >= 0) &&
 		die "$P: The --ignore-cfg option is only supported with one source file at a time!\n";
