@@ -157,17 +157,19 @@ For example, to check drivers/net/wireless/ one may write::
 
     make coccicheck M=drivers/net/wireless/
 
-To apply Coccinelle on a file basis, instead of a directory basis, the
-following command may be used::
+To apply Coccinelle as the only checker on a file basis,
+instead of a directory basis, the following command may be used::
 
-    make C=1 CHECK="scripts/coccicheck"
+    make C=2 CF="--run:coccicheck"
 
-To check only newly edited code, use the value 2 for the C flag, i.e.::
+To check only newly edited code, use the value 1 for the C flag, i.e.::
 
-    make C=2 CHECK="scripts/coccicheck"
+    make C=1 CF="--run:coccicheck"
 
 In these modes, which works on a file basis, there is no information
 about semantic patches displayed, and no commit message proposed.
+For more information about options in this calling mode, see
+Documentation/dev-tools/runchecks.rst .
 
 This runs every semantic patch in scripts/coccinelle by default. The
 COCCI variable may additionally be used to only apply a single

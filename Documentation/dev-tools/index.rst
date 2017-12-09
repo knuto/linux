@@ -16,6 +16,7 @@ whole; patches welcome!
 
    coccinelle
    sparse
+   runchecks
    kcov
    gcov
    kasan

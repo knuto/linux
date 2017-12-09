@@ -103,10 +103,13 @@ CROSS_COMPILE is also used for ccache in some setups.
 
 CF
 --------------------------------------------------
-Additional options for sparse.
-CF is often used on the command-line like this:
+Additional options for runchecks, the generic checker runner.
+CF is often used on the command-line for instance like this:
 
-    make CF=-Wbitwise C=2
+    make C=2 CF="--run:sparse --color -w"
+
+to run the sparse tool only, and to use colored output and continue on warnings
+or errors.
 
 INSTALL_PATH
 --------------------------------------------------
