@@ -165,14 +165,22 @@ ifeq ($(skip-makefile),)
 # so that IDEs/editors are able to understand relative filenames.
 MAKEFLAGS += --no-print-directory
 
-# Call a source code checker (by default, "sparse") as part of the
-# C compilation.
+# Do source code checking as part of the C compilation.
+#
 #
 # Use 'make C=1' to enable checking of only re-compiled files.
 # Use 'make C=2' to enable checking of *all* source files, regardless
 # of whether they are re-compiled or not.
 #
-# See the file "Documentation/dev-tools/sparse.rst" for more details,
+# Source code checking is done via the runchecks script, which
+# has knowledge of each individual cheker and how it wants to be called,
+# as well as options for rules as to which checks that are applicable
+# to different parts of the kernel, at source file granularity.
+#
+# Several types of checking is available, and custom checkers can also
+# be added.
+#
+# See the file "Documentation/dev-tools/runchecks.rst" for more details,
 # including where to get the "sparse" utility.
 
 ifeq ("$(origin C)", "command line")
@@ -393,10 +401,8 @@ PERL		= perl
 PYTHON		= python
 PYTHON2		= python2
 PYTHON3		= python3
-CHECK		= sparse
-
-CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
-		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
+CHECK		= $(srctree)/scripts/runchecks
+CHECKFLAGS	=
 NOSTDINC_FLAGS  =
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
@@ -440,7 +446,7 @@ GCC_PLUGINS_CFLAGS :=
 export ARCH SRCARCH CONFIG_SHELL HOSTCC KBUILD_HOSTCFLAGS CROSS_COMPILE AS LD CC
 export CPP AR NM STRIP OBJCOPY OBJDUMP KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS
 export MAKE LEX YACC AWK GENKSYMS INSTALLKERNEL PERL PYTHON PYTHON2 PYTHON3 UTS_MACHINE
-export HOSTCXX KBUILD_HOSTCXXFLAGS LDFLAGS_MODULE CHECK CHECKFLAGS
+export HOSTCXX KBUILD_HOSTCXXFLAGS LDFLAGS_MODULE CHECK CHECK_CFLAGS CHECKFLAGS
 
 export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
 export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
@@ -797,6 +803,7 @@ endif
 
 # arch Makefile may override CC so keep this after arch Makefile is included
 NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
+CHECK_CFLAGS     += $(NOSTDINC_FLAGS)
 
 # warn about C99 declaration after statement
 KBUILD_CFLAGS += -Wdeclaration-after-statement
@@ -1491,8 +1498,12 @@ help:
 	@echo  '  make V=0|1 [targets] 0 => quiet build (default), 1 => verbose build'
 	@echo  '  make V=2   [targets] 2 => give reason for rebuild of target'
 	@echo  '  make O=dir [targets] Locate all output files in "dir", including .config'
-	@echo  '  make C=1   [targets] Check re-compiled c source with $$CHECK (sparse by default)'
-	@echo  '  make C=2   [targets] Force check of all c source with $$CHECK'
+	@echo  '  make C=n   [targets] Run C source through a set of checker programs'
+	@echo  '		1: Run checkers only on sources that need recompile'
+	@echo  '		2: Force run of checkers on all c sources'
+	@echo  '		Additional options can be passed in via CF= .'
+	@echo  '		For further info see ./scripts/runchecks -h and further'
+	@echo  '		documentation in ./Documentation/dev-tools/runchecks.rst'
 	@echo  '  make RECORDMCOUNT_WARN=1 [targets] Warn about ignored mcount sections'
 	@echo  '  make W=n   [targets] Enable extra gcc checks, n=1,2,3 where'
 	@echo  '		1: warnings which may be relevant and do not occur too often'

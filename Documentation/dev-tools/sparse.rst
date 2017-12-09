@@ -101,5 +101,31 @@ recompiled, or use "make C=2" to run sparse on the files whether they need to
 be recompiled or not.  The latter is a fast way to check the whole tree if you
 have already built it.
 
-The optional make variable CF can be used to pass arguments to sparse.  The
-build system passes -Wbitwise to sparse automatically.
+The "make C={1,2}" form of kernel make indirectly calls sparse via "runchecks",
+which dependent on configuration and command line options may dispatch calls to
+other checkers in addition to sparse. Details on how this works is covered
+in Documentation/dev-tools/runchecks.rst .
+
+The optional make variable CF can be used to pass arguments to runchecks for dispatch
+to sparse. If sparse is the only tool enabled, any option not recognized by
+runchecks will be forwarded to sparse. If more than one tool is active, you must
+add the parameters you want sparse to get as a comma separated list prefixed by
+``--to-sparse:``. If you want sparse to be the only checker run, and you want
+some nice colored output, you can specify this as::
+
+	make C=2 CF="--run:sparse --color"
+
+This will cause sparse to be called for all files which are supported by a valid
+runchecks configuration (again see Documentation/dev-tools/runchecks.rst for
+details). If you want to run sparse on all files and ignore any missing
+configuration files(s), just add ``-n`` to the list of options passed to
+runchecks. This will cause runchecks to call sparse with all errors enabled for
+all files even if no valid configuration is found in the tree for the source files.
+
+By default "runchecks" is set to enable all sparse errors, but you can
+configure what checks to be applied by sparse on a per file or per subsystem
+basis. With the above invocation, make will fail and stop on the first file
+encountered with sparse errors or warnings in it. If you want to continue
+anyway, you can use::
+
+	make C=2 CF="--run:sparse --color -w"
