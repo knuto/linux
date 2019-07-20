@@ -20,6 +20,7 @@ TARGETS += ipc
 TARGETS += ir
 TARGETS += kcmp
 TARGETS += kexec
+TARGETS += ktf
 TARGETS += kvm
 TARGETS += lib
 TARGETS += livepatch
