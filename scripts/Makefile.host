@@ -46,8 +46,10 @@ host-cxxmulti	:= $(foreach m,$(__hostprogs),$(if $($(m)-cxxobjs),$(m)))
 host-cxxobjs	:= $(sort $(foreach m,$(host-cxxmulti),$($(m)-cxxobjs)))
 
 # Object (.o) files used by the shared libaries
-host-cshobjs	:= $(sort $(foreach m,$(host-cshlib),$($(m:.so=-objs))))
-host-cxxshobjs	:= $(sort $(foreach m,$(host-cxxshlib),$($(m:.so=-objs))))
+# Note: C++ libraries may contain both C and C++ objects, compiled differently:
+host-cshobjs	:= $(sort $(foreach m,$(host-cshlib),$($(m:.so=-cshobjs))))
+host-cshobjs	+= $(sort $(foreach m,$(host-cxxshlib),$($(m:.so=-cshobjs))))
+host-cxxshobjs	:= $(sort $(foreach m,$(host-cxxshlib),$($(m:.so=-cxxshobjs))))
 
 host-csingle	:= $(addprefix $(obj)/,$(host-csingle))
 host-cmulti	:= $(addprefix $(obj)/,$(host-cmulti))
@@ -130,14 +132,10 @@ quiet_cmd_host-cshobjs	= HOSTCC  -fPIC $@
 $(host-cshobjs): $(obj)/%.o: $(src)/%.c FORCE
 	$(call if_changed_dep,host-cshobjs)
 
-# Compile .c file, create position independent .o file
-# Note that plugin capable gcc versions can be either C or C++ based
-# therefore plugin source files have to be compilable in both C and C++ mode.
-# This is why a C++ compiler is invoked on a .c file.
-# host-cxxshobjs -> .o
+# Compile .cc (C++) file, create position independent .o file
 quiet_cmd_host-cxxshobjs	= HOSTCXX -fPIC $@
       cmd_host-cxxshobjs	= $(HOSTCXX) $(hostcxx_flags) -fPIC -c -o $@ $<
-$(host-cxxshobjs): $(obj)/%.o: $(src)/%.c FORCE
+$(host-cxxshobjs): $(obj)/%.o: $(src)/%.cc FORCE
 	$(call if_changed_dep,host-cxxshobjs)
 
 # Link a shared library, based on position independent .o files
@@ -154,7 +152,8 @@ $(call multi_depend, $(host-cshlib), .so, -objs)
 # *.o -> .so shared library (host-cxxshlib)
 quiet_cmd_host-cxxshlib	= HOSTLLD -shared $@
       cmd_host-cxxshlib	= $(HOSTCXX) $(KBUILD_HOSTLDFLAGS) -shared -o $@ \
-			  $(addprefix $(obj)/,$($(@F:.so=-objs))) \
+			  $(addprefix $(obj)/,$($(@F:.so=-cshobjs))) \
+			  $(addprefix $(obj)/,$($(@F:.so=-cxxshobjs))) \
 			  $(KBUILD_HOSTLDLIBS) $(HOSTLDLIBS_$(@F))
 $(host-cxxshlib): FORCE
 	$(call if_changed,host-cxxshlib)
