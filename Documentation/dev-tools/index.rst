@@ -24,6 +24,7 @@ whole; patches welcome!
    gdb-kernel-debugging
    kgdb
    kselftest
+   ktf/index
 
 
 .. only::  subproject and html
