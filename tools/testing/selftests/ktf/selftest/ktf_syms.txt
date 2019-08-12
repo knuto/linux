@@ -1,0 +1,17 @@
+#module ktf
+#header ktf_map.h
+ktf_map_init
+ktf_map_elem_init
+ktf_map_insert
+ktf_map_find
+ktf_map_find_first
+ktf_map_remove
+ktf_map_elem_get
+ktf_map_elem_put
+ktf_map_find_next
+ktf_map_delete_all
+#header ktf_cov.h
+ktf_cov_entry_find
+ktf_cov_entry_put
+ktf_cov_enable
+ktf_cov_disable
